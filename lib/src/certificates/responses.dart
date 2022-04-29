@@ -90,7 +90,7 @@ class CertificateResponse {
     final json = jsonDecode(content);
     final data = _required(json, 'data');
     return CertificateResponse(
-      links: DocumentLinks(self: data['links']),
+      links: DocumentLinks(self: data['links']['self']),
       data: Certificate(
           id: data['id'].toString(),
           links: ResourceLinks(self: data['links']['self']),
