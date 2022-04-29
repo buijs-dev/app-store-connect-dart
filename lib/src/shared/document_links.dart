@@ -17,12 +17,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// Wrapper for the Certificates Resource.
+
+import 'package:appstoreconnect/src/shared/resource_links.dart';
+
+/// Self-links to documents that can contain information for one or more resources.
 ///
-/// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificates.
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/documentlinks.
 ///
 /// [Author] Gillian Buijs.
-library certificates;
-
-export 'responses.dart';
-export 'service.dart';
+class DocumentLinks extends ResourceLinks {
+  DocumentLinks({required String self}) : super(self: self);
+}

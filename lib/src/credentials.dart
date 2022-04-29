@@ -26,7 +26,7 @@ import 'utils/files.dart';
 
 /// Utility to create a JWT token and HTTP client for connecting to app-store-connect-api.
 ///
-/// An [AppleCredentials] instance can be created either
+/// An [AppStoreCredentials] instance can be created either
 /// directly by using the primary constructor
 /// or by deserializing a JSON file (recommended).
 ///
@@ -41,8 +41,8 @@ import 'utils/files.dart';
 /// ```
 ///
 /// [Author] Gillian Buijs.
-class AppleCredentials {
-  const AppleCredentials({
+class AppStoreCredentials {
+  const AppStoreCredentials({
     required this.privateKeyId,
     required this.privateKey,
     required this.issuerId,
@@ -57,15 +57,15 @@ class AppleCredentials {
   /// The issuer ID from the API keys page in App Store Connect.
   final String issuerId;
 
-  /// Create an [AppleCredentials] instance by deserializing a file from the given path.
+  /// Create an [AppStoreCredentials] instance by deserializing a file from the given path.
   ///
   /// Path can be a String [path] absolute path or a File instance.
   ///
   /// Throws [AppStoreConnectException] if the [path] does not exist
   /// or if the file extension is not '.json'.
   ///
-  /// Return [AppleCredentials] used to create a JWT token and connect to app-store-connect-api.
-  factory AppleCredentials.fromFile(dynamic path) {
+  /// Return [AppStoreCredentials] used to create a JWT token and connect to app-store-connect-api.
+  factory AppStoreCredentials.fromFile(dynamic path) {
     final source = FileFactory(path).file();
     if(extension(source.path) != ".json") {
       throw AppStoreConnectException(
@@ -76,17 +76,17 @@ class AppleCredentials {
       );
 
     }
-    return AppleCredentials.fromJson(source.readAsStringSync());
+    return AppStoreCredentials.fromJson(source.readAsStringSync());
   }
 
-  /// Deserialize JSON string to an [AppleCredentials] instance.
+  /// Deserialize JSON string to an [AppStoreCredentials] instance.
   ///
   /// Throws [AppStoreConnectException] if the JSON is not valid.
   ///
-  /// Return [AppleCredentials] used to create a JWT token and connect to app-store-connect-api.
-  factory AppleCredentials.fromJson(String fileContent) {
+  /// Return [AppStoreCredentials] used to create a JWT token and connect to app-store-connect-api.
+  factory AppStoreCredentials.fromJson(String fileContent) {
     final json = jsonDecode(fileContent);
-    return AppleCredentials(
+    return AppStoreCredentials(
       privateKeyId: _propertyOrFail(json, "private_key_id"),
       privateKey: _propertyOrFail(json, "private_key"),
       issuerId: _propertyOrFail(json, "issuer_id"),

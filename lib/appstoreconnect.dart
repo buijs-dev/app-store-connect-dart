@@ -21,3 +21,8 @@ library appstoreconnect;
 
 export 'src/credentials.dart';
 export 'src/service.dart';
+export 'src/exception.dart';
+
+export 'src/certificates/certificates.dart';
+export 'src/bundle_ids/bundle_ids.dart';
+export 'src/shared/shared.dart';

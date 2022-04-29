@@ -17,45 +17,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
-/// Query parameters used to sort the [CertificatesResponse].
+/// Wrapper for the Bundle IDs Resource.
+///
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/bundle_ids.
 ///
 /// [Author] Gillian Buijs.
-enum CertificatesSort {
-  certificateTypeAsc,
-  certificateTypeDesc,
-  displayNameAsc,
-  displayNameDesc,
-  idAsc,
-  idDesc,
-  serialNumberAsc,
-  serialNumberDesc,
-}
+library bundle_ids;
 
-/// Helper to serialize [CertificatesSort] enumeration.
-///
-/// [Author] Gillian Buijs.
-extension CertificatesSortExt on CertificatesSort {
-
-  String get serialize {
-    switch(this) {
-      case CertificatesSort.certificateTypeAsc:
-        return "certificateType";
-      case CertificatesSort.certificateTypeDesc:
-        return "-certificateType";
-      case CertificatesSort.displayNameAsc:
-        return "displayName";
-      case CertificatesSort.displayNameDesc:
-        return "-displayName";
-      case CertificatesSort.idAsc:
-        return "id";
-      case CertificatesSort.idDesc:
-        return "-id";
-      case CertificatesSort.serialNumberAsc:
-        return "serialNumber";
-      case CertificatesSort.serialNumberDesc:
-        return "-serialNumber";
-    }
-  }
-
-}
+export 'bundle_id_create.dart';
+export 'bundle_id_platform.dart';

@@ -30,7 +30,7 @@ class BaseService {
   });
 
   /// Credentials used to create a JSON web token for authenticating.
-  final AppleCredentials credentials;
+  final AppStoreCredentials credentials;
 
   /// Resource path which is appended to the base App Store Connect API endpoint.
   final String path;
@@ -43,8 +43,11 @@ class BaseService {
   /// Query parameters.
   var query = <String, String>{};
 
-  /// Resource URI e.g. base endpoint + path.
-  String get _uri => "https://api.appstoreconnect.apple.com/v1/$path$_printQuery";
+  /// Path parameters
+  var params = <String>[];
+
+  /// Resource URI e.g. base endpoint + path + path parameters + query parameters.
+  String get _uri => "https://api.appstoreconnect.apple.com/v1$path$_printParams$_printQuery";
 
   /// Print the query params or return an empty String if there are none.
   String get _printQuery {
@@ -58,6 +61,21 @@ class BaseService {
 
     // If there are no query params then return an empty String.
     return printed == "?" ? "" : printed;
+  }
+
+  /// Print the path params or return an empty String if there are none.
+  String get _printParams {
+    var printed = "";
+
+    // Join the params to a single path String.
+    for (var param in params) {
+      printed += "/$param";
+    }
+
+    // Clear the params for the next requests.
+    params.clear();
+
+    return printed;
   }
 
   /// Execute a GET request to App Store Connect API.

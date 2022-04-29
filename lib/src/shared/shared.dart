@@ -17,14 +17,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// Wrapper for the Certificates Resource.
+///
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificates.
+///
 /// [Author] Gillian Buijs.
-enum CertificatesFields {
-  certificateContent,
-  certificateType,
-  csrContent,
-  displayName,
-  expirationDate,
-  name,
-  platform,
-  serialNumber
-}
+library shared;
+
+export 'document_links.dart';
+export 'paged_document_links.dart';
+export 'paging_information.dart';
+export 'resource_links.dart';

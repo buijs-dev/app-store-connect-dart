@@ -17,10 +17,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import 'package:appstoreconnect/src/certificates/service.dart';
 import 'package:appstoreconnect/src/credentials.dart';
 import 'package:appstoreconnect/src/utils/client.dart';
-
-import 'request/bundle_id_create.dart';
 
 /// The actual service which uses the App Store Connect API to communicate.
 ///
@@ -28,38 +27,14 @@ import 'request/bundle_id_create.dart';
 class AppStoreConnect {
   AppStoreConnect({
     required this.credentials,
-    this.client = const AppleClient(),
-  });
-
-  final AppleCredentials credentials;
-  final AbstractAppleClient client;
-
-  /// Register a new bundleId.
-  Future<String> registerBundleId({
-    required String bundleId,
-    required String appName,
-  }) async {
-
-    final response = await client.post(
-      uri: bundleIdsUri,
-      jwt: credentials.jsonWebToken,
-      body: BundleIdCreateRequest.json(
-        bundleId: bundleId,
-        appName: appName,
-      ),
-    );
-
-    return response.body;
+    this.client = const HttpAppleClient(),
+  }) {
+    certificates= CertificatesService(credentials, client);
   }
 
-  /// Retrieve all existing signing certificates.
-  Future<String> getCertificates() async {
-    final response = await client.get(
-      uri: certificatesUri,
-      jwt: credentials.jsonWebToken,
-    );
+  final AppStoreCredentials credentials;
+  final AppleClient client;
 
-    return response.body;
-  }
+  late final CertificatesService certificates;
 
 }
