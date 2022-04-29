@@ -17,33 +17,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:test/test.dart';
 
-import 'package:appstoreconnect/appstoreconnect.dart';
+/// Links related to the response document, including paging links.
+///
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/pageddocumentlinks.
+///
+/// [Author] Gillian Buijs.
+class PagedDocumentLinks {
 
-import '../fake_client.dart';
-
-void main() async {
-
-  final credentials = AppleCredentials.fromFile("apple_keys.json");
-  final client = FakeClient();
-  final publisher = AppStoreConnect(
-    credentials: credentials,
-    client: client,
-  );
-
-  test('Create bundleId', () async {
-
-    //Given
-    client.postResponseCode = 201;
-    client.postResponseBody = "All might: I am here!";
-    client.expectedUri = "https://api.appstoreconnect.apple.com/v1/bundleIds";
-
-    //When
-    final response = await publisher.registerBundleId(bundleId: "my.hero.academia", appName: "one4all");
-
-    expect(response, "All might: I am here!");
-
+  const PagedDocumentLinks({
+    required this.self,
+    this.first,
+    this.next,
   });
+
+  /// (Required) The link that produced the current document.
+  final String self;
+
+  /// The link to the first page of documents.
+  final String? first;
+
+  /// The link to the next page of documents.
+  final String? next;
+
+  factory PagedDocumentLinks.fromJson(dynamic json) =>
+      PagedDocumentLinks(
+        first: json['first'],
+        next: json['next'],
+        self: json['self'],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "first": first,
+    "next": next,
+    "self": self,
+  };
 
 }
