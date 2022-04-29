@@ -67,7 +67,7 @@ class AppleCredentials {
   /// Return [AppleCredentials] used to create a JWT token and connect to app-store-connect-api.
   factory AppleCredentials.fromFile(dynamic path) {
     final source = FileFactory(path).file();
-    if(extension(source.path) != "json") {
+    if(extension(source.path) != ".json") {
       throw AppStoreConnectException(
           """|Could not create an AppleCredentials instance because the given path is not a JSON file.
              |
