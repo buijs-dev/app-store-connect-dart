@@ -34,7 +34,7 @@ void main(List<String> arguments) async {
   /// Read from JSON file given the file is named 'apple_keys.json'
   /// and is stored one folder above the current folder.
   final pathToJson = "${Directory.current.path}$pathSeparator..${pathSeparator}apple_keys.json";
-  final credentials = AppleCredentials.fromFile(pathToJson);
+  final credentials = AppStoreCredentials.fromFile(pathToJson);
 
   /// Create an AppStoreConnect instance.
   final service = AppStoreConnect(credentials: credentials);
@@ -42,8 +42,32 @@ void main(List<String> arguments) async {
   /// Now you can use the service to communicate with App Store Connect.
   ///
   /// For example: Retrieve all certificates:
-  final certificates = await service.getCertificates();
+  await service.certificates.find()
+      .then((certificates) => print(certificates));
 
-  print(certificates);
+  /// Or execute a query to find a specific Certificate:
+  await service.certificates.find((_) => _
+    ..filterId = ["1234NOIDEA"]
+    ..filterSerialNumber = ["FOOBAR123"]
+    ..filterDisplayName = ["Beautiful Display"]
+    ..limit = 1
+  ).then((certificate) => print(certificate));
+
+  /// Limit the response data returned:
+  await service.certificates.find((_) => _
+    ..showDisplayName
+    ..showCsrContent
+  ).then((certificates) => print(certificates));
+
+  /// Find by ID:
+  await service.certificates.findById("1234NOIDEA");
+
+  /// Find by ID with limited response data returned:
+  await service.certificates.findById("1234NOIDEA",
+      show: (_) => _
+      ..showDisplayName
+      ..showCsrContent
+      ..showName
+  );
 
 }
