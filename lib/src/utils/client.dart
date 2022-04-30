@@ -23,16 +23,16 @@ import 'package:http/http.dart' as http;
 
 /// Basic abstract HTTP client which uses JWT for auth.
 ///
-/// [AppStoreConnect] uses the [HttpAppleClient] implementation to communicate
+/// [AppStoreConnect] uses the [HttpAppStoreClient] implementation to communicate
 /// with the App Store Connect API.
 ///
-/// A custom [AppleClient] implementation can be used for testing
+/// A custom [AppStoreClient] implementation can be used for testing
 /// to avoid having to use a real developer account.
 ///
 /// [Author] Gillian Buijs.
-abstract class AppleClient {
+abstract class AppStoreClient {
 
-  const AppleClient();
+  const AppStoreClient();
 
   Future<http.Response> get({
     required String uri,
@@ -53,12 +53,12 @@ abstract class AppleClient {
 
 }
 
-/// Implementation for the [AppleClient].
+/// Implementation for the [AppStoreClient].
 ///
 /// [Author] Gillian Buijs.
-class HttpAppleClient extends AppleClient {
+class HttpAppStoreClient extends AppStoreClient {
 
-  const HttpAppleClient();
+  const HttpAppStoreClient();
 
   @override
   /// Execute a GET request to the App Store Connect API.

@@ -27,13 +27,13 @@ import 'package:appstoreconnect/src/utils/client.dart';
 class AppStoreConnect {
   AppStoreConnect({
     required this.credentials,
-    this.client = const HttpAppleClient(),
+    this.client = const HttpAppStoreClient(),
   }) {
     certificates= CertificatesService(credentials, client);
   }
 
   final AppStoreCredentials credentials;
-  final AppleClient client;
+  final AppStoreClient client;
 
   late final CertificatesService certificates;
 

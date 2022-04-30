@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 /// Injectable client for testing purposes.
 ///
 /// [Author] Gillian Buijs.
-class FakeClient extends AppleClient {
+class FakeClient extends AppStoreClient {
 
   String getResponseBody = "";
   int getResponseCode = 200;

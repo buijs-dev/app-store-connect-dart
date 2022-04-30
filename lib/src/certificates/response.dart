@@ -24,6 +24,8 @@ import '../shared/document_links.dart';
 import '../shared/paged_document_links.dart';
 import '../shared/paging_information.dart';
 import '../shared/resource_links.dart';
+import 'const.dart';
+import 'exception.dart';
 
 /// A response that contains a list of Certificates resources.
 ///
@@ -44,8 +46,15 @@ class CertificatesResponse {
 
   factory CertificatesResponse.fromJson(String content) {
     final json = jsonDecode(content);
-    final data = _required(json, 'data');
-    final links = _required(json, 'links');
+
+    final data = json['data'].required(() {
+      throw CertificateException("CertificateResponse JSON did not contain required element data");
+    });
+
+    final links = json['links'].required(() {
+      throw CertificateException("CertificateResponse JSON did not contain required element links");
+    });
+
     final meta = json['meta'];
     return CertificatesResponse(
         links: PagedDocumentLinks.fromJson(links),
@@ -87,8 +96,13 @@ class CertificateResponse {
   final DocumentLinks links;
 
   factory CertificateResponse.fromJson(String content) {
+
     final json = jsonDecode(content);
-    final data = _required(json, 'data');
+
+    final data = json['data'].required(() {
+      throw CertificateException("CertificateResponse JSON did not contain required element data");
+    });
+
     return CertificateResponse(
       links: DocumentLinks(self: data['links']['self']),
       data: Certificate(
@@ -169,18 +183,18 @@ class CertificateAttributes {
   final CertificateType? certificateType;
 
   factory CertificateAttributes.fromJson(dynamic json) {
-    final maybePlatform = json['platform'];
-    final maybeCertificateType = json['certificateType'];
+    final maybePlatform = json['platform']
+        .let((str) => BundleIdPlatformJson.deserialize(str));
+    final maybeCertificateType = json['certificateType']
+        .let((str) => CertificateType.deserialize(str));
     return CertificateAttributes(
       expirationDate: json['expirationDate'],
       certificateContent: json['certificateContent'],
       displayName: json['displayName'],
       name: json['name'],
-      platform: maybePlatform == null
-          ? null : BundleIdPlatformJson.deserialize(maybePlatform),
       serialNumber:json['serialNumber'],
-      certificateType: maybeCertificateType == null
-          ? null : _deserialize(maybeCertificateType),
+      platform: maybePlatform,
+      certificateType: maybeCertificateType,
     );
   }
 
@@ -191,148 +205,7 @@ class CertificateAttributes {
     "name": name,
     "platform": platform?.serialize,
     "serialNumber": serialNumber,
-    "certificateType": certificateType?.serialize,
+    "certificateType": certificateType?.value,
   };
 
 }
-
-/// Literal values that represent types of signing certificates.
-///
-/// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificatetype.
-///
-/// [Author] Gillian Buijs.
-enum CertificateType {
-  iosDevelopment,
-  iosDistribution,
-  macAppDistribution,
-  macInstallerDistribution,
-  macAppDevelopment,
-  developerIdKext,
-  developerIdApplication,
-  development,
-  distribution,
-  passTypeId,
-  passTypeIdWithNfc,
-}
-
-/// Helper to serialize [CertificateType] enumeration.
-///
-/// iosDevelopment => IOS_DEVELOPMENT
-/// iosDistribution => IOS_DISTRIBUTION
-/// macAppDistribution => MAC_APP_DISTRIBUTION
-/// macInstallerDistribution => MAC_INSTALLER_DISTRIBUTION
-/// macAppDevelopment => MAC_APP_DEVELOPMENT
-/// developerIdKext => DEVELOPER_ID_KEXT
-/// developerIdApplication => DEVELOPER_ID_APPLICATION
-/// development => DEVELOPMENT
-/// distribution => DISTRIBUTION
-/// passTypeId => PASS_TYPE_ID
-/// passTypeIdWithNfc => PASS_TYPE_ID_WITH_NFC
-///
-/// [Author] Gillian Buijs.
-extension _CertificateTypeExt on CertificateType {
-  String get serialize {
-    switch(this) {
-      case CertificateType.iosDevelopment:
-        return "IOS_DEVELOPMENT";
-      case CertificateType.iosDistribution:
-        return "IOS_DISTRIBUTION";
-      case CertificateType.macAppDistribution:
-        return "MAC_APP_DISTRIBUTION";
-      case CertificateType.macInstallerDistribution:
-        return "MAC_INSTALLER_DISTRIBUTION";
-      case CertificateType.macAppDevelopment:
-        return "MAC_APP_DEVELOPMENT";
-      case CertificateType.developerIdKext:
-        return "DEVELOPER_ID_KEXT";
-      case CertificateType.developerIdApplication:
-        return "DEVELOPER_ID_APPLICATION";
-      case CertificateType.development:
-        return "DEVELOPMENT";
-      case CertificateType.distribution:
-        return "DISTRIBUTION";
-      case CertificateType.passTypeId:
-        return "PASS_TYPE_ID";
-      case CertificateType.passTypeIdWithNfc:
-        return "PASS_TYPE_ID_WITH_NFC";
-    }
-  }
-}
-
-/// Helper to deserialize String to [CertificateType] enumeration.
-///
-/// Throws [CertificateTypeException] if the given value is not valid.
-/// Returns [CertificateType] if value is valid.
-///
-/// [Author] Gillian Buijs.
-CertificateType _deserialize(String value) {
-  if(value == "IOS_DEVELOPMENT") {
-    return CertificateType.iosDevelopment;
-  }
-
-  if(value == "IOS_DISTRIBUTION") {
-    return CertificateType.iosDistribution;
-  }
-
-  if(value == "MAC_APP_DISTRIBUTION") {
-    return CertificateType.macAppDistribution;
-  }
-
-  if(value == "MAC_INSTALLER_DISTRIBUTION") {
-    return CertificateType.macInstallerDistribution;
-  }
-
-  if(value == "MAC_APP_DEVELOPMENT") {
-    return CertificateType.macAppDevelopment;
-  }
-
-  if(value == "DEVELOPER_ID_KEXT") {
-    return CertificateType.developerIdKext;
-  }
-
-  if(value == "DEVELOPER_ID_APPLICATION") {
-    return CertificateType.developerIdApplication;
-  }
-
-  if(value == "DEVELOPMENT") {
-    return CertificateType.development;
-  }
-
-  if(value == "DISTRIBUTION") {
-    return CertificateType.distribution;
-  }
-
-  if(value == "PASS_TYPE_ID") {
-    return CertificateType.passTypeId;
-  }
-
-  if(value == "PASS_TYPE_ID_WITH_NFC") {
-    return CertificateType.passTypeIdWithNfc;
-  }
-
-  throw CertificateException("Invalid CertificateType value: '$value'.");
-}
-
-///Exception indicating an issue communicating with the App Store Connect API regarding the Certificates resource.
-///
-/// [Author] Gillian Buijs.
-class CertificateException implements Exception {
-  CertificateException(this.cause);
-
-  String cause;
-
-  @override
-  String toString() => "CertificateException with cause: '$cause'";
-}
-
-/// Utility to get a required JSON element or throw a [CertificateException] if not found.
-dynamic _required(dynamic json, String name) {
-  final data = json[name];
-
-  if(data == null) {
-    throw CertificateException("CertificateResponse JSON did not contain required element '$name'.");
-  }
-
-  return data;
-}
-

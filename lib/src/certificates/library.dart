@@ -17,12 +17,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library appstoreconnect;
+/// Wrapper for the Certificates Resource.
+///
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificates.
+///
+/// [Author] Gillian Buijs.
 
-export 'src/credentials.dart';
-export 'src/service.dart';
-export 'src/exception.dart';
+library certificates;
 
-export 'src/certificates/library.dart';
-export 'src/bundle_ids/library.dart';
-export 'src/shared/shared.dart';
+export 'const.dart';
+export 'exception.dart';
+export 'response.dart';
+export 'service.dart';

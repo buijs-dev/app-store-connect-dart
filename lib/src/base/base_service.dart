@@ -37,8 +37,8 @@ class BaseService {
 
   /// Client which communicates with the App Store Connect API.
   ///
-  /// Defaults to [HttpAppleClient].
-  final AppleClient client;
+  /// Defaults to [HttpAppStoreClient].
+  final AppStoreClient client;
 
   /// Query parameters.
   var query = <String, String>{};

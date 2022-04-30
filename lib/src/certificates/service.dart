@@ -17,33 +17,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library certificates;
-
 import 'package:logger/logger.dart';
 
 import '../base/base_service.dart';
 import '../credentials.dart';
 import '../utils/client.dart';
-import 'responses.dart';
+import 'response.dart';
 
 final _log = Logger();
-
-/// Wrapper which creates valid requests and uses an [AppleClient] to execute it.
-late final BaseService _base;
 
 /// Service to access the Certificates resource in App Store Connect API.
 ///
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificates.
 ///
 /// [Author] Gillian Buijs.
-class CertificatesService {
-  CertificatesService(AppStoreCredentials credentials, [AppleClient? client]) {
-    _base = BaseService(
-      credentials: credentials,
-      path: '/certificates',
-      client: client ?? const HttpAppleClient(),
-    );
-  }
+class CertificatesService extends BaseService {
+
+  CertificatesService(AppStoreCredentials credentials, [AppStoreClient? client]) : super(
+    credentials: credentials,
+    path: '/certificates',
+    client: client ?? const HttpAppStoreClient(),
+  );
 
   /// Retrieve all signing certificates.
   Future<CertificatesResponse> find([
@@ -90,6 +84,27 @@ class CertificatesService {
 
     return revoked;
   }
+
+  /// Execute a GET with specified query and/or path parameters and return the response body as String.
+  Future<String> _doGet(CertificatesService service, {
+    CertificateQuery? query,
+    List<String>? params
+  }) {
+    if (query != null) super.query = query._createQueryMap;
+    if (params != null) super.params = params;
+    return super.doGet.then((response) => response.body);
+  }
+
+  /// Execute a DELETE with specified path parameters.
+  ///
+  /// Return true if deleted or false if not.
+  Future<bool> _doDelete(CertificatesService service, {
+    List<String>? params
+  }) {
+    if (params != null) super.params = params;
+    return super.doDelete.then((response) => true);
+  }
+
 }
 
 /// Helper to construct query params for finding Certificates with [CertificatesService.find].
@@ -196,12 +211,15 @@ class CertificatesQuery extends CertificateQuery {
     }
 
     if (filterDisplayName.isNotEmpty) {
-      map.putIfAbsent("filter[displayName]", () => filterDisplayName.join(','));
+      map.putIfAbsent(
+          "filter[displayName]", () => filterDisplayName.join(','),
+      );
     }
 
     if (filterSerialNumber.isNotEmpty) {
       map.putIfAbsent(
-          "filter[serialNumber]", () => filterSerialNumber.join(','));
+          "filter[serialNumber]", () => filterSerialNumber.join(','),
+      );
     }
 
     if (_sort.isNotEmpty) {
@@ -344,41 +362,4 @@ extension _CertificatesSortExt on _CertificatesSort {
         return "-serialNumber";
     }
   }
-}
-
-/// Execute a GET with specified query and/or path parameters and return the response body as String.
-Future<String> _doGet(
-    CertificatesService service, {
-      CertificateQuery? query,
-      List<String>? params
-    })
-{
-
-  if (query != null) {
-    _base.query = query._createQueryMap;
-  }
-
-  if (params != null) {
-    _base.params = params;
-  }
-
-  return _base.doGet.then((response) => response.body);
-
-}
-
-/// Execute a DELETE with specified path parameters.
-///
-/// Return true if deleted or false if not.
-Future<bool> _doDelete(
-    CertificatesService service, {
-      List<String>? params
-    })
-{
-
-  if (params != null) {
-    _base.params = params;
-  }
-
-  return _base.doDelete.then((response) => true);
-
 }

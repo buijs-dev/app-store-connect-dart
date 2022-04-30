@@ -17,12 +17,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library appstoreconnect;
+///Exception indicating an issue communicating with the App Store Connect API regarding the Certificates resource.
+///
+/// [Author] Gillian Buijs.
+class CertificateException implements Exception {
+  CertificateException(this.cause);
 
-export 'src/credentials.dart';
-export 'src/service.dart';
-export 'src/exception.dart';
+  String cause;
 
-export 'src/certificates/library.dart';
-export 'src/bundle_ids/library.dart';
-export 'src/shared/shared.dart';
+  @override
+  String toString() => "CertificateException with cause: '$cause'";
+}

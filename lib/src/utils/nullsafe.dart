@@ -17,12 +17,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// Wrapper for the Certificates Resource.
-///
-/// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificates.
-///
-/// [Author] Gillian Buijs.
-library certificates;
+/// Helper to execute an action on an object if its not null.
+extension HelloIsItMeYoureLookingFor on dynamic {
+  void let(Function(dynamic) action) {
+    if(this != null) action(this);
+  }
+}
 
-export 'responses.dart';
-export 'service.dart';
+/// Helper to get a required value or fallback to alternate action.
+extension NoICantLiveIfLivingIsWithoutYou on dynamic {
+  dynamic required({required Function() orElse}) {
+    if(this == null) {
+      orElse.call();
+    } else {
+      return this;
+    }
+  }
+}
