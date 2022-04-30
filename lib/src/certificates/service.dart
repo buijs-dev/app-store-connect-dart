@@ -17,11 +17,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import 'dart:convert';
+
 import 'package:logger/logger.dart';
 
 import '../base/base_service.dart';
 import '../credentials.dart';
 import '../shared/client.dart';
+import 'const.dart';
+import 'request.dart';
 import 'response.dart';
 
 final _log = Logger();
@@ -50,6 +54,15 @@ class CertificatesService extends BaseService {
     CertificateQuery Function(CertificateQuery)? show}) =>
       _doGet(this, params: [id], query: show == null ? null : show(CertificateQuery()))
           .then((json) => CertificateResponse.fromJson(json));
+
+  /// Create a new signing certificate.
+  Future<CertificateResponse> create({
+    required CertificateType certificateType,
+    required String csrContent,
+  }) => _doPost(this, CertificateCreateRequest.create(
+      certificateType: certificateType,
+      csrContent: csrContent
+  )).then((json) => CertificateResponse.fromJson(json));
 
   /// Revoke a signing certificate for given ID.
   ///
@@ -93,6 +106,11 @@ class CertificatesService extends BaseService {
     if (query != null) super.query = query._createQueryMap;
     if (params != null) super.params = params;
     return super.doGet.then((response) => response.body);
+  }
+
+  /// Execute a POST with specified query and/or path parameters and return the response body as String.
+  Future<String> _doPost(CertificatesService service, CertificateCreateRequest request) {
+    return super.doPost(jsonEncode(request)).then((response) => response.body);
   }
 
   /// Execute a DELETE with specified path parameters.
