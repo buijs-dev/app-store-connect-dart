@@ -17,12 +17,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library appstoreconnect;
+///Exception indicating an issue communicating with the App Store Connect API regarding the BundleId resource.
+///
+/// [Author] Gillian Buijs.
+class BundleIdException implements Exception {
+  BundleIdException(this.cause);
 
-export 'src/credentials.dart';
-export 'src/service.dart';
-export 'src/exception.dart';
+  String cause;
 
-export 'src/certificates/library.dart';
-export 'src/bundle/library.dart';
-export 'src/shared/library.dart';
+  @override
+  String toString() => "BundleIdException with cause: '$cause'";
+}

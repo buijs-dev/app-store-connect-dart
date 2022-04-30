@@ -24,5 +24,5 @@
 /// [Author] Gillian Buijs.
 library bundle_ids;
 
-export 'bundle_id_create.dart';
-export 'bundle_id_platform.dart';
+export 'request.dart';
+export 'const.dart';

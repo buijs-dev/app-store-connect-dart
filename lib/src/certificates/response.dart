@@ -19,7 +19,7 @@
 
 import 'dart:convert';
 
-import '../bundle_ids/bundle_id_platform.dart';
+import '../bundle/const.dart';
 import '../shared/library.dart';
 import '../utils/nullsafe.dart';
 import 'const.dart';
@@ -223,7 +223,7 @@ class CertificateAttributes {
   factory CertificateAttributes.fromJson(dynamic json) {
 
     final maybePlatform = NotNull(json['platform'])
-        .map((str) => BundleIdPlatformJson.deserialize(str));
+        .map((str) => BundleIdPlatform.deserialize(str));
 
     final maybeCertificateType = NotNull(json['certificateType'])
         .map((str) => CertificateType.deserialize(str));
@@ -245,7 +245,7 @@ class CertificateAttributes {
     "displayName": displayName,
     "expirationDate": expirationDate,
     "name": name,
-    "platform": platform?.serialize,
+    "platform": platform?.value,
     "serialNumber": serialNumber,
     "certificateType": certificateType?.value,
   };

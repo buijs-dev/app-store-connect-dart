@@ -22,54 +22,27 @@
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/bundleidplatform
 ///
 /// [Author] Gillian Buijs.
-enum BundleIdPlatform { ios, macOs }
+class BundleIdPlatform {
 
-/// Helper to serialize [BundleIdPLatform] enumeration.
-///
-/// ios => IOS
-/// macOs => MAC_OS
-///
-/// [Author] Gillian Buijs.
-extension BundleIdPlatformExt on BundleIdPlatform {
-  String get serialize {
-    switch (this) {
-      case BundleIdPlatform.ios:
-        return "IOS";
-      case BundleIdPlatform.macOs:
-        return "MAC_OS";
-    }
+  const BundleIdPlatform(this.value);
+
+  final String value;
+
+  static const ios = BundleIdPlatform("IOS");
+  static const macOs = BundleIdPlatform("MAC_OS");
+
+  static List<BundleIdPlatform> get values => [ios, macOs];
+
+  /// Helper to deserialize String to [BundleIdPlatform] enumeration.
+  ///
+  /// Throws [BundleIdException] if the given value is not valid.
+  /// Returns [BundleIdPlatform] if value is valid.
+  ///
+  /// [Author] Gillian Buijs.
+  factory BundleIdPlatform.deserialize(String value) {
+    return BundleIdPlatform.values.firstWhere((type) => type.value == value,
+        orElse: () => throw BundleIdPlatform("Invalid BundleIdPlatform value: '$value'.")
+    );
   }
-}
 
-/// Helper to deserialize String to [BundleIdPLatform] enumeration.
-///
-/// Throws [BundleIdPlatformException] if the given value is not valid.
-/// Returns [BundleIdPlatform] if value is valid.
-///
-/// [Author] Gillian Buijs.
-class BundleIdPlatformJson {
-  static BundleIdPlatform deserialize(String value) {
-    if (value == "IOS") {
-      return BundleIdPlatform.ios;
-    }
-
-    if (value == "MAC_OS") {
-      return BundleIdPlatform.macOs;
-    }
-
-    throw BundleIdPlatformException(
-        "Invalid BundleIdPlatform value: '$value'. ");
-  }
-}
-
-/// Exception indicating an issue deserializing to [BundleIdPlatform] enumeration.
-///
-/// [Author] Gillian Buijs.
-class BundleIdPlatformException implements Exception {
-  BundleIdPlatformException(this.cause);
-
-  String cause;
-
-  @override
-  String toString() => "BundleIdPlatformException with cause: '$cause'";
 }
