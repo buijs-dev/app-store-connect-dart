@@ -21,7 +21,7 @@ import 'package:logger/logger.dart';
 
 import '../base/base_service.dart';
 import '../credentials.dart';
-import '../utils/client.dart';
+import '../shared/client.dart';
 import 'response.dart';
 
 final _log = Logger();

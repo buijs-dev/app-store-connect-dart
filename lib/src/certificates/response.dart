@@ -20,10 +20,7 @@
 import 'dart:convert';
 
 import '../bundle_ids/bundle_id_platform.dart';
-import '../shared/document_links.dart';
-import '../shared/paged_document_links.dart';
-import '../shared/paging_information.dart';
-import '../shared/resource_links.dart';
+import '../shared/library.dart';
 import 'const.dart';
 import 'exception.dart';
 

@@ -19,7 +19,7 @@
 
 import 'package:appstoreconnect/src/certificates/service.dart';
 import 'package:appstoreconnect/src/credentials.dart';
-import 'package:appstoreconnect/src/utils/client.dart';
+import 'package:appstoreconnect/src/shared/client.dart';
 
 /// The actual service which uses the App Store Connect API to communicate.
 ///

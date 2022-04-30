@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:appstoreconnect/src/utils/client.dart';
+import 'package:appstoreconnect/src/shared/client.dart';
 import 'package:http/http.dart' as http;
 
 /// Injectable client for testing purposes.

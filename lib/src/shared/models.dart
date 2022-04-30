@@ -17,6 +17,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// Self-links to documents that can contain information for one or more resources.
+///
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/documentlinks.
+///
+/// [Author] Gillian Buijs.
+class DocumentLinks extends ResourceLinks {
+  DocumentLinks({required String self}) : super(self: self);
+}
+
+/// Links related to the response document, including paging links.
+///
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/pageddocumentlinks.
+///
+/// [Author] Gillian Buijs.
+class PagedDocumentLinks {
+
+  const PagedDocumentLinks({
+    required this.self,
+    this.first,
+    this.next,
+  });
+
+  /// (Required) The link that produced the current document.
+  final String self;
+
+  /// The link to the first page of documents.
+  final String? first;
+
+  /// The link to the next page of documents.
+  final String? next;
+
+  factory PagedDocumentLinks.fromJson(dynamic json) =>
+      PagedDocumentLinks(
+        first: json['first'],
+        next: json['next'],
+        self: json['self'],
+      );
+
+  Map<String, dynamic> toJson() => {
+    "first": first,
+    "next": next,
+    "self": self,
+  };
+
+}
 
 /// Paging information for data responses.
 ///
@@ -36,10 +81,10 @@ class PagingInformation {
     required int total,
     required int limit,
   }) => PagingInformation(
-      paging: PagingInformationPaging(
-        total: total,
-        limit: limit,
-      ),
+    paging: PagingInformationPaging(
+      total: total,
+      limit: limit,
+    ),
   );
 
   /// Helper to deserialize PagingInformation for responses where it is a nullable element.
@@ -85,3 +130,22 @@ class PagingInformationPaging {
 
 }
 
+
+/// Self-links to requested resources.
+///
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/resourcelinks.
+///
+/// [Author] Gillian Buijs.
+class ResourceLinks {
+
+  const ResourceLinks({
+    //Such a selfish resource. :-)
+    required this.self,
+  });
+
+  /// (Required) The link to the resource.
+  final String self;
+
+  Map<String, dynamic> toJson() => { "self": self };
+
+}

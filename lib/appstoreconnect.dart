@@ -25,4 +25,4 @@ export 'src/exception.dart';
 
 export 'src/certificates/library.dart';
 export 'src/bundle_ids/library.dart';
-export 'src/shared/shared.dart';
+export 'src/shared/library.dart';

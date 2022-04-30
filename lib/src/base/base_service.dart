@@ -18,7 +18,7 @@
 // SOFTWARE.
 
 import 'package:appstoreconnect/src/credentials.dart';
-import 'package:appstoreconnect/src/utils/client.dart';
+import 'package:appstoreconnect/src/shared/client.dart';
 import 'package:http/http.dart';
 
 /// [Author] Gillian Buijs.
