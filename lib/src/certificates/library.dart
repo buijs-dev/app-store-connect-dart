@@ -28,4 +28,5 @@ library certificates;
 export 'const.dart';
 export 'exception.dart';
 export 'response.dart';
+export 'request.dart';
 export 'service.dart';
