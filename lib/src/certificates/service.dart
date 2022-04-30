@@ -21,9 +21,9 @@ library certificates;
 
 import 'package:logger/logger.dart';
 
-import '../utils/client.dart';
 import '../base/base_service.dart';
 import '../credentials.dart';
+import '../utils/client.dart';
 import 'responses.dart';
 
 final _log = Logger();
@@ -37,7 +37,6 @@ late final BaseService _base;
 ///
 /// [Author] Gillian Buijs.
 class CertificatesService {
-
   CertificatesService(AppStoreCredentials credentials, [AppleClient? client]) {
     _base = BaseService(
       credentials: credentials,
@@ -46,26 +45,57 @@ class CertificatesService {
     );
   }
 
-  /// Retrieve a signing certificate for given ID.
-  Future<CertificateResponse> findById(id, {CertificateQuery Function(CertificateQuery)? show}) =>
-      _doGet(this,
-        params: [id],
-        query: show == null ? null : show(CertificateQuery()),
-      ).then((json) => CertificateResponse.fromJson(json));
-
   /// Retrieve all signing certificates.
-  Future<CertificatesResponse> find([CertificatesQuery Function(CertificatesQuery)? query]) =>
-      _doGet(this,
-        query: query == null ? null : query(CertificatesQuery()),
-      ).then((json) => CertificatesResponse.fromJson(json));
+  Future<CertificatesResponse> find([
+    CertificatesQuery Function(CertificatesQuery)? query]) =>
+      _doGet(this, query: query == null ? null : query(CertificatesQuery()))
+          .then((json) => CertificatesResponse.fromJson(json));
 
+  /// Retrieve a signing certificate for given ID.
+  Future<CertificateResponse> findById(id, {
+    CertificateQuery Function(CertificateQuery)? show}) =>
+      _doGet(this, params: [id], query: show == null ? null : show(CertificateQuery()))
+          .then((json) => CertificateResponse.fromJson(json));
+
+  /// Revoke a signing certificate for given ID.
+  ///
+  /// Param [verify] bool value defaults to true. Do [find] after deleting to verify deletion was indeed successful.
+  /// Param [findBeforeDeletion] bool value defaults to true. Do [find] before deleting to verify Certificate exists.
+  ///
+  /// Return [bool] true if Certificate no longer exists or false if it does exist.
+  Future<bool> revokeById(id, {
+    bool findBeforeDeletion = true,
+    bool verify = true,
+  }) async {
+    // If enabled then find the Certificate.
+    if (findBeforeDeletion) {
+      final exists = await find((_) => _..filterId = [id])
+          .then((response) => response.data.isNotEmpty);
+
+      // If the Certificate does not exist then return true.
+      // No use in deleting something that does not exist!
+      if (!exists) return true;
+    }
+
+    // Delete the Certificate by ID.
+    final revoked = await _doDelete(this, params: [id]);
+
+    // If enabled then try to find the Certificate by ID
+    // and return true if not found or false when found.
+    if (verify) {
+      return find((_){
+        return  _..filterId = [id];
+      }).then((response) => response.data.isEmpty);
+    }
+
+    return revoked;
+  }
 }
 
 /// Helper to construct query params for finding Certificates with [CertificatesService.find].
 ///
 /// [Author] Gillian Buijs.
 class CertificatesQuery extends CertificateQuery {
-
   /// Only return Certificates which matches an ID specified in this list.
   List<String> filterId = [];
 
@@ -84,19 +114,22 @@ class CertificatesQuery extends CertificateQuery {
   int? _limit;
 
   set limit(int limit) {
-
     /// If limit is less than 1 then log a warning and set the limit to 1.
-    if(limit < 1) {
-      _log.w("Specified limit is invalid: $limit");
-      _log.w("Why do you want to see less than 1 certificate!?");
-      _log.w("Setting limit to: '1'");
+    if (limit < 1) {
+      _log.w(""
+          "Specified limit is invalid: $limit"
+          "Why do you want to see less than 1 certificate!?"
+          "Setting limit to: '1'"
+      );
       _limit = 1;
     }
 
     /// If the limit is more than 200 then log a warning and set to max value.
-    else if(limit > 200) {
-      _log.w("Specified limit exceeds the maximum value: $limit");
-      _log.w("Setting limit to maximum value: '200'");
+    else if (limit > 200) {
+      _log.w(""
+          "Specified limit exceeds the maximum value: $limit"
+          "Setting limit to maximum value: '200'"
+      );
       _limit = 200;
     }
 
@@ -104,7 +137,6 @@ class CertificatesQuery extends CertificateQuery {
     else {
       _limit = limit;
     }
-
   }
 
   /// Sort the results by field CertificateType in ascending order.
@@ -159,43 +191,41 @@ class CertificatesQuery extends CertificateQuery {
   Map<String, String> get _createQueryMap {
     final map = <String, String>{};
 
-    if(filterId.isNotEmpty) {
+    if (filterId.isNotEmpty) {
       map.putIfAbsent("filter[id]", () => filterId.join(','));
     }
 
-    if(filterDisplayName.isNotEmpty) {
+    if (filterDisplayName.isNotEmpty) {
       map.putIfAbsent("filter[displayName]", () => filterDisplayName.join(','));
     }
 
-    if(filterSerialNumber.isNotEmpty) {
-      map.putIfAbsent("filter[serialNumber]", () => filterSerialNumber.join(','));
+    if (filterSerialNumber.isNotEmpty) {
+      map.putIfAbsent(
+          "filter[serialNumber]", () => filterSerialNumber.join(','));
     }
 
-    if(_sort.isNotEmpty) {
+    if (_sort.isNotEmpty) {
       map.putIfAbsent("sort", () => _sort.map((e) => e.serialize).join(','));
     }
 
-    if(_limit != null) {
+    if (_limit != null) {
       map.putIfAbsent("limit", () => "$_limit");
     }
 
-    if(_fields.isNotEmpty) {
-      map.putIfAbsent("fields[certificates]", () =>
-          _fields.map((e) => e.name).join(',')
+    if (_fields.isNotEmpty) {
+      map.putIfAbsent(
+          "fields[certificates]", () => _fields.map((e) => e.name).join(','),
       );
     }
 
     return map;
   }
-
 }
-
 
 /// Helper to construct query params for 'fields' filter only.
 ///
 /// [Author] Gillian Buijs.
-class CertificateQuery  {
-
+class CertificateQuery {
   /// Filter which fields of the [CertificateAttributes] should be returned by the App Store Connect API.
   ///
   /// If no fields are specified then all are returned.
@@ -252,15 +282,14 @@ class CertificateQuery  {
   Map<String, String> get _createQueryMap {
     final map = <String, String>{};
 
-    if(_fields.isNotEmpty) {
-      map.putIfAbsent("fields[certificates]", () =>
-          _fields.map((e) => e.name).join(',')
+    if (_fields.isNotEmpty) {
+      map.putIfAbsent(
+          "fields[certificates]", () => _fields.map((e) => e.name).join(','),
       );
     }
 
     return map;
   }
-
 }
 
 /// JSON fields of the [CertificatesResponse] and [CertificateResponse] that can be filtered and sorted.
@@ -295,9 +324,8 @@ enum _CertificatesSort {
 ///
 /// [Author] Gillian Buijs.
 extension _CertificatesSortExt on _CertificatesSort {
-
   String get serialize {
-    switch(this) {
+    switch (this) {
       case _CertificatesSort.certificateTypeAsc:
         return "certificateType";
       case _CertificatesSort.certificateTypeDesc:
@@ -316,7 +344,6 @@ extension _CertificatesSortExt on _CertificatesSort {
         return "-serialNumber";
     }
   }
-
 }
 
 /// Execute a GET with specified query and/or path parameters and return the response body as String.
@@ -327,14 +354,31 @@ Future<String> _doGet(
     })
 {
 
-  if(query != null) {
+  if (query != null) {
     _base.query = query._createQueryMap;
   }
 
-  if(params != null) {
+  if (params != null) {
     _base.params = params;
   }
 
   return _base.doGet.then((response) => response.body);
+
+}
+
+/// Execute a DELETE with specified path parameters.
+///
+/// Return true if deleted or false if not.
+Future<bool> _doDelete(
+    CertificatesService service, {
+      List<String>? params
+    })
+{
+
+  if (params != null) {
+    _base.params = params;
+  }
+
+  return _base.doDelete.then((response) => true);
 
 }
