@@ -46,6 +46,11 @@ abstract class AppleClient {
     Map<String, String> headers = const {},
   });
 
+  Future<http.Response> delete({
+    required String uri,
+    required String jwt,
+  });
+
 }
 
 /// Implementation for the [AppleClient].
@@ -92,6 +97,33 @@ class HttpAppleClient extends AppleClient {
     );
 
     return _verifyResponse(response, endpoint, 201);
+
+  }
+
+  @override
+  /// Execute a DELETE request to the App Store Connect API.
+  Future<http.Response> delete({
+    required String uri,
+    required String jwt,
+    Map<String, String> headers = const {},
+  }) async {
+
+    final endpoint = Uri.parse(uri);
+
+    var response = await http.delete(
+      Uri.parse(uri),
+      headers: _createHeaders(jwt)..addAll(headers),
+    );
+
+    // DELETE requests don't return response body
+    // so code 204 no content means deletion was successful.
+    try{
+      return _verifyResponse(response, endpoint, 204);
+    } on HttpException {
+      // If code is not 204 then check for a 404 which
+      // would indicate the resource does not exist anyway.
+      return _verifyResponse(response, endpoint, 404);
+    }
 
   }
 

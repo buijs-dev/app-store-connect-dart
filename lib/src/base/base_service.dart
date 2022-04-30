@@ -91,4 +91,10 @@ class BaseService {
     body: body,
   );
 
+  /// Execute a DELETE request to App Store Connect API.
+  Future<Response> get doDelete async => client.delete(
+    uri: _uri,
+    jwt: credentials.jsonWebToken,
+  );
+
 }

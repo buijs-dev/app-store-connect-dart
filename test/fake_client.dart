@@ -81,4 +81,10 @@ class FakeClient extends AppleClient {
     }
   }
 
+  @override
+  Future<http.Response> delete({required String uri, required String jwt}) {
+    // TODO: implement delete
+    throw UnimplementedError();
+  }
+
 }
