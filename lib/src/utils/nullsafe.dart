@@ -17,20 +17,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// Helper to execute an action on an object if its not null.
-extension HelloIsItMeYoureLookingFor on dynamic {
-  void let(Function(dynamic) action) {
-    if(this != null) action(this);
-  }
-}
+/// Value wrapper to facilitate handling null values.
+///
+/// [Author] Gillian Buijs.
+class NotNull {
 
-/// Helper to get a required value or fallback to alternate action.
-extension NoICantLiveIfLivingIsWithoutYou on dynamic {
-  dynamic required({required Function() orElse}) {
-    if(this == null) {
-      orElse.call();
+  NotNull(dynamic value){
+    _value = value;
+  }
+
+  late final dynamic _value;
+
+  /// Return the value or use the fallback action if value is null.
+  dynamic orElse(Function() orElse) {
+    if(_value == null) {
+      return orElse.call();
     } else {
-      return this;
+      return _value;
     }
   }
+
+  /// Execute an action on the value Object if it is not null.
+  dynamic map(Function(dynamic) action) {
+    if(_value != null) {
+      return action(_value);
+    } else {
+      return null;
+    }
+  }
+
 }
