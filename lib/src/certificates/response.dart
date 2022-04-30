@@ -21,6 +21,7 @@ import 'dart:convert';
 
 import '../bundle_ids/bundle_id_platform.dart';
 import '../shared/library.dart';
+import '../utils/nullsafe.dart';
 import 'const.dart';
 import 'exception.dart';
 
@@ -44,25 +45,27 @@ class CertificatesResponse {
   factory CertificatesResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
-    final data = json['data'].required(() {
-      throw CertificateException("CertificateResponse JSON did not contain required element data");
+    final data = NotNull(json['data']).orElse(() {
+      throw CertificateException(
+          "CertificateResponse JSON did not contain required element data");
     });
 
-    final links = json['links'].required(() {
-      throw CertificateException("CertificateResponse JSON did not contain required element links");
+    final links = NotNull(json['links']).orElse(() {
+      throw CertificateException(
+          "CertificateResponse JSON did not contain required element links");
     });
 
     final meta = json['meta'];
     return CertificatesResponse(
-        links: PagedDocumentLinks.fromJson(links),
-        meta: PagingInformation.fromJson(meta),
-        data: List.from(data).map((cert) =>
-            Certificate(
-                id: cert['id'].toString(),
-                links: ResourceLinks(self: cert['links']['self']),
-                attributes: CertificateAttributes.fromJson(cert['attributes'])
-            ),
-        ).toList(),
+      links: PagedDocumentLinks.fromJson(links),
+      meta: PagingInformation.fromJson(meta),
+      data: List.from(data).map((cert) =>
+          Certificate(
+              id: cert['id'].toString(),
+              links: ResourceLinks(self: cert['links']['self']),
+              attributes: CertificateAttributes.fromJson(cert['attributes'])
+          ),
+      ).toList(),
     );
 
   }
@@ -72,6 +75,19 @@ class CertificatesResponse {
     "links": links,
     "meta": meta,
   };
+
+  @override
+  bool operator ==(Object other) => other is CertificatesResponse
+      && other.runtimeType == runtimeType
+      && other.data == data
+      && other.links == links
+      && other.meta == meta;
+
+  @override
+  int get hashCode => data.hashCode;
+
+  @override
+  String toString() => "Instance of CertificatesResponse: data = $data | links = $links | meta = $meta";
 
 }
 
@@ -96,7 +112,7 @@ class CertificateResponse {
 
     final json = jsonDecode(content);
 
-    final data = json['data'].required(() {
+    final data = NotNull(json['data']).orElse(() {
       throw CertificateException("CertificateResponse JSON did not contain required element data");
     });
 
@@ -115,6 +131,18 @@ class CertificateResponse {
     "data": data,
     "links": links,
   };
+
+  @override
+  bool operator ==(Object other) => other is CertificateResponse
+      && other.runtimeType == runtimeType
+      && other.data == data
+      && other.links == links;
+
+  @override
+  int get hashCode => data.hashCode;
+
+  @override
+  String toString() => "Instance of CertificateResponse: data = $data | links = $links";
 
 }
 
@@ -149,6 +177,19 @@ class Certificate {
     "links": links,
   };
 
+  @override
+  bool operator ==(Object other) => other is Certificate
+      && other.runtimeType == runtimeType
+      && other.attributes == attributes
+      && other.id == id
+      && other.links == links;
+
+  @override
+  int get hashCode => attributes.hashCode;
+
+  @override
+  String toString() => "Instance of Certificate: attributes = $attributes | id = $id | links = $links";
+
 }
 
 /// Part of [Certificate].
@@ -180,10 +221,13 @@ class CertificateAttributes {
   final CertificateType? certificateType;
 
   factory CertificateAttributes.fromJson(dynamic json) {
-    final maybePlatform = json['platform']
-        .let((str) => BundleIdPlatformJson.deserialize(str));
-    final maybeCertificateType = json['certificateType']
-        .let((str) => CertificateType.deserialize(str));
+
+    final maybePlatform = NotNull(json['platform'])
+        .map((str) => BundleIdPlatformJson.deserialize(str));
+
+    final maybeCertificateType = NotNull(json['certificateType'])
+        .map((str) => CertificateType.deserialize(str));
+
     return CertificateAttributes(
       expirationDate: json['expirationDate'],
       certificateContent: json['certificateContent'],
@@ -193,6 +237,7 @@ class CertificateAttributes {
       platform: maybePlatform,
       certificateType: maybeCertificateType,
     );
+
   }
 
   Map<String, dynamic> toJson() => {
@@ -204,5 +249,30 @@ class CertificateAttributes {
     "serialNumber": serialNumber,
     "certificateType": certificateType?.value,
   };
+
+  @override
+  bool operator ==(Object other) => other is CertificateAttributes
+      && other.runtimeType == runtimeType
+      && other.certificateContent == certificateContent
+      && other.displayName == displayName
+      && other.expirationDate == expirationDate
+      && other.name == name
+      && other.platform == platform
+      && other.serialNumber == serialNumber
+      && other.certificateType == certificateType;
+
+  @override
+  int get hashCode =>
+      certificateType.hashCode + certificateContent.hashCode;
+
+  @override
+  String toString() => "Instance of CertificateAttributes: "
+      "certificateContent = $certificateContent | "
+      "displayName = $displayName | "
+      "expirationDate = $expirationDate | "
+      "name = $name | "
+      "platform = $platform | "
+      "serialNumber = $serialNumber | "
+      "certificateType = ${certificateType?.value}";
 
 }
