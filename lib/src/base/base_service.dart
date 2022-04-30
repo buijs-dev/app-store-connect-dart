@@ -54,7 +54,13 @@ class BaseService {
     var printed = "?";
 
     // Join the map to a single query String.
-    query.forEach((key, value) => printed += "$key=$value");
+    final keys = query.keys.toList();
+    final values = query.values.toList();
+
+    for(int i = 0; i < keys.length; i++) {
+      if(i != 0) printed += "&";
+      printed += "${keys[i]}=${values[i]}";
+    }
 
     // Clear the query for the next requests.
     query.clear();
