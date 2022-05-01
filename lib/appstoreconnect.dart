@@ -19,10 +19,45 @@
 
 library appstoreconnect;
 
-export 'src/credentials.dart';
-export 'src/service.dart';
-export 'src/exception.dart';
+import 'package:appstoreconnect/src/certificates/service.dart';
+import 'package:appstoreconnect/src/shared/credentials.dart';
+import 'package:appstoreconnect/src/shared/client.dart';
 
 export 'src/certificates/library.dart';
 export 'src/bundle/library.dart';
 export 'src/shared/library.dart';
+
+/// The actual service which uses the App Store Connect API to communicate.
+///
+/// [Author] Gillian Buijs.
+class AppStoreConnect {
+  AppStoreConnect({
+    required this.credentials,
+    this.client = const AppStoreHttpClient(),
+  }) {
+    certificates= CertificatesService(credentials, client);
+  }
+
+  final AppStoreCredentials credentials;
+  final AppStoreClient client;
+
+  late final CertificatesService certificates;
+
+}
+
+///Exception indicating an issue connecting to the App Store Connect API.
+///
+/// [Author] Gillian Buijs.
+class AppStoreConnectException implements Exception {
+  AppStoreConnectException(this.cause);
+
+  String cause;
+
+  @override
+  String toString() =>
+      "AppStoreConnectException with cause: '${_format(cause)}'";
+
+  String _format(String msg) =>
+      msg.replaceAllMapped(RegExp(r'(\s+?\|)'), (match) => "\n").replaceAll("|", "");
+
+}
