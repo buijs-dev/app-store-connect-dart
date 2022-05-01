@@ -19,8 +19,8 @@
 
 import 'dart:convert';
 
-import 'package:crypto_keys/crypto_keys.dart'; //TODO remove
-import 'package:x509/x509.dart' as x509; //TODO remove
+import 'package:crypto_keys/crypto_keys.dart';
+import 'package:x509/x509.dart' as x509;
 
 import '../../appstoreconnect.dart';
 import '../utils/library.dart';

@@ -9,9 +9,8 @@ environment:
   sdk: '>=2.16.1 <3.0.0'
 
 dependencies:
-#  dartdoc: ^5.0.1
-#  pana: ^0.21.12
-#  jose: ^0.3.2
+  #  dartdoc: ^5.0.1
+  #  pana: ^0.21.12
   crypto_keys:
   x509:
 
