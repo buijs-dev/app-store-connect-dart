@@ -10,9 +10,8 @@ environment:
 
 dependencies:
 #  dartdoc: ^5.0.1
-  pana: ^0.21.12
+#  pana: ^0.21.12
   jose: ^0.3.2
-  http: ^0.13.4
 
 dev_dependencies:
   lints: ^1.0.0

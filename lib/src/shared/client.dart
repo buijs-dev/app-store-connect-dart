@@ -17,8 +17,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:appstoreconnect/appstoreconnect.dart';
-import 'package:http/http.dart' as http;
+import 'dart:io';
+
+import '../../appstoreconnect.dart';
 
 /// Basic abstract HTTP client which uses JWT for auth.
 ///
@@ -32,19 +33,19 @@ import 'package:http/http.dart' as http;
 abstract class AppStoreClient {
   const AppStoreClient();
 
-  Future<http.Response> get({
+  Future<HttpClientResponse> get({
     required String uri,
     required String jwt,
   });
 
-  Future<http.Response> post({
+  Future<HttpClientResponse> post({
     required String uri,
     required String body,
     required String jwt,
     Map<String, String> headers = const {},
   });
 
-  Future<http.Response> delete({
+  Future<HttpClientResponse> delete({
     required String uri,
     required String jwt,
   });
@@ -54,43 +55,48 @@ abstract class AppStoreClient {
 ///
 /// [Author] Gillian Buijs.
 class AppStoreHttpClient extends AppStoreClient {
-  const AppStoreHttpClient();
+  AppStoreHttpClient();
 
-  @override
+  final _client = HttpClient();
 
   /// Execute a GET request to the App Store Connect API.
-  Future<http.Response> get({
+  @override
+  Future<HttpClientResponse> get({
     required String uri,
     required String jwt,
     Map<String, String> headers = const {},
-  }) =>
-      http.get(Uri.parse(uri), headers: headers.add(jwt));
-
-  @override
+  }) async {
+    final request = await _client.getUrl(Uri.parse(uri));
+    request.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
+    request.headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
+    return request.close();
+  }
 
   /// Execute a POST request to the App Store Connect API.
-  Future<http.Response> post({
+  @override
+  Future<HttpClientResponse> post({
     required String uri,
     required String body,
     required String jwt,
     Map<String, String> headers = const {},
-  }) =>
-      http.post(Uri.parse(uri), body: body, headers: headers.add(jwt));
-
-  @override
+  }) async {
+    final request = await _client.postUrl(Uri.parse(uri));
+    request.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
+    request.headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
+    request.write(body);
+    return request.close();
+  }
 
   /// Execute a DELETE request to the App Store Connect API.
-  Future<http.Response> delete({
+  @override
+  Future<HttpClientResponse> delete({
     required String uri,
     required String jwt,
     Map<String, String> headers = const {},
-  }) =>
-      http.delete(Uri.parse(uri), headers: headers.add(jwt));
-}
-
-extension _JWT on Map<String, String> {
-  Map<String, String> add(String token) => {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      }..addAll(this);
+  }) async {
+    final request = await _client.deleteUrl(Uri.parse(uri));
+    request.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
+    request.headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
+    return request.close();
+  }
 }

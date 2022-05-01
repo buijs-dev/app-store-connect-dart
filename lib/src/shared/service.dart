@@ -17,9 +17,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:appstoreconnect/src/shared/credentials.dart';
-import 'package:appstoreconnect/src/shared/client.dart';
-import 'package:http/http.dart';
+import 'dart:io';
+
+import '../shared/credentials.dart';
+import '../shared/client.dart';
 
 /// Parent for all App Store Connect API Resource Services.
 ///
@@ -88,20 +89,20 @@ class Service {
   }
 
   /// Execute a GET request to App Store Connect API.
-  Future<Response> get doGet async => client.get(
+  Future<HttpClientResponse> get doGet async => client.get(
         uri: _uri,
         jwt: credentials.jsonWebToken,
       );
 
   /// Execute a POST request to App Store Connect API.
-  Future<Response> doPost(String body) async => client.post(
+  Future<HttpClientResponse> doPost(String body) async => client.post(
         uri: _uri,
         jwt: credentials.jsonWebToken,
         body: body,
       );
 
   /// Execute a DELETE request to App Store Connect API.
-  Future<Response> get doDelete async => client.delete(
+  Future<HttpClientResponse> get doDelete async => client.delete(
         uri: _uri,
         jwt: credentials.jsonWebToken,
       );

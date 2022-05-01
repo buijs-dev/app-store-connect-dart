@@ -18,8 +18,7 @@
 // SOFTWARE.
 
 import 'dart:convert';
-
-import 'package:http/http.dart' as http;
+import 'dart:io';
 
 import '../shared/service.dart';
 import '../shared/client.dart';
@@ -37,15 +36,11 @@ List<String> _warnings = [];
 ///
 /// [Author] Gillian Buijs.
 class CertificatesService extends Service {
-  CertificatesService(
-      // Credentials for creating a JWT.
-      AppStoreCredentials credentials,
-      // Client to communicate with the App Store Connect API (default AppStoreHttpClient).
-      [AppStoreClient? client])
-      : super(
+  CertificatesService(AppStoreCredentials credentials, [AppStoreClient? client])
+      : super( //man -_-
           credentials: credentials,
           path: '/certificates',
-          client: client ?? const AppStoreHttpClient(),
+          client: client ?? AppStoreHttpClient(),
         );
 
   /// Retrieve all signing certificates.
@@ -59,7 +54,7 @@ class CertificatesService extends Service {
     });
 
     return _doGet(query: queryOrNull)
-        .then((response) => Result.fromResponse(
+        .then((response) => Result<CertificatesResponse>().create(
             warnings: _warnings,
             response: response,
             success: (response) => response.statusCode == 200,
@@ -77,7 +72,7 @@ class CertificatesService extends Service {
     });
 
     return _doGet(params: params, query: queryOrNull)
-        .then((response) => Result.fromResponse(
+        .then((response) => Result<CertificateResponse>().create(
             warnings: _warnings,
             response: response,
             success: (response) => response.statusCode == 200,
@@ -96,7 +91,7 @@ class CertificatesService extends Service {
     );
 
     return _doPost(request)
-        .then((response) => Result.fromResponse(
+        .then((response) => Result<CertificateResponse>().create(
             warnings: _warnings,
             response: response,
             success: (response) => response.statusCode == 201,
@@ -109,7 +104,7 @@ class CertificatesService extends Service {
   /// Return [bool].
   Future<Result<bool>> revokeById(id) {
     return _doDelete(params: [id])
-        .then((response) => Result.fromResponse(
+        .then((response) => Result<bool>().create(
             warnings: _warnings,
             response: response,
             success: (response) => response.statusCode == 204,
@@ -118,7 +113,7 @@ class CertificatesService extends Service {
   }
 
   /// Execute a GET with specified query and/or path parameters and return the response body as String.
-  Future<http.Response> _doGet(
+  Future<HttpClientResponse> _doGet(
       {CertificateQuery? query, List<String>? params}) {
     if (query != null) super.query = query._createQueryMap;
     if (params != null) super.params = params;
@@ -126,14 +121,14 @@ class CertificatesService extends Service {
   }
 
   /// Execute a POST with specified query and/or path parameters and return the response body as String.
-  Future<http.Response> _doPost(CertificateCreateRequest request) {
+  Future<HttpClientResponse> _doPost(CertificateCreateRequest request) {
     return super.doPost(jsonEncode(request));
   }
 
   /// Execute a DELETE with specified path parameters.
   ///
   /// Return true if deleted or false if not.
-  Future<http.Response> _doDelete({List<String>? params}) {
+  Future<HttpClientResponse> _doDelete({List<String>? params}) {
     if (params != null) super.params = params;
     return super.doDelete;
   }

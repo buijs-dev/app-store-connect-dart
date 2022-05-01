@@ -8,7 +8,7 @@
 // furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.//
+// copies or substantial portions of the Software.
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -17,9 +17,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library utils;
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
-export 'files.dart';
-export 'nullsafe.dart';
-export 'strings.dart';
-export 'http.dart';
+/// Extension to write [HttpClientResponse] stream to String.
+///
+/// [Author] Gillian Buijs.
+extension ResponseBodyWriter on HttpClientResponse {
+  Future<String> get body {
+    final completer = Completer<String>();
+    final contents = StringBuffer();
+    transform(utf8.decoder).listen((data) {
+      contents.write(data);
+    }, onDone: () => completer.complete(contents.toString()));
+    return completer.future;
+  }
+}

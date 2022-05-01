@@ -17,19 +17,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:http/http.dart' as http;
+import 'dart:io';
 
-/// Wrapper for handling the HTTP response returned by the App Store Connect API.
-///
-/// Param [code] HTTP response status code.
-/// Param [body] HTTP response body.
-/// Param [value] Nullable deserialized Response object of type T.
-/// Param [isSuccess] bool value indicating if the HTTP request is processed successfully.
-/// Param [warnings] List of warnings produced by the dart service concerning the handling of the HTTP request and/or response.
+import '../utils/http.dart';
+
+/// Wrapper which encapsulates all processing information for a single App Store Connect API request.
 ///
 /// [Author] Gillian Buijs.
 class Result<T> {
-  const Result._({
+  /// Private constuctor not meant to be used directly.
+  /// Create a Result instance with the no-args constructor instead
+  /// and then call the [create] function.
+  ///
+  /// Example:
+  ///
+  /// ```
+  /// Result<CertificatesResponse>().create(
+  ///    warnings: <String>["Timberrrr!"],
+  ///    response: response,
+  ///    success: (response) => response.statusCode == 200,
+  ///    deserialize: (json) => CertificatesResponse.fromJson(json)),
+  /// )
+  /// ```
+  Result._({
     required this.code,
     required this.body,
     required this.isSuccess,
@@ -37,45 +47,55 @@ class Result<T> {
     this.value,
   });
 
-  /// HTTP response status code.
-  final int code;
-
-  /// HTTP response body.
-  final String body;
-
-  /// Deserialized Response object.
-  final T? value;
-
-  /// Value indicating if the HTTP request is processed successfully.
-  final bool isSuccess;
-
-  /// List of warnings produced by the dart service concerning the handling of the HTTP request and/or response.
-  final List<String> warnings;
+  /// No-arg constructor used to set type T.
+  /// Call [create] to initialize all fields.
+  Result();
 
   /// Convert the HTTP Response to a Result object.
-  factory Result.fromResponse({
+  Future<Result<T>> create({
     /// The HTTP Response.
-    required http.Response response,
+    required HttpClientResponse response,
 
     /// Predicate (function) which takes a HTTP response
     /// and determines if the request was handled successfully.
-    required bool Function(http.Response) success,
+    required bool Function(HttpClientResponse) success,
 
     /// Function to deserialize the HTTP response body to a DTO.
     required T Function(String) deserialize,
 
     /// Any warning occurred during processing.
     List<String> warnings = const [],
-  }) {
+  }) async {
+    // Convert body stream to String.
+    final responseBody = await response.body;
+
     // Call the predicate function and determine if the request is handled successfully.
     final isSuccess = success(response);
 
-    return Result._(
+    // Only deserialize if isSuccess is true to avoid running into deserialization issues.
+    final value = isSuccess ? deserialize(responseBody) : null;
+
+    return Result<T>._(
       code: response.statusCode,
-      body: response.body,
+      body: responseBody,
       isSuccess: isSuccess,
-      value: isSuccess ? deserialize(response.body) : null,
+      value: value,
       warnings: warnings,
     );
   }
+
+  /// HTTP response status code.
+  late final int code;
+
+  /// HTTP response body.
+  late final String body;
+
+  /// Deserialized Response object.
+  late final T? value;
+
+  /// Value indicating if the HTTP request is processed successfully.
+  late final bool isSuccess;
+
+  /// List of warnings produced by the dart service concerning the handling of the HTTP request and/or response.
+  late final List<String> warnings;
 }
