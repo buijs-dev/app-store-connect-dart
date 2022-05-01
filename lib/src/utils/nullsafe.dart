@@ -20,27 +20,38 @@
 /// Value wrapper to facilitate handling null values.
 ///
 /// [Author] Gillian Buijs.
-class NotNull {
+class Optional<T> {
 
-  NotNull(dynamic value){
-    _value = value;
-  }
+  const Optional(this.value);
 
-  late final dynamic _value;
+  final T value;
 
   /// Return the value or use the fallback action if value is null.
-  dynamic orElse(Function() orElse) {
-    if(_value == null) {
+  T orElse(Function() orElse) {
+    if(value == null) {
       return orElse.call();
     } else {
-      return _value;
+      return value;
     }
   }
 
   /// Execute an action on the value Object if it is not null.
-  dynamic map(Function(dynamic) action) {
-    if(_value != null) {
-      return action(_value);
+  ///
+  /// Return [Optional] with new value or this instance with null value.
+  Optional<dynamic> map(Function(dynamic) action) {
+    if(value != null) {
+      return Optional(action(value));
+    } else {
+      return this;
+    }
+  }
+
+  /// Terminal operation which executes an action if a value is present.
+  ///
+  /// Return [T] or null if no value is present.
+  dynamic mapOrNull(Function(dynamic) action) {
+    if(value != null) {
+      return action(value);
     } else {
       return null;
     }

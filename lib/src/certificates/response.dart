@@ -45,12 +45,12 @@ class CertificatesResponse {
   factory CertificatesResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
-    final data = NotNull(json['data']).orElse(() {
+    final data = Optional(json['data']).orElse(() {
       throw CertificateException(
           "CertificateResponse JSON did not contain required element data");
     });
 
-    final links = NotNull(json['links']).orElse(() {
+    final links = Optional(json['links']).orElse(() {
       throw CertificateException(
           "CertificateResponse JSON did not contain required element links");
     });
@@ -112,7 +112,7 @@ class CertificateResponse {
 
     final json = jsonDecode(content);
 
-    final data = NotNull(json['data']).orElse(() {
+    final data = Optional(json['data']).orElse(() {
       throw CertificateException("CertificateResponse JSON did not contain required element data");
     });
 
@@ -222,11 +222,11 @@ class CertificateAttributes {
 
   factory CertificateAttributes.fromJson(dynamic json) {
 
-    final maybePlatform = NotNull(json['platform'])
-        .map((str) => BundleIdPlatform.deserialize(str));
+    final maybePlatform = Optional(json['platform'])
+        .mapOrNull((str) => BundleIdPlatform.deserialize(str));
 
-    final maybeCertificateType = NotNull(json['certificateType'])
-        .map((str) => CertificateType.deserialize(str));
+    final maybeCertificateType = Optional(json['certificateType'])
+        .mapOrNull((str) => CertificateType.deserialize(str));
 
     return CertificateAttributes(
       expirationDate: json['expirationDate'],
