@@ -21,9 +21,7 @@ import 'package:appstoreconnect/appstoreconnect.dart';
 import 'package:test/test.dart';
 
 void main() async {
-
   test('Verify deserializing JSON to CertificatesResponse', () async {
-
     final response = CertificatesResponse.fromJson(json);
 
     final links = response.links;
@@ -40,7 +38,8 @@ void main() async {
     expect(data[0].type, "certificates");
     expect(data[0].id, "123456");
     expect(data[0].attributes.serialNumber, "1ABCDEFGHIJKLFNIUEUGJIGESESFE");
-    expect(data[0].attributes.certificateContent, "1ABCDEFGHIJKLFNIUEUGJIGESESFEABCDEFGHIJKLFNIUEUGJIGESESFEABCDEFGHIJKLFNIUEUGJIGESESFE");
+    expect(data[0].attributes.certificateContent,
+        "1ABCDEFGHIJKLFNIUEUGJIGESESFEABCDEFGHIJKLFNIUEUGJIGESESFEABCDEFGHIJKLFNIUEUGJIGESESFE");
     expect(data[0].attributes.displayName, "Some Name");
     expect(data[0].attributes.name, "Apple Distribution: Some name");
     expect(data[0].attributes.platform, null);
@@ -51,15 +50,14 @@ void main() async {
     expect(data[1].type, "certificates");
     expect(data[1].id, "234567");
     expect(data[1].attributes.serialNumber, "2ABCDEFGHIJKLFNIUEUGJIGESESFE");
-    expect(data[1].attributes.certificateContent, "2ABCDEFGHIJKLFNIUEUGJIGESESFEABCDEFGHIJKLFNIUEUGJIGESESFEABCDEFGHIJKLFNIUEUGJIGESESFE");
+    expect(data[1].attributes.certificateContent,
+        "2ABCDEFGHIJKLFNIUEUGJIGESESFEABCDEFGHIJKLFNIUEUGJIGESESFEABCDEFGHIJKLFNIUEUGJIGESESFE");
     expect(data[1].attributes.displayName, "Some Name");
     expect(data[1].attributes.name, "Apple Development: Some name");
     expect(data[1].attributes.platform, BundleIdPlatform.ios);
     expect(data[1].attributes.expirationDate, "2023-04-21T13:14:06.000+00:00");
     expect(data[1].attributes.certificateType, CertificateType.development);
-
   });
-
 }
 
 final json = """{

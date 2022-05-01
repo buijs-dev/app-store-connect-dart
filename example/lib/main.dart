@@ -26,14 +26,14 @@ import 'package:appstoreconnect/appstoreconnect.dart';
 
 /// Example of creating an AppStoreConnect instance.
 void main(List<String> arguments) async {
-
   final pathSeparator = Platform.pathSeparator;
 
   /// Create an AppleCredentials instance.
   ///
   /// Read from JSON file given the file is named 'apple_keys.json'
   /// and is stored one folder above the current folder.
-  final pathToJson = "${Directory.current.path}$pathSeparator..${pathSeparator}apple_keys.json";
+  final pathToJson =
+      "${Directory.current.path}$pathSeparator..${pathSeparator}apple_keys.json";
   final credentials = AppStoreCredentials.fromFile(pathToJson);
 
   /// Create an AppStoreConnect instance.
@@ -42,22 +42,23 @@ void main(List<String> arguments) async {
   /// Now you can use the service to communicate with App Store Connect.
   ///
   /// For example: Retrieve all certificates:
-  await service.certificates.find()
-      .then((certificates) => print(certificates));
+  await service.certificates.find().then((certificates) => print(certificates));
 
   /// Or execute a query to find a specific Certificate:
-  await service.certificates.find((_) => _
-    ..filterId = ["1234NOIDEA"]
-    ..filterSerialNumber = ["FOOBAR123"]
-    ..filterDisplayName = ["Beautiful Display"]
-    ..limit = 1
-  ).then((certificate) => print(certificate));
+  await service.certificates
+      .find((_) => _
+        ..filterId = ["1234NOIDEA"]
+        ..filterSerialNumber = ["FOOBAR123"]
+        ..filterDisplayName = ["Beautiful Display"]
+        ..limit = 1)
+      .then((certificate) => print(certificate));
 
   /// Limit the response data returned:
-  await service.certificates.find((_) => _
-    ..showDisplayName
-    ..showCsrContent
-  ).then((certificates) => print(certificates));
+  await service.certificates
+      .find((_) => _
+        ..showDisplayName
+        ..showCsrContent)
+      .then((certificates) => print(certificates));
 
   /// Find by ID:
   await service.certificates.findById("1234NOIDEA");
@@ -65,9 +66,7 @@ void main(List<String> arguments) async {
   /// Find by ID with limited response data returned:
   await service.certificates.findById("1234NOIDEA",
       show: (_) => _
-      ..showDisplayName
-      ..showCsrContent
-      ..showName
-  );
-
+        ..showDisplayName
+        ..showCsrContent
+        ..showName);
 }

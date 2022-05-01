@@ -23,38 +23,34 @@ import 'dart:io';
 ///
 /// [Author] Gillian Buijs.
 class FileFactory {
-
   FileFactory(dynamic path) {
     FileSystemEntity? fse;
 
-    /// Create a FileSystemEntity instance if the given path is a String.
-    if (path is String) {
-      ///Return a File if the path contains a "." or a Directory if not.
-      fse = path.toString().contains(".") ? File(path).absolute : Directory(path).absolute;
-    }
-
     /// If path is a File or Directory then use it.
-    else if (path is File || path is Directory) {
+    if (path is File || path is Directory) {
       fse = path.absolute;
     }
 
+    /// Create a FileSystemEntity instance if the given path is a String.
+    else if (path is String) {
+      fse = _absolutePath(path);
+    }
+
     /// The given path is not a String, File or Directory so throw a [FileException] to stop the process.
-    else {
+    if (fse == null) {
       throw FileException(""
           "The given path is not valid. "
           "Please specify an absolute path as String or a File."
-          "Received path: '$path'"
-      );
+          "Received path: '$path'");
     }
 
-    /// Return the fse if it exists
-    if (fse!.existsSync()) {
+    /// Set the fse if it exists
+    if (fse.existsSync()) {
       _wrapper = FileSystemEntityWrapper(fse);
-    }
-
-    /// Throw a [FileException] if it does not exist.
-    else {
-      throw FileException("The given path does not exist. Received path: '$path'");
+    } else {
+      /// Throw a [FileException] because the given path does not exist.
+      throw FileException(
+          "The given path does not exist. Received path: '$path'");
     }
   }
 
@@ -64,11 +60,16 @@ class FileFactory {
 
   Directory folder() => _wrapper.folder();
 
+  ///Return a File if the path contains a "." or a Directory if not.
+  static FileSystemEntity _absolutePath(String path) {
+    return path.toString().contains(".")
+        ? File(path).absolute
+        : Directory(path).absolute;
+  }
 }
 
 /// [Author] Gillian Buijs.
 class FileSystemEntityWrapper {
-
   FileSystemEntityWrapper(FileSystemEntity entity) {
     _fse = entity;
   }
@@ -78,7 +79,6 @@ class FileSystemEntityWrapper {
   File file() => File(_fse.path);
 
   Directory folder() => Directory(_fse.path);
-
 }
 
 /// Exception indicating a [File] instance could not be created

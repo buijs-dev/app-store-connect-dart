@@ -8,7 +8,7 @@
 // furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.//
+// copies or substantial portions of the Software.
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -17,34 +17,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'dart:convert';
-
-import 'package:appstoreconnect/appstoreconnect.dart';
-import 'package:test/test.dart';
-
-void main() async {
-  test('Verify serializing CertificateCreateRequest to JSON', () async {
-    final request = CertificateCreateRequest.create(
-      certificateType: CertificateType.iosDistribution,
-      csrContent: """-----BEGIN CERTIFICATE REQUEST-----
-                    BLABLABLABLABLABLABLABLABLALBLA==
-                    -----END CERTIFICATE REQUEST-----""",
-    ).toJson();
-
-    expect(jsonEncode(request).replaceAll(" ", "").replaceAll("\\n", ""), json);
-  });
+/// Utility to print templated Strings.
+///
+/// Example:
+///
+/// Given a templated String:
+/// ```
+/// final String foo = """|A multi-line message
+///                       |is a message
+///                       |that exists of
+///                       |multiple lines.
+///                       |
+///                       |True story"""";
+/// ```
+///
+/// Will produce a multi-line String:
+///
+/// 'A multi-line message
+/// is a message
+/// that exists of
+/// multiple lines.
+///
+/// True story'
+///
+/// [Author] Gillian Buijs.
+extension TemplatePrinter on String {
+  String format() => replaceAllMapped(
+      // Find all '|' char including preceding whitespaces.
+      RegExp(r'(\s+?\|)'),
+      // Replace them with a single linebreak.
+      (_) => "\n").replaceAll("|", "");
 }
-
-final json = """{
-    "data": {
-        "type": "certificates",
-        "attributes": {
-          "certificateType": "IOS_DISTRIBUTION",
-          "csrContent": "-----BEGIN CERTIFICATE REQUEST-----
-          BLABLABLABLABLABLABLABLABLALBLA==
-          -----END CERTIFICATE REQUEST-----"
-        }
-     }
-  }"""
-    .replaceAll(" ", "")
-    .replaceAll("\n", "");

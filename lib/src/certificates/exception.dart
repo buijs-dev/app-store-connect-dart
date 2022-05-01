@@ -17,6 +17,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import '../utils/strings.dart';
+
 ///Exception indicating an issue communicating with the App Store Connect API regarding the Certificates resource.
 ///
 /// [Author] Gillian Buijs.
@@ -26,5 +28,5 @@ class CertificateException implements Exception {
   String cause;
 
   @override
-  String toString() => "CertificateException with cause: '$cause'";
+  String toString() => "CertificateException with cause: '${cause.format()}'";
 }

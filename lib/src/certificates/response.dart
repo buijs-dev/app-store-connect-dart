@@ -31,7 +31,6 @@ import 'exception.dart';
 ///
 /// [Author] Gillian Buijs.
 class CertificatesResponse {
-
   CertificatesResponse({
     required this.data,
     required this.links,
@@ -45,49 +44,48 @@ class CertificatesResponse {
   factory CertificatesResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
-    final data = Optional(json['data']).orElseThrow(
-        CertificateException("CertificateResponse JSON did not contain required element data")
-    );
+    final data = Optional(json['data']).orElseThrow(CertificateException(
+        "CertificateResponse JSON did not contain required element data"));
 
-    final links = Optional(json['links']).orElseThrow(
-        CertificateException("CertificateResponse JSON did not contain required element links")
-    );
+    final links = Optional(json['links']).orElseThrow(CertificateException(
+        "CertificateResponse JSON did not contain required element links"));
 
     final meta = json['meta'];
 
     return CertificatesResponse(
       links: PagedDocumentLinks.fromJson(links),
       meta: PagingInformation.fromJson(meta),
-      data: List.from(data).map((cert) =>
-          Certificate(
-              id: cert['id'].toString(),
-              links: ResourceLinks(cert['links']['self']),
-              attributes: CertificateAttributes.fromJson(cert['attributes'])
-          ),
-      ).toList(),
+      data: List.from(data)
+          .map(
+            (cert) => Certificate(
+                id: cert['id'].toString(),
+                links: ResourceLinks(cert['links']['self']),
+                attributes: CertificateAttributes.fromJson(cert['attributes'])),
+          )
+          .toList(),
     );
-
   }
 
   Map<String, dynamic> toJson() => {
-    "data": data,
-    "links": links,
-    "meta": meta,
-  };
+        "data": data,
+        "links": links,
+        "meta": meta,
+      };
 
   @override
-  bool operator ==(Object other) => other is CertificatesResponse
-      && other.runtimeType == runtimeType
-      && other.data == data
-      && other.links == links
-      && other.meta == meta;
+  bool operator ==(Object other) =>
+      other is CertificatesResponse &&
+      other.runtimeType == runtimeType &&
+      other.data == data &&
+      other.links == links &&
+      other.meta == meta;
 
   @override
   int get hashCode => data.hashCode;
 
   @override
-  String toString() => "Instance of CertificatesResponse: data = $data | links = $links | meta = $meta";
-
+  String toString() =>
+      "Instance of CertificatesResponse: data = $data | links = $links | meta = $meta";
 }
 
 /// A response that contains a single Certificates resource.
@@ -96,7 +94,6 @@ class CertificatesResponse {
 ///
 /// [Author] Gillian Buijs.
 class CertificateResponse {
-
   CertificateResponse({
     required this.data,
     required this.links,
@@ -108,41 +105,38 @@ class CertificateResponse {
   final DocumentLinks links;
 
   factory CertificateResponse.fromJson(String content) {
-
     final json = jsonDecode(content);
 
-    final data = Optional(json['data']).orElseThrow(
-        CertificateException("CertificateResponse JSON did not contain required element data")
-    );
+    final data = Optional(json['data']).orElseThrow(CertificateException(
+        "CertificateResponse JSON did not contain required element data"));
 
     return CertificateResponse(
       links: DocumentLinks(self: data['links']['self']),
       data: Certificate(
           id: data['id'].toString(),
           links: ResourceLinks(data['links']['self']),
-          attributes: CertificateAttributes.fromJson(data['attributes'])
-      ),
+          attributes: CertificateAttributes.fromJson(data['attributes'])),
     );
-
   }
 
   Map<String, dynamic> toJson() => {
-    "data": data,
-    "links": links,
-  };
+        "data": data,
+        "links": links,
+      };
 
   @override
-  bool operator ==(Object other) => other is CertificateResponse
-      && other.runtimeType == runtimeType
-      && other.data == data
-      && other.links == links;
+  bool operator ==(Object other) =>
+      other is CertificateResponse &&
+      other.runtimeType == runtimeType &&
+      other.data == data &&
+      other.links == links;
 
   @override
   int get hashCode => data.hashCode;
 
   @override
-  String toString() => "Instance of CertificateResponse: data = $data | links = $links";
-
+  String toString() =>
+      "Instance of CertificateResponse: data = $data | links = $links";
 }
 
 /// Part of [CertificatesResponse] and [CertificateResponse].
@@ -151,7 +145,6 @@ class CertificateResponse {
 ///
 /// [Author] Gillian Buijs.
 class Certificate {
-
   Certificate({
     required this.attributes,
     required this.id,
@@ -171,24 +164,25 @@ class Certificate {
   final ResourceLinks links;
 
   Map<String, dynamic> toJson() => {
-    "attributes": attributes,
-    "id": id,
-    "links": links,
-  };
+        "attributes": attributes,
+        "id": id,
+        "links": links,
+      };
 
   @override
-  bool operator ==(Object other) => other is Certificate
-      && other.runtimeType == runtimeType
-      && other.attributes == attributes
-      && other.id == id
-      && other.links == links;
+  bool operator ==(Object other) =>
+      other is Certificate &&
+      other.runtimeType == runtimeType &&
+      other.attributes == attributes &&
+      other.id == id &&
+      other.links == links;
 
   @override
   int get hashCode => attributes.hashCode;
 
   @override
-  String toString() => "Instance of Certificate: attributes = $attributes | id = $id | links = $links";
-
+  String toString() =>
+      "Instance of Certificate: attributes = $attributes | id = $id | links = $links";
 }
 
 /// Part of [Certificate].
@@ -200,7 +194,6 @@ class Certificate {
 ///
 /// [Author] Gillian Buijs.
 class CertificateAttributes {
-
   CertificateAttributes({
     this.certificateContent,
     this.displayName,
@@ -220,7 +213,6 @@ class CertificateAttributes {
   final CertificateType? certificateType;
 
   factory CertificateAttributes.fromJson(dynamic json) {
-
     final maybePlatform = Optional(json['platform'])
         .mapOrNull((str) => BundleIdPlatform.deserialize(str));
 
@@ -232,37 +224,36 @@ class CertificateAttributes {
       certificateContent: json['certificateContent'],
       displayName: json['displayName'],
       name: json['name'],
-      serialNumber:json['serialNumber'],
+      serialNumber: json['serialNumber'],
       platform: maybePlatform,
       certificateType: maybeCertificateType,
     );
-
   }
 
   Map<String, dynamic> toJson() => {
-    "certificateContent": certificateContent,
-    "displayName": displayName,
-    "expirationDate": expirationDate,
-    "name": name,
-    "platform": platform?.value,
-    "serialNumber": serialNumber,
-    "certificateType": certificateType?.value,
-  };
+        "certificateContent": certificateContent,
+        "displayName": displayName,
+        "expirationDate": expirationDate,
+        "name": name,
+        "platform": platform?.value,
+        "serialNumber": serialNumber,
+        "certificateType": certificateType?.value,
+      };
 
   @override
-  bool operator ==(Object other) => other is CertificateAttributes
-      && other.runtimeType == runtimeType
-      && other.certificateContent == certificateContent
-      && other.displayName == displayName
-      && other.expirationDate == expirationDate
-      && other.name == name
-      && other.platform == platform
-      && other.serialNumber == serialNumber
-      && other.certificateType == certificateType;
+  bool operator ==(Object other) =>
+      other is CertificateAttributes &&
+      other.runtimeType == runtimeType &&
+      other.certificateContent == certificateContent &&
+      other.displayName == displayName &&
+      other.expirationDate == expirationDate &&
+      other.name == name &&
+      other.platform == platform &&
+      other.serialNumber == serialNumber &&
+      other.certificateType == certificateType;
 
   @override
-  int get hashCode =>
-      certificateType.hashCode + certificateContent.hashCode;
+  int get hashCode => certificateType.hashCode + certificateContent.hashCode;
 
   @override
   String toString() => "Instance of CertificateAttributes: "
@@ -273,5 +264,4 @@ class CertificateAttributes {
       "platform = $platform | "
       "serialNumber = $serialNumber | "
       "certificateType = ${certificateType?.value}";
-
 }

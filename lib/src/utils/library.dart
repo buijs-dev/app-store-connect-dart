@@ -17,34 +17,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'dart:convert';
+library utils;
 
-import 'package:appstoreconnect/appstoreconnect.dart';
-import 'package:test/test.dart';
-
-void main() async {
-  test('Verify serializing CertificateCreateRequest to JSON', () async {
-    final request = CertificateCreateRequest.create(
-      certificateType: CertificateType.iosDistribution,
-      csrContent: """-----BEGIN CERTIFICATE REQUEST-----
-                    BLABLABLABLABLABLABLABLABLALBLA==
-                    -----END CERTIFICATE REQUEST-----""",
-    ).toJson();
-
-    expect(jsonEncode(request).replaceAll(" ", "").replaceAll("\\n", ""), json);
-  });
-}
-
-final json = """{
-    "data": {
-        "type": "certificates",
-        "attributes": {
-          "certificateType": "IOS_DISTRIBUTION",
-          "csrContent": "-----BEGIN CERTIFICATE REQUEST-----
-          BLABLABLABLABLABLABLABLABLALBLA==
-          -----END CERTIFICATE REQUEST-----"
-        }
-     }
-  }"""
-    .replaceAll(" ", "")
-    .replaceAll("\n", "");
+export 'files.dart';
+export 'nullsafe.dart';
+export 'strings.dart';

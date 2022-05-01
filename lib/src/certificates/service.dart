@@ -37,72 +37,89 @@ List<String> _warnings = [];
 ///
 /// [Author] Gillian Buijs.
 class CertificatesService extends Service {
-
-  CertificatesService(AppStoreCredentials credentials, [AppStoreClient? client]) : super(
-    credentials: credentials,
-    path: '/certificates',
-    client: client ?? const AppStoreHttpClient(),
-  );
+  CertificatesService(
+      // Credentials for creating a JWT.
+      AppStoreCredentials credentials,
+      // Client to communicate with the App Store Connect API (default AppStoreHttpClient).
+      [AppStoreClient? client])
+      : super(
+          credentials: credentials,
+          path: '/certificates',
+          client: client ?? const AppStoreHttpClient(),
+        );
 
   /// Retrieve all signing certificates.
-  Future<Result<CertificatesResponse>> find([
-    CertificatesQuery Function(CertificatesQuery)? query]) =>
-      _doGet(
-          query: Optional(query).mapOrNull((query) => query(CertificatesQuery()))
-      ).then((response){
-        return Result.fromResponse(
+  Future<Result<CertificatesResponse>> find(
+      [CertificatesQuery Function(CertificatesQuery)? query]) {
+    // Create a query if there are parameters.
+    // Return null if there are none.
+    final queryOrNull = Optional(query).mapOrNull((query) {
+      // Params found so create a query.
+      return query(CertificatesQuery());
+    });
+
+    return _doGet(query: queryOrNull)
+        .then((response) => Result.fromResponse(
             warnings: _warnings,
             response: response,
             success: (response) => response.statusCode == 200,
-            deserialize: (json) => CertificatesResponse.fromJson(json));
-      }).whenComplete(() => _warnings.clear());
+            deserialize: (json) => CertificatesResponse.fromJson(json)))
+        .whenComplete(() => _warnings.clear());
+  }
 
   /// Retrieve a signing certificate for given ID.
-  Future<Result<CertificateResponse>> findById(id, {
-    CertificateQuery Function(CertificateQuery)? show}) =>
-      _doGet(params: [id],
-          query: Optional(show).mapOrNull((show) => show(CertificateQuery()))
-      ).then((response){
-        return Result.fromResponse(
+  Future<Result<CertificateResponse>> findById(id,
+      {CertificateQuery Function(CertificateQuery)? show}) {
+    final params = <String>[id];
+    final queryOrNull = Optional(show).mapOrNull((show) {
+      // Params found so create a query.
+      return show(CertificateQuery());
+    });
+
+    return _doGet(params: params, query: queryOrNull)
+        .then((response) => Result.fromResponse(
             warnings: _warnings,
             response: response,
             success: (response) => response.statusCode == 200,
-            deserialize: (json) => CertificateResponse.fromJson(json));
-      }).whenComplete(() => _warnings.clear());
+            deserialize: (json) => CertificateResponse.fromJson(json)))
+        .whenComplete(() => _warnings.clear());
+  }
 
   /// Create a new signing certificate.
   Future<Result<CertificateResponse>> create({
     required CertificateType certificateType,
     required String csrContent,
-  }) => _doPost(CertificateCreateRequest.create(
+  }) {
+    final request = CertificateCreateRequest.create(
       certificateType: certificateType,
-      csrContent: csrContent
-  )).then((response){
-    return Result.fromResponse(
-        warnings: _warnings,
-        response: response,
-        success: (response) => response.statusCode == 201,
-        deserialize: (json) => CertificateResponse.fromJson(json));
-  }).whenComplete(() => _warnings.clear());
+      csrContent: csrContent,
+    );
+
+    return _doPost(request)
+        .then((response) => Result.fromResponse(
+            warnings: _warnings,
+            response: response,
+            success: (response) => response.statusCode == 201,
+            deserialize: (json) => CertificateResponse.fromJson(json)))
+        .whenComplete(() => _warnings.clear());
+  }
 
   /// Revoke a signing certificate for given ID.
   ///
   /// Return [bool].
   Future<Result<bool>> revokeById(id) {
-    return _doDelete(params: [id]).then((response) =>
-        Result.fromResponse(
+    return _doDelete(params: [id])
+        .then((response) => Result.fromResponse(
             warnings: _warnings,
             response: response,
             success: (response) => response.statusCode == 204,
-            deserialize: (json) => response.statusCode == 204 ? true : false)
-    ).whenComplete(() => _warnings.clear());
+            deserialize: (json) => response.statusCode == 204 ? true : false))
+        .whenComplete(() => _warnings.clear());
   }
 
   /// Execute a GET with specified query and/or path parameters and return the response body as String.
-  Future<http.Response> _doGet({
-    CertificateQuery? query,
-    List<String>? params
-  }) {
+  Future<http.Response> _doGet(
+      {CertificateQuery? query, List<String>? params}) {
     if (query != null) super.query = query._createQueryMap;
     if (params != null) super.params = params;
     return super.doGet;
@@ -120,7 +137,6 @@ class CertificatesService extends Service {
     if (params != null) super.params = params;
     return super.doDelete;
   }
-
 }
 
 /// Helper to construct query params for finding Certificates with [CertificatesService.find].
@@ -150,8 +166,7 @@ class CertificatesQuery extends CertificateQuery {
       _warnings.add(""
           "Specified limit is invalid: $limit"
           "Why do you want to see less than 1 certificate!?"
-          "Setting limit to: '1'"
-      );
+          "Setting limit to: '1'");
       _limit = 1;
     }
 
@@ -159,8 +174,7 @@ class CertificatesQuery extends CertificateQuery {
     else if (limit > 200) {
       _warnings.add(""
           "Specified limit exceeds the maximum value: $limit"
-          "Setting limit to maximum value: '200'"
-      );
+          "Setting limit to maximum value: '200'");
       _limit = 200;
     }
 
@@ -228,13 +242,15 @@ class CertificatesQuery extends CertificateQuery {
 
     if (filterDisplayName.isNotEmpty) {
       map.putIfAbsent(
-          "filter[displayName]", () => filterDisplayName.join(','),
+        "filter[displayName]",
+        () => filterDisplayName.join(','),
       );
     }
 
     if (filterSerialNumber.isNotEmpty) {
       map.putIfAbsent(
-          "filter[serialNumber]", () => filterSerialNumber.join(','),
+        "filter[serialNumber]",
+        () => filterSerialNumber.join(','),
       );
     }
 
@@ -248,7 +264,8 @@ class CertificatesQuery extends CertificateQuery {
 
     if (_fields.isNotEmpty) {
       map.putIfAbsent(
-          "fields[certificates]", () => _fields.map((e) => e.name).join(','),
+        "fields[certificates]",
+        () => _fields.map((e) => e.name).join(','),
       );
     }
 
@@ -318,7 +335,8 @@ class CertificateQuery {
 
     if (_fields.isNotEmpty) {
       map.putIfAbsent(
-          "fields[certificates]", () => _fields.map((e) => e.name).join(','),
+        "fields[certificates]",
+        () => _fields.map((e) => e.name).join(','),
       );
     }
 

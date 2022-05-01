@@ -17,7 +17,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 import 'const.dart';
 
 /// The request body you use to create a Certificate.
@@ -26,7 +25,6 @@ import 'const.dart';
 ///
 /// [Author] Gillian Buijs.
 class CertificateCreateRequest {
-
   const CertificateCreateRequest(this.data);
 
   /// (Required) The resource data.
@@ -35,25 +33,26 @@ class CertificateCreateRequest {
   factory CertificateCreateRequest.create({
     required CertificateType certificateType,
     required String csrContent,
-  }) => CertificateCreateRequest(
-      CertificateCreateRequestData(
+  }) =>
+      CertificateCreateRequest(
+        CertificateCreateRequestData(
           CertificateCreateRequestDataAttributes(
             certificateType: certificateType,
             csrContent: csrContent,
-          )
-      )
-  );
+          ),
+        ),
+      );
 
-  Map<String, dynamic> toJson() => { "data": data };
+  Map<String, dynamic> toJson() => {"data": data};
 
   @override
-  bool operator ==(Object other) => other is CertificateCreateRequest
-      && other.runtimeType == runtimeType
-      && other.data == data;
+  bool operator ==(Object other) =>
+      other is CertificateCreateRequest &&
+      other.runtimeType == runtimeType &&
+      other.data == data;
 
   @override
   int get hashCode => data.hashCode;
-
 }
 
 /// The data element of the request body.
@@ -62,7 +61,6 @@ class CertificateCreateRequest {
 ///
 /// [Author] Gillian Buijs.
 class CertificateCreateRequestData {
-
   const CertificateCreateRequestData(this.attributes);
 
   /// (Required) fixed value.
@@ -72,19 +70,19 @@ class CertificateCreateRequestData {
   final CertificateCreateRequestDataAttributes attributes;
 
   Map<String, dynamic> toJson() => {
-    "type": type,
-    "attributes": attributes,
-  };
+        "type": type,
+        "attributes": attributes,
+      };
 
   @override
-  bool operator ==(Object other) => other is CertificateCreateRequestData
-      && other.runtimeType == runtimeType
-      && other.attributes == attributes
-      && other.type == type;
+  bool operator ==(Object other) =>
+      other is CertificateCreateRequestData &&
+      other.runtimeType == runtimeType &&
+      other.attributes == attributes &&
+      other.type == type;
 
   @override
   int get hashCode => attributes.hashCode;
-
 }
 
 /// Attributes that you set that describe the new resource.
@@ -93,7 +91,6 @@ class CertificateCreateRequestData {
 ///
 /// [Author] Gillian Buijs.
 class CertificateCreateRequestDataAttributes {
-
   const CertificateCreateRequestDataAttributes({
     required this.certificateType,
     required this.csrContent,
@@ -106,17 +103,17 @@ class CertificateCreateRequestDataAttributes {
   final String csrContent;
 
   Map<String, dynamic> toJson() => {
-    "certificateType": certificateType.value,
-    "csrContent": csrContent,
-  };
+        "certificateType": certificateType.value,
+        "csrContent": csrContent,
+      };
 
   @override
-  bool operator ==(Object other) => other is CertificateCreateRequestDataAttributes
-      && other.runtimeType == runtimeType
-      && other.certificateType == certificateType
-      && other.csrContent == csrContent;
+  bool operator ==(Object other) =>
+      other is CertificateCreateRequestDataAttributes &&
+      other.runtimeType == runtimeType &&
+      other.certificateType == certificateType &&
+      other.csrContent == csrContent;
 
   @override
   int get hashCode => certificateType.hashCode;
-
 }

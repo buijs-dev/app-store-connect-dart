@@ -29,7 +29,6 @@ import 'package:http/http.dart' as http;
 ///
 /// [Author] Gillian Buijs.
 class Result<T> {
-
   const Result._({
     required this.code,
     required this.body,
@@ -55,7 +54,6 @@ class Result<T> {
 
   /// Convert the HTTP Response to a Result object.
   factory Result.fromResponse({
-
     /// The HTTP Response.
     required http.Response response,
 
@@ -69,7 +67,6 @@ class Result<T> {
     /// Any warning occurred during processing.
     List<String> warnings = const [],
   }) {
-
     // Call the predicate function and determine if the request is handled successfully.
     final isSuccess = success(response);
 
@@ -80,7 +77,5 @@ class Result<T> {
       value: isSuccess ? deserialize(response.body) : null,
       warnings: warnings,
     );
-
   }
-
 }

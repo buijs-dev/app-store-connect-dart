@@ -25,7 +25,6 @@ import 'exception.dart';
 ///
 /// [Author] Gillian Buijs.
 class BundleIdPlatform {
-
   const BundleIdPlatform(this.value);
 
   final String value;
@@ -42,9 +41,10 @@ class BundleIdPlatform {
   ///
   /// [Author] Gillian Buijs.
   factory BundleIdPlatform.deserialize(String value) {
-    return BundleIdPlatform.values.firstWhere((type) => type.value == value,
-        orElse: () => throw BundleIdException("Invalid BundleIdPlatform value: '$value'.")
+    return BundleIdPlatform.values.firstWhere(
+      (type) => type.value == value,
+      orElse: () =>
+          throw BundleIdException("Invalid BundleIdPlatform value: '$value'."),
     );
   }
-
 }

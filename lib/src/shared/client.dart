@@ -30,7 +30,6 @@ import 'package:http/http.dart' as http;
 ///
 /// [Author] Gillian Buijs.
 abstract class AppStoreClient {
-
   const AppStoreClient();
 
   Future<http.Response> get({
@@ -49,46 +48,49 @@ abstract class AppStoreClient {
     required String uri,
     required String jwt,
   });
-
 }
 
 /// Implementation for the [AppStoreClient].
 ///
 /// [Author] Gillian Buijs.
 class AppStoreHttpClient extends AppStoreClient {
-
   const AppStoreHttpClient();
 
   @override
+
   /// Execute a GET request to the App Store Connect API.
   Future<http.Response> get({
     required String uri,
     required String jwt,
     Map<String, String> headers = const {},
-  })  => http.get(Uri.parse(uri), headers: headers.add(jwt));
+  }) =>
+      http.get(Uri.parse(uri), headers: headers.add(jwt));
 
   @override
+
   /// Execute a POST request to the App Store Connect API.
   Future<http.Response> post({
     required String uri,
     required String body,
     required String jwt,
     Map<String, String> headers = const {},
-  }) => http.post(Uri.parse(uri), body: body, headers: headers.add(jwt));
+  }) =>
+      http.post(Uri.parse(uri), body: body, headers: headers.add(jwt));
 
   @override
+
   /// Execute a DELETE request to the App Store Connect API.
   Future<http.Response> delete({
     required String uri,
     required String jwt,
     Map<String, String> headers = const {},
-  }) => http.delete(Uri.parse(uri), headers: headers.add(jwt));
-
+  }) =>
+      http.delete(Uri.parse(uri), headers: headers.add(jwt));
 }
 
 extension _JWT on Map<String, String> {
   Map<String, String> add(String token) => {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + token
-  }..addAll(this);
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }..addAll(this);
 }

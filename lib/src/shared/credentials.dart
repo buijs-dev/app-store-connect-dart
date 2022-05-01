@@ -19,11 +19,9 @@
 
 import 'dart:convert';
 import 'package:jose/jose.dart';
-import 'package:path/path.dart';
 
 import '../../appstoreconnect.dart';
-import '../utils/nullsafe.dart';
-import '../utils/files.dart';
+import '../utils/library.dart';
 
 /// Utility to create a JWT token and HTTP client for connecting to app-store-connect-api.
 ///
@@ -68,14 +66,12 @@ class AppStoreCredentials {
   /// Return [AppStoreCredentials] used to create a JWT token and connect to app-store-connect-api.
   factory AppStoreCredentials.fromFile(dynamic path) {
     final source = FileFactory(path).file();
-    if(extension(source.path) != ".json") {
+    if (!source.path.endsWith(".json")) {
       throw AppStoreCredentialsException(
           """|Could not create an AppleCredentials instance because the given path is not a JSON file.
              |
              |Path: '${source.absolute.path}'
-          """
-      );
-
+          """);
     }
     return AppStoreCredentials.fromJson(source.readAsStringSync());
   }
@@ -86,20 +82,19 @@ class AppStoreCredentials {
   ///
   /// Return [AppStoreCredentials] used to create a JWT token and connect to app-store-connect-api.
   factory AppStoreCredentials.fromJson(String fileContent) {
-    return Optional(fileContent)
-        .map((str) => jsonDecode(str))
-        .map((json) {
-          return AppStoreCredentials(
-            privateKeyId: Optional(json['private_key_id'])
-                .orElseThrow(AppStoreCredentialsException("Missing key named 'private_key_id' in JSON document.")),
-
-            privateKey: Optional(json['private_key'])
-                .orElseThrow(AppStoreCredentialsException("Missing key named 'private_key' in JSON document.")),
-
-            issuerId: Optional(json['issuer_id'])
-                .orElseThrow(AppStoreCredentialsException("Missing key named 'issuer_id' in JSON document.")),
-          );
-        }).value;
+    return Optional(fileContent).map((str) => jsonDecode(str)).map((json) {
+      return AppStoreCredentials(
+        privateKeyId: Optional(json['private_key_id']).orElseThrow(
+            AppStoreCredentialsException(
+                "Missing key named 'private_key_id' in JSON document.")),
+        privateKey: Optional(json['private_key']).orElseThrow(
+            AppStoreCredentialsException(
+                "Missing key named 'private_key' in JSON document.")),
+        issuerId: Optional(json['issuer_id']).orElseThrow(
+            AppStoreCredentialsException(
+                "Missing key named 'issuer_id' in JSON document.")),
+      );
+    }).value;
   }
 
   /// Create a JSON web token with the given key information.
@@ -124,7 +119,6 @@ class AppStoreCredentials {
 
     return builder.build().toCompactSerialization();
   }
-
 }
 
 ///Exception indicating an issue authenticating to the App Store Connect API.
@@ -137,9 +131,5 @@ class AppStoreCredentialsException implements Exception {
 
   @override
   String toString() =>
-      "AppStoreConnectException with cause: '${_format(cause)}'";
-
-  String _format(String msg) =>
-      msg.replaceAllMapped(RegExp(r'(\s+?\|)'), (match) => "\n").replaceAll("|", "");
-
+      "AppStoreConnectException with cause: '${cause.format()}'";
 }

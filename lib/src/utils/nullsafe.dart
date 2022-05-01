@@ -21,14 +21,13 @@
 ///
 /// [Author] Gillian Buijs.
 class Optional<T> {
-
   const Optional(this.value);
 
   final T value;
 
   /// Return the value or use the fallback action if value is null.
   T orElse(Function() orElse) {
-    if(value == null) {
+    if (value == null) {
       return orElse.call();
     } else {
       return value;
@@ -37,7 +36,7 @@ class Optional<T> {
 
   /// Return the value or throw exception if value is null.
   T orElseThrow(Exception e) {
-    if(value == null) {
+    if (value == null) {
       return throw e;
     } else {
       return value;
@@ -48,7 +47,7 @@ class Optional<T> {
   ///
   /// Return [Optional] with new value or this instance with null value.
   Optional<dynamic> map(Function(dynamic) action) {
-    if(value != null) {
+    if (value != null) {
       return Optional(action(value));
     } else {
       return this;
@@ -59,11 +58,10 @@ class Optional<T> {
   ///
   /// Return [T] or null if no value is present.
   dynamic mapOrNull(Function(dynamic) action) {
-    if(value != null) {
+    if (value != null) {
       return action(value);
     } else {
       return null;
     }
   }
-
 }

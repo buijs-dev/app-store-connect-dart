@@ -1,5 +1,7 @@
 import 'exception.dart';
 
+typedef _C = CertificateType;
+
 /// Literal values that represent types of signing certificates.
 ///
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificatetype.
@@ -10,31 +12,31 @@ class CertificateType {
 
   final String value;
 
-  static const developerIdApplication = CertificateType("DEVELOPER_ID_APPLICATION");
-  static const developerIdKext = CertificateType("DEVELOPER_ID_KEXT");
-  static const development = CertificateType("DEVELOPMENT");
-  static const distribution = CertificateType("DISTRIBUTION");
-  static const iosDevelopment = CertificateType("IOS_DEVELOPMENT");
-  static const iosDistribution = CertificateType("IOS_DISTRIBUTION");
-  static const macAppDevelopment = CertificateType("MAC_APP_DEVELOPMENT");
-  static const macAppDistribution = CertificateType("MAC_APP_DISTRIBUTION");
-  static const macInstallerDistribution = CertificateType("MAC_INSTALLER_DISTRIBUTION");
-  static const passTypeId = CertificateType("PASS_TYPE_ID");
-  static const passTypeIdWithNfc = CertificateType("PASS_TYPE_ID_WITH_NFC");
+  static const developerIdApplication = _C("DEVELOPER_ID_APPLICATION");
+  static const developerIdKext = _C("DEVELOPER_ID_KEXT");
+  static const development = _C("DEVELOPMENT");
+  static const distribution = _C("DISTRIBUTION");
+  static const iosDevelopment = _C("IOS_DEVELOPMENT");
+  static const iosDistribution = _C("IOS_DISTRIBUTION");
+  static const macAppDevelopment = _C("MAC_APP_DEVELOPMENT");
+  static const macAppDistribution = _C("MAC_APP_DISTRIBUTION");
+  static const macInstallerDistribution = _C("MAC_INSTALLER_DISTRIBUTION");
+  static const passTypeId = _C("PASS_TYPE_ID");
+  static const passTypeIdWithNfc = _C("PASS_TYPE_ID_WITH_NFC");
 
   static List<CertificateType> get values => [
-    iosDevelopment,
-    iosDistribution,
-    macAppDistribution,
-    macInstallerDistribution,
-    macAppDevelopment,
-    developerIdKext,
-    developerIdApplication,
-    development,
-    distribution,
-    passTypeId,
-    passTypeIdWithNfc,
-  ];
+        iosDevelopment,
+        iosDistribution,
+        macAppDistribution,
+        macInstallerDistribution,
+        macAppDevelopment,
+        developerIdKext,
+        developerIdApplication,
+        development,
+        distribution,
+        passTypeId,
+        passTypeIdWithNfc,
+      ];
 
   /// Helper to deserialize String to [CertificateType] enumeration.
   ///
@@ -43,9 +45,10 @@ class CertificateType {
   ///
   /// [Author] Gillian Buijs.
   factory CertificateType.deserialize(String value) {
-    return CertificateType.values.firstWhere((type) => type.value == value,
-        orElse: () => throw CertificateException("Invalid CertificateType value: '$value'.")
+    return CertificateType.values.firstWhere(
+      (type) => type.value == value,
+      orElse: () => throw CertificateException(
+          "Invalid CertificateType value: '$value'."),
     );
   }
-
 }

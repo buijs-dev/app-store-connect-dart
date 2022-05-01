@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 ///
 /// [Author] Gillian Buijs.
 class FakeClient extends AppStoreClient {
-
   String getResponseBody = "";
   int getResponseCode = 200;
 
@@ -22,15 +21,16 @@ class FakeClient extends AppStoreClient {
     required String uri,
     required String jwt,
   }) async {
-
     assertUri(uri);
 
     var response = http.Response(getResponseBody, getResponseCode);
 
     if (response.statusCode != 200) {
       throw HttpException(
-          "Http request returned status code " + response.statusCode.toString() +
-              " and body: " + response.body,
+          "Http request returned status code " +
+              response.statusCode.toString() +
+              " and body: " +
+              response.body,
           uri: Uri.parse(uri));
     }
 
@@ -44,7 +44,6 @@ class FakeClient extends AppStoreClient {
     required String jwt,
     Map<String, String> headers = const {},
   }) async {
-
     assertUri(uri);
     assertRequest(body);
 
@@ -52,32 +51,33 @@ class FakeClient extends AppStoreClient {
 
     if (response.statusCode != 201) {
       throw HttpException(
-          "Http request returned status code " + response.statusCode.toString() +
-              " and body: " + response.body,
+          "Http request returned status code " +
+              response.statusCode.toString() +
+              " and body: " +
+              response.body,
           uri: Uri.parse(uri));
     }
 
     return response;
-
   }
 
   void assertUri(String uri) {
+    assert(Uri.tryParse(uri) != null, "Invalid URI: '$uri'");
 
-    assert (Uri.tryParse(uri) != null, "Invalid URI: '$uri'");
-
-    if(expectedUri != "") {
+    if (expectedUri != "") {
       var compare = expectedUri;
       //Clear the URI to be sure it does not interfere when client is reused for other test.
       expectedUri = "";
-      assert (compare == uri, "Expected URI: '$compare'\nActual URI: $uri");
+      assert(compare == uri, "Expected URI: '$compare'\nActual URI: $uri");
     }
   }
 
   void assertRequest(String request) {
-    if(expectedRequest != "") {
+    if (expectedRequest != "") {
       //Clear the Request to be sure it does not interfere when client is reused for other test.
       expectedRequest = "";
-      assert (expectedRequest.replaceAll(" ", "") == request.replaceAll(" ", ""), "Expected request: '$expectedRequest'\nActual request: $request");
+      assert(expectedRequest.replaceAll(" ", "") == request.replaceAll(" ", ""),
+          "Expected request: '$expectedRequest'\nActual request: $request");
     }
   }
 
@@ -86,5 +86,4 @@ class FakeClient extends AppStoreClient {
     // TODO: implement delete
     throw UnimplementedError();
   }
-
 }

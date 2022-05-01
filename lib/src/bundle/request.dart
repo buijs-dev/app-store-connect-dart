@@ -41,10 +41,10 @@ class BundleIdCreateRequest {
     required String bundleId,
   }) =>
       jsonEncode(
-          BundleIdCreateRequest.create(
-            appName: appName,
-            bundleId: bundleId,
-          ),
+        BundleIdCreateRequest.create(
+          appName: appName,
+          bundleId: bundleId,
+        ),
       );
 
   Map<String, dynamic> toJson() => {"data": data};
@@ -59,10 +59,9 @@ class _BundleIdCreateRequestData {
   final String type = "bundleIds";
 
   Map<String, dynamic> toJson() => {
-    "attributes": attributes,
-    "type": type,
-  };
-
+        "attributes": attributes,
+        "type": type,
+      };
 }
 
 /// [Author] Gillian Buijs.
@@ -74,9 +73,8 @@ class _BundleIdCreateRequestDataAttributes {
   final String platform = "IOS";
 
   Map<String, dynamic> toJson() => {
-    "identifier": identifier,
-    "name": name,
-    "platform": platform,
-  };
-
+        "identifier": identifier,
+        "name": name,
+        "platform": platform,
+      };
 }
