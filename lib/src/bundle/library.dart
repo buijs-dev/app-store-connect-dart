@@ -22,7 +22,7 @@
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/bundle_ids.
 ///
 /// [Author] Gillian Buijs.
-library bundle_ids;
+library bundle;
 
 export 'request.dart';
 export 'const.dart';

@@ -17,6 +17,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import 'exception.dart';
+
 /// Strings that represent the operating system intended for the bundle.
 ///
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/bundleidplatform
@@ -41,7 +43,7 @@ class BundleIdPlatform {
   /// [Author] Gillian Buijs.
   factory BundleIdPlatform.deserialize(String value) {
     return BundleIdPlatform.values.firstWhere((type) => type.value == value,
-        orElse: () => throw BundleIdPlatform("Invalid BundleIdPlatform value: '$value'.")
+        orElse: () => throw BundleIdException("Invalid BundleIdPlatform value: '$value'.")
     );
   }
 

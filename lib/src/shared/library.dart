@@ -24,4 +24,6 @@
 /// [Author] Gillian Buijs.
 library shared;
 
+export 'credentials.dart';
 export 'models.dart';
+export 'result.dart';
