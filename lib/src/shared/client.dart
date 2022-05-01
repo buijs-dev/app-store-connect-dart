@@ -17,13 +17,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'dart:io';
 import 'package:appstoreconnect/appstoreconnect.dart';
 import 'package:http/http.dart' as http;
 
 /// Basic abstract HTTP client which uses JWT for auth.
 ///
-/// [AppStoreConnect] uses the [HttpAppStoreClient] implementation to communicate
+/// [AppStoreConnect] uses the [AppStoreHttpClient] implementation to communicate
 /// with the App Store Connect API.
 ///
 /// A custom [AppStoreClient] implementation can be used for testing
@@ -56,9 +55,9 @@ abstract class AppStoreClient {
 /// Implementation for the [AppStoreClient].
 ///
 /// [Author] Gillian Buijs.
-class HttpAppStoreClient extends AppStoreClient {
+class AppStoreHttpClient extends AppStoreClient {
 
-  const HttpAppStoreClient();
+  const AppStoreHttpClient();
 
   @override
   /// Execute a GET request to the App Store Connect API.
@@ -66,18 +65,7 @@ class HttpAppStoreClient extends AppStoreClient {
     required String uri,
     required String jwt,
     Map<String, String> headers = const {},
-  }) async {
-
-    final endpoint = Uri.parse(uri);
-
-    var response = await http.get(
-        Uri.parse(uri),
-        headers: _createHeaders(jwt)..addAll(headers),
-    );
-
-    return _verifyResponse(response, endpoint, 200);
-
-  }
+  })  => http.get(Uri.parse(uri), headers: headers.add(jwt));
 
   @override
   /// Execute a POST request to the App Store Connect API.
@@ -86,19 +74,7 @@ class HttpAppStoreClient extends AppStoreClient {
     required String body,
     required String jwt,
     Map<String, String> headers = const {},
-  }) async {
-
-    final endpoint = Uri.parse(uri);
-
-    final response = await http.post(
-      Uri.parse(uri),
-      body: body,
-      headers: _createHeaders(jwt)..addAll(headers),
-    );
-
-    return _verifyResponse(response, endpoint, 201);
-
-  }
+  }) => http.post(Uri.parse(uri), body: body, headers: headers.add(jwt));
 
   @override
   /// Execute a DELETE request to the App Store Connect API.
@@ -106,48 +82,13 @@ class HttpAppStoreClient extends AppStoreClient {
     required String uri,
     required String jwt,
     Map<String, String> headers = const {},
-  }) async {
+  }) => http.delete(Uri.parse(uri), headers: headers.add(jwt));
 
-    final endpoint = Uri.parse(uri);
+}
 
-    var response = await http.delete(
-      Uri.parse(uri),
-      headers: _createHeaders(jwt)..addAll(headers),
-    );
-
-    // DELETE requests don't return response body
-    // so code 204 no content means deletion was successful.
-    try{
-      return _verifyResponse(response, endpoint, 204);
-    } on HttpException {
-      // If code is not 204 then check for a 404 which
-      // would indicate the resource does not exist anyway.
-      return _verifyResponse(response, endpoint, 404);
-    }
-
-  }
-
-  /// Create a headers map with the JWT token.
-  Map<String, String> _createHeaders(String jwt) => {
+extension _JWT on Map<String, String> {
+  Map<String, String> add(String token) => {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + jwt
-  };
-
-  /// Verify if the response code is as expected.
-  ///
-  /// Throws [HttpException] if the given code is not as expected.
-  /// Returns [http.Response] if the given code is as expected.
-  http.Response _verifyResponse(http.Response response, Uri uri, int code) {
-
-    if (response.statusCode == code) {
-      return response;
-    }
-
-    throw HttpException(
-      "Http request returned status code ${response.statusCode.toString()}",
-      uri: uri,
-    );
-
-  }
-
+    'Authorization': 'Bearer ' + token
+  }..addAll(this);
 }
