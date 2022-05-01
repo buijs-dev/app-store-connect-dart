@@ -17,7 +17,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:appstoreconnect/src/credentials.dart';
+import 'package:appstoreconnect/src/shared/credentials.dart';
 import 'package:appstoreconnect/src/shared/client.dart';
 import 'package:http/http.dart';
 
@@ -37,7 +37,7 @@ class BaseService {
 
   /// Client which communicates with the App Store Connect API.
   ///
-  /// Defaults to [HttpAppStoreClient].
+  /// Defaults to [AppStoreHttpClient].
   final AppStoreClient client;
 
   /// Query parameters.
