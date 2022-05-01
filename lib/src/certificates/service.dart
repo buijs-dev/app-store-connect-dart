@@ -19,16 +19,17 @@
 
 import 'dart:convert';
 
-import 'package:logger/logger.dart';
+import 'package:http/http.dart' as http;
 
 import '../base/base_service.dart';
-import '../credentials.dart';
 import '../shared/client.dart';
+import '../shared/library.dart';
+import '../utils/nullsafe.dart';
 import 'const.dart';
 import 'request.dart';
 import 'response.dart';
 
-final _log = Logger();
+List<String> _warnings = [];
 
 /// Service to access the Certificates resource in App Store Connect API.
 ///
@@ -40,87 +41,84 @@ class CertificatesService extends BaseService {
   CertificatesService(AppStoreCredentials credentials, [AppStoreClient? client]) : super(
     credentials: credentials,
     path: '/certificates',
-    client: client ?? const HttpAppStoreClient(),
+    client: client ?? const AppStoreHttpClient(),
   );
 
   /// Retrieve all signing certificates.
-  Future<CertificatesResponse> find([
+  Future<Result<CertificatesResponse>> find([
     CertificatesQuery Function(CertificatesQuery)? query]) =>
-      _doGet(this, query: query == null ? null : query(CertificatesQuery()))
-          .then((json) => CertificatesResponse.fromJson(json));
+      _doGet(
+          query: Optional(query).mapOrNull((query) => query(CertificatesQuery()))
+      ).then((response){
+        return Result.fromResponse(
+            warnings: _warnings,
+            response: response,
+            success: (response) => response.statusCode == 200,
+            deserialize: (json) => CertificatesResponse.fromJson(json));
+      }).whenComplete(() => _warnings.clear());
 
   /// Retrieve a signing certificate for given ID.
-  Future<CertificateResponse> findById(id, {
+  Future<Result<CertificateResponse>> findById(id, {
     CertificateQuery Function(CertificateQuery)? show}) =>
-      _doGet(this, params: [id], query: show == null ? null : show(CertificateQuery()))
-          .then((json) => CertificateResponse.fromJson(json));
+      _doGet(params: [id],
+          query: Optional(show).mapOrNull((show) => show(CertificateQuery()))
+      ).then((response){
+        return Result.fromResponse(
+            warnings: _warnings,
+            response: response,
+            success: (response) => response.statusCode == 200,
+            deserialize: (json) => CertificateResponse.fromJson(json));
+      }).whenComplete(() => _warnings.clear());
 
   /// Create a new signing certificate.
-  Future<CertificateResponse> create({
+  Future<Result<CertificateResponse>> create({
     required CertificateType certificateType,
     required String csrContent,
-  }) => _doPost(this, CertificateCreateRequest.create(
+  }) => _doPost(CertificateCreateRequest.create(
       certificateType: certificateType,
       csrContent: csrContent
-  )).then((json) => CertificateResponse.fromJson(json));
+  )).then((response){
+    return Result.fromResponse(
+        warnings: _warnings,
+        response: response,
+        success: (response) => response.statusCode == 201,
+        deserialize: (json) => CertificateResponse.fromJson(json));
+  }).whenComplete(() => _warnings.clear());
 
   /// Revoke a signing certificate for given ID.
   ///
-  /// Param [verify] bool value defaults to true. Do [find] after deleting to verify deletion was indeed successful.
-  /// Param [findBeforeDeletion] bool value defaults to true. Do [find] before deleting to verify Certificate exists.
-  ///
-  /// Return [bool] true if Certificate no longer exists or false if it does exist.
-  Future<bool> revokeById(id, {
-    bool findBeforeDeletion = true,
-    bool verify = true,
-  }) async {
-    // If enabled then find the Certificate.
-    if (findBeforeDeletion) {
-      final exists = await find((_) => _..filterId = [id])
-          .then((response) => response.data.isNotEmpty);
-
-      // If the Certificate does not exist then return true.
-      // No use in deleting something that does not exist!
-      if (!exists) return true;
-    }
-
-    // Delete the Certificate by ID.
-    final revoked = await _doDelete(this, params: [id]);
-
-    // If enabled then try to find the Certificate by ID
-    // and return true if not found or false when found.
-    if (verify) {
-      return find((_){
-        return  _..filterId = [id];
-      }).then((response) => response.data.isEmpty);
-    }
-
-    return revoked;
+  /// Return [bool].
+  Future<Result<bool>> revokeById(id) {
+    return _doDelete(params: [id]).then((response) =>
+        Result.fromResponse(
+            warnings: _warnings,
+            response: response,
+            success: (response) => response.statusCode == 204,
+            deserialize: (json) => response.statusCode == 204 ? true : false)
+    ).whenComplete(() => _warnings.clear());
   }
 
   /// Execute a GET with specified query and/or path parameters and return the response body as String.
-  Future<String> _doGet(CertificatesService service, {
+  Future<http.Response> _doGet({
     CertificateQuery? query,
     List<String>? params
   }) {
     if (query != null) super.query = query._createQueryMap;
     if (params != null) super.params = params;
-    return super.doGet.then((response) => response.body);
+    return super.doGet;
   }
 
   /// Execute a POST with specified query and/or path parameters and return the response body as String.
-  Future<String> _doPost(CertificatesService service, CertificateCreateRequest request) {
-    return super.doPost(jsonEncode(request)).then((response) => response.body);
+  Future<http.Response> _doPost(CertificateCreateRequest request) {
+    return super.doPost(jsonEncode(request));
   }
 
   /// Execute a DELETE with specified path parameters.
   ///
   /// Return true if deleted or false if not.
-  Future<bool> _doDelete(CertificatesService service, {
-    List<String>? params
-  }) {
+  Future<http.Response> _doDelete({List<String>? params}) {
     if (params != null) super.params = params;
-    return super.doDelete.then((response) => true);
+    return super.doDelete;
   }
 
 }
@@ -149,7 +147,7 @@ class CertificatesQuery extends CertificateQuery {
   set limit(int limit) {
     /// If limit is less than 1 then log a warning and set the limit to 1.
     if (limit < 1) {
-      _log.w(""
+      _warnings.add(""
           "Specified limit is invalid: $limit"
           "Why do you want to see less than 1 certificate!?"
           "Setting limit to: '1'"
@@ -159,7 +157,7 @@ class CertificatesQuery extends CertificateQuery {
 
     /// If the limit is more than 200 then log a warning and set to max value.
     else if (limit > 200) {
-      _log.w(""
+      _warnings.add(""
           "Specified limit exceeds the maximum value: $limit"
           "Setting limit to maximum value: '200'"
       );
