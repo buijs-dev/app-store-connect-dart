@@ -28,12 +28,15 @@ void main() async {
 
   final service = CertificatesService(AppStoreCredentials.fromFile("apple_keys.json"));
 
-  final csrContent = NotNull(File("private.csr")).map((file) {
+  final csrContent = Optional(File("private.csr")).mapOrNull((file) {
     return (file as File).readAsStringSync();
   });
 
   /// Get the certificate count to check if the count after creation is increased by 1.
-  int certificateCount = await service.find().then((res) => res.data.length);
+  int certificateCount = await service.find().then((res) {
+    assert(res.isSuccess, "Failed to get certificate count");
+    return res.value!.data.length;
+  });
 
   /// Shared between tests.
   Certificate? certificate;
@@ -46,9 +49,9 @@ void main() async {
         csrContent: csrContent,
     );
 
-    expect(response.data.type, "certificates");
-
-    certificate = response.data;
+    expect(response.isSuccess, true);
+    expect(response.value!.data.type, "certificates");
+    certificate = response.value!.data;
 
   });
 
@@ -56,8 +59,8 @@ void main() async {
   test('Verify find', () async {
 
     final response = await service.find();
-
-    expect(response.data.length, certificateCount + 1);
+    expect(response.isSuccess, true);
+    expect(response.value!.data.length, certificateCount + 1);
 
   });
 
@@ -70,7 +73,9 @@ void main() async {
       ..limit = 1
     );
 
-    final certificate2 = response.data[0];
+    expect(response.isSuccess, true);
+
+    final certificate2 = response.value!.data[0];
     expect(certificate!.toString(), certificate2.toString());
 
   });
@@ -80,7 +85,9 @@ void main() async {
 
     final response = await service.findById(certificate!.id);
 
-    final certificate2 = response.data;
+    expect(response.isSuccess, true);
+
+    final certificate2 = response.value!.data;
     expect(certificate!.toString(), certificate2.toString());
 
   });
@@ -91,16 +98,18 @@ void main() async {
         show: (_) => _..showName
     );
 
-    final certificate2 = response.data;
+    expect(response.isSuccess, true);
+    final certificate2 = response.value!.data;
     expect(certificate!.attributes.name, certificate2.attributes.name);
 
   });
 
   test('Verify revoke', () async {
 
-    final isRevoked = await service.revokeById(certificate!.id);
+    final response = await service.revokeById(certificate!.id);
 
-    expect(isRevoked, true);
+    expect(response.isSuccess, true);
+    expect(response.value!, true);
 
   });
 
@@ -109,7 +118,8 @@ void main() async {
 
     final response = await service.find();
 
-    expect(response.data.length, certificateCount);
+    expect(response.isSuccess, true);
+    expect(response.value!.data.length, certificateCount);
 
   });
 
