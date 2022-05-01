@@ -18,7 +18,9 @@
 // SOFTWARE.
 
 import 'dart:convert';
-import 'package:jose/jose.dart';
+
+import 'package:crypto_keys/crypto_keys.dart'; //TODO remove
+import 'package:x509/x509.dart' as x509; //TODO remove
 
 import '../../appstoreconnect.dart';
 import '../utils/library.dart';
@@ -100,24 +102,31 @@ class AppStoreCredentials {
   /// Create a JSON web token with the given key information.
   String get jsonWebToken {
     final expirationDate = DateTime.now().add(const Duration(minutes: 15));
-
-    final payload = <String, dynamic>{
+    final payload = utf8.encode(jsonEncode(<String, dynamic>{
       'iss': issuerId,
       'exp': expirationDate.millisecondsSinceEpoch ~/ 1000,
       'aud': 'appstoreconnect-v1'
+    }));
+
+    final algorithm = 'ES256';
+    final key = _toKeyPair(privateKey, privateKeyId);
+    final header = <String, dynamic>{
+      'alg': algorithm,
+      'kid': privateKeyId
     };
 
-    var builder = JsonWebSignatureBuilder()
-      ..jsonContent = JsonWebTokenClaims.fromJson(payload).toJson()
-      ..addRecipient(
-        JsonWebKey.fromPem(
-          privateKey,
-          keyId: privateKeyId,
-        ),
-        algorithm: 'ES256',
-      );
+    final encoded = utf8
+        .encode('${_encodeString(header)}.${_encodeBytes(payload)}');
 
-    return builder.build().toCompactSerialization();
+    final signed = key.privateKey!
+        .createSigner(AlgorithmIdentifier.getByJwaName(algorithm)!)
+        .sign(encoded)
+        .data;
+
+    return ''
+        '${_encodeString(header)}'
+        '.${_encodeBytes(payload)}.'
+        '${_encodeBytes(signed)}';
   }
 }
 
@@ -132,4 +141,38 @@ class AppStoreCredentialsException implements Exception {
   @override
   String toString() =>
       "AppStoreConnectException with cause: '${cause.format()}'";
+}
+
+KeyPair _toKeyPair(String privateKey, String privateKeyId) {
+  x509.PrivateKeyInfo info = x509.parsePem(privateKey).first;
+  KeyPair v = info.keyPair;
+  final json = {
+    'kty': 'EC',
+    'crv': 'P-256',
+    'x': _intToBase64((v.publicKey as EcPublicKey).xCoordinate),
+    'y': _intToBase64((v.publicKey as EcPublicKey).yCoordinate),
+    'd': _intToBase64((v.privateKey as EcPrivateKey).eccPrivateKey),
+    'kid': privateKeyId,
+  };
+  return KeyPair.fromJwk(json);
+}
+
+String _encodeString(Map<String, dynamic> json) =>
+    _encodeBytes(utf8.encode(jsonEncode(json)));
+
+String _encodeBytes(List<int> data) =>
+    base64Url.encode(data).replaceAll('=', '');
+
+String _intToBase64(BigInt v) {
+  var s = v.toRadixString(16);
+  if (s.length % 2 != 0) s = '0$s';
+
+  return base64Url
+      .encode(s
+          .replaceAllMapped(RegExp('[0-9a-f]{2}'), (m) => '${m.group(0)},')
+          .split(',')
+          .where((v) => v.isNotEmpty)
+          .map((v) => int.parse(v, radix: 16))
+          .toList())
+      .replaceAll('=', '');
 }
