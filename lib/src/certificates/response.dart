@@ -45,24 +45,23 @@ class CertificatesResponse {
   factory CertificatesResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
-    final data = Optional(json['data']).orElse(() {
-      throw CertificateException(
-          "CertificateResponse JSON did not contain required element data");
-    });
+    final data = Optional(json['data']).orElseThrow(
+        CertificateException("CertificateResponse JSON did not contain required element data")
+    );
 
-    final links = Optional(json['links']).orElse(() {
-      throw CertificateException(
-          "CertificateResponse JSON did not contain required element links");
-    });
+    final links = Optional(json['links']).orElseThrow(
+        CertificateException("CertificateResponse JSON did not contain required element links")
+    );
 
     final meta = json['meta'];
+
     return CertificatesResponse(
       links: PagedDocumentLinks.fromJson(links),
       meta: PagingInformation.fromJson(meta),
       data: List.from(data).map((cert) =>
           Certificate(
               id: cert['id'].toString(),
-              links: ResourceLinks(self: cert['links']['self']),
+              links: ResourceLinks(cert['links']['self']),
               attributes: CertificateAttributes.fromJson(cert['attributes'])
           ),
       ).toList(),
@@ -112,15 +111,15 @@ class CertificateResponse {
 
     final json = jsonDecode(content);
 
-    final data = Optional(json['data']).orElse(() {
-      throw CertificateException("CertificateResponse JSON did not contain required element data");
-    });
+    final data = Optional(json['data']).orElseThrow(
+        CertificateException("CertificateResponse JSON did not contain required element data")
+    );
 
     return CertificateResponse(
       links: DocumentLinks(self: data['links']['self']),
       data: Certificate(
           id: data['id'].toString(),
-          links: ResourceLinks(self: data['links']['self']),
+          links: ResourceLinks(data['links']['self']),
           attributes: CertificateAttributes.fromJson(data['attributes'])
       ),
     );

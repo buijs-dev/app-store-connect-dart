@@ -31,16 +31,19 @@ export 'src/shared/library.dart';
 ///
 /// [Author] Gillian Buijs.
 class AppStoreConnect {
-  AppStoreConnect({
-    required this.credentials,
-    this.client = const AppStoreHttpClient(),
-  }) {
+  AppStoreConnect(this.credentials, {this.client = const AppStoreHttpClient()}) {
     certificates= CertificatesService(credentials, client);
   }
 
+  /// Credentials to be converted to a JSON web token
+  /// which are used to authenticate to App Store Connect API.
   final AppStoreCredentials credentials;
+
+  /// Client which communicates with the App Store Connect API.
+  /// Defaults to the [AppStoreHttpClient].
   final AppStoreClient client;
 
+  /// Service to access the App Store Connect API Certificates Resource.
   late final CertificatesService certificates;
 
 }

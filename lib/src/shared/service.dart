@@ -22,8 +22,8 @@ import 'package:appstoreconnect/src/shared/client.dart';
 import 'package:http/http.dart';
 
 /// [Author] Gillian Buijs.
-class BaseService {
-  BaseService({
+class Service {
+  Service({
     required this.credentials,
     required this.path,
     required this.client,

@@ -23,7 +23,19 @@
 ///
 /// [Author] Gillian Buijs.
 class DocumentLinks extends ResourceLinks {
-  DocumentLinks({required String self}) : super(self: self);
+  DocumentLinks({required String self}) : super(self);
+
+  @override
+  bool operator ==(Object other) => other is DocumentLinks
+      && other.runtimeType == runtimeType
+      && other.self == self;
+
+  @override
+  int get hashCode => self.hashCode;
+
+  @override
+  String toString() => "Instance of DocumentLinks: self = $self";
+
 }
 
 /// Links related to the response document, including paging links.
@@ -61,6 +73,19 @@ class PagedDocumentLinks {
     "self": self,
   };
 
+  @override
+  bool operator ==(Object other) => other is PagedDocumentLinks
+      && other.runtimeType == runtimeType
+      && other.self == self
+      && other.next == next
+      && other.first == first;
+
+  @override
+  int get hashCode => self.hashCode;
+
+  @override
+  String toString() => "Instance of PagedDocumentLinks: self = $self | next = $next | first = $first";
+
 }
 
 /// Paging information for data responses.
@@ -70,9 +95,7 @@ class PagedDocumentLinks {
 /// [Author] Gillian Buijs.
 class PagingInformation {
 
-  const PagingInformation({
-    required this.paging,
-  });
+  const PagingInformation(this.paging);
 
   /// (Required) The paging information details.
   final PagingInformationPaging paging;
@@ -81,7 +104,7 @@ class PagingInformation {
     required int total,
     required int limit,
   }) => PagingInformation(
-    paging: PagingInformationPaging(
+    PagingInformationPaging(
       total: total,
       limit: limit,
     ),
@@ -90,9 +113,7 @@ class PagingInformation {
   /// Helper to deserialize PagingInformation for responses where it is a nullable element.
   static PagingInformation? fromJson(dynamic json) {
 
-    if(json == null) {
-      return json;
-    }
+    if(json == null) return null;
 
     return PagingInformation.paging(
       total: json['paging']['total'],
@@ -102,6 +123,17 @@ class PagingInformation {
   }
 
   Map<String, dynamic> toJson() => { "paging": paging };
+
+  @override
+  bool operator ==(Object other) => other is PagingInformation
+      && other.runtimeType == runtimeType
+      && other.paging == paging;
+
+  @override
+  int get hashCode => paging.hashCode;
+
+  @override
+  String toString() => "Instance of PagingInformation: paging = $paging";
 
 }
 
@@ -128,6 +160,18 @@ class PagingInformationPaging {
     "limit": limit,
   };
 
+  @override
+  bool operator ==(Object other) => other is PagingInformationPaging
+      && other.runtimeType == runtimeType
+      && other.limit == limit
+      && other.total == total;
+
+  @override
+  int get hashCode => limit.hashCode;
+
+  @override
+  String toString() => "Instance of PagingInformationPaging: total = $total | limit = $limit";
+
 }
 
 
@@ -138,14 +182,23 @@ class PagingInformationPaging {
 /// [Author] Gillian Buijs.
 class ResourceLinks {
 
-  const ResourceLinks({
-    //Such a selfish resource. :-)
-    required this.self,
-  });
+  //Such a selfish resource. :-)
+  const ResourceLinks(this.self);
 
   /// (Required) The link to the resource.
   final String self;
 
   Map<String, dynamic> toJson() => { "self": self };
+
+  @override
+  bool operator ==(Object other) => other is ResourceLinks
+      && other.runtimeType == runtimeType
+      && other.self == self;
+
+  @override
+  int get hashCode => self.hashCode;
+
+  @override
+  String toString() => "Instance of ResourceLinks: self = $self";
 
 }

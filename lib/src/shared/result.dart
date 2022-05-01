@@ -21,6 +21,12 @@ import 'package:http/http.dart' as http;
 
 /// Wrapper for handling the HTTP response returned by the App Store Connect API.
 ///
+/// Param [code] HTTP response status code.
+/// Param [body] HTTP response body.
+/// Param [value] Nullable deserialized Response object of type T.
+/// Param [isSuccess] bool value indicating if the HTTP request is processed successfully.
+/// Param [warnings] List of warnings produced by the dart service concerning the handling of the HTTP request and/or response.
+///
 /// [Author] Gillian Buijs.
 class Result<T> {
 

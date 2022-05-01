@@ -37,7 +37,7 @@ void main(List<String> arguments) async {
   final credentials = AppStoreCredentials.fromFile(pathToJson);
 
   /// Create an AppStoreConnect instance.
-  final service = AppStoreConnect(credentials: credentials);
+  final service = AppStoreConnect(credentials);
 
   /// Now you can use the service to communicate with App Store Connect.
   ///

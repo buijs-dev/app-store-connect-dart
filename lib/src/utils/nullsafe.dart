@@ -35,6 +35,15 @@ class Optional<T> {
     }
   }
 
+  /// Return the value or throw exception if value is null.
+  T orElseThrow(Exception e) {
+    if(value == null) {
+      return throw e;
+    } else {
+      return value;
+    }
+  }
+
   /// Execute an action on the value Object if it is not null.
   ///
   /// Return [Optional] with new value or this instance with null value.

@@ -21,7 +21,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../base/base_service.dart';
+import '../shared/service.dart';
 import '../shared/client.dart';
 import '../shared/library.dart';
 import '../utils/nullsafe.dart';
@@ -36,7 +36,7 @@ List<String> _warnings = [];
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificates.
 ///
 /// [Author] Gillian Buijs.
-class CertificatesService extends BaseService {
+class CertificatesService extends Service {
 
   CertificatesService(AppStoreCredentials credentials, [AppStoreClient? client]) : super(
     credentials: credentials,

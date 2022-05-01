@@ -90,17 +90,14 @@ class AppStoreCredentials {
         .map((str) => jsonDecode(str))
         .map((json) {
           return AppStoreCredentials(
-            privateKeyId: Optional(json['private_key_id']).orElse(() {
-              throw AppStoreCredentialsException("Missing key named 'private_key_id' in JSON document.");
-            }),
+            privateKeyId: Optional(json['private_key_id'])
+                .orElseThrow(AppStoreCredentialsException("Missing key named 'private_key_id' in JSON document.")),
 
-            privateKey: Optional(json['private_key']).orElse(() {
-              throw AppStoreCredentialsException("Missing key named 'private_key' in JSON document.");
-            }),
+            privateKey: Optional(json['private_key'])
+                .orElseThrow(AppStoreCredentialsException("Missing key named 'private_key' in JSON document.")),
 
-            issuerId: Optional(json['issuer_id']).orElse(() {
-              throw AppStoreCredentialsException("Missing key named 'issuer_id' in JSON document.");
-            }),
+            issuerId: Optional(json['issuer_id'])
+                .orElseThrow(AppStoreCredentialsException("Missing key named 'issuer_id' in JSON document.")),
           );
         }).value;
   }
