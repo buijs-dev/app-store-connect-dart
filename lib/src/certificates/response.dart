@@ -44,8 +44,9 @@ class CertificatesResponse {
   factory CertificatesResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
-    final data = Optional<Iterable<dynamic>>(json['data']).orElseThrow(CertificateException(
-        "CertificateResponse JSON did not contain required element data"));
+    final data = Optional<Iterable<dynamic>>(json['data']).orElseThrow(
+        CertificateException(
+            "CertificateResponse JSON did not contain required element data"));
 
     final links = Optional(json['links']).orElseThrow(CertificateException(
         "CertificateResponse JSON did not contain required element links"));
@@ -107,8 +108,9 @@ class CertificateResponse {
   factory CertificateResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
-    final data = Optional<dynamic>(json['data']).orElseThrow(CertificateException(
-        "CertificateResponse JSON did not contain required element data"));
+    final data = Optional<dynamic>(json['data']).orElseThrow(
+        CertificateException(
+            "CertificateResponse JSON did not contain required element data"));
 
     return CertificateResponse(
       links: DocumentLinks(self: data['links']['self']),
