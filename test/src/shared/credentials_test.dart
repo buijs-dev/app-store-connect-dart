@@ -19,22 +19,22 @@
 
 import 'dart:io';
 
-
 import 'package:app_store_client/connect.dart';
 import 'package:test/test.dart';
 
 void main() async {
-
   // Create a temporary folder to work in.
-  final workingDirectory = Directory("${Directory.current.absolute.path}${Platform.pathSeparator}foo")..createSync();
+  final workingDirectory = Directory(
+      "${Directory.current.absolute.path}${Platform.pathSeparator}foo")
+    ..createSync();
 
   test('Verify apple_keys JSON generation', () async {
-
     // Assert it actually exists because... you never know.
     expect(workingDirectory.existsSync(), true);
 
     // Create link to apple_keys.json.
-    final keysJson = File("${workingDirectory.absolute.path}${Platform.pathSeparator}apple_keys.json");
+    final keysJson = File(
+        "${workingDirectory.absolute.path}${Platform.pathSeparator}apple_keys.json");
 
     // Assert it does not exist yet.
     expect(keysJson.existsSync(), false);
@@ -46,18 +46,14 @@ void main() async {
     expect(keysJson.existsSync(), true);
 
     // Read apple_keys.json and remove all whitespaces/linebreaks for easier assertion.
-    final content = keysJson
-        .readAsStringSync()
-        .replaceAll(" ", "")
-        .replaceAll("\n", "");
+    final content =
+        keysJson.readAsStringSync().replaceAll(" ", "").replaceAll("\n", "");
 
     // Finally assert the template content
     expect(content, json);
-
   });
 
   tearDown(() => workingDirectory.deleteSync(recursive: true));
-
 }
 
 final json = """

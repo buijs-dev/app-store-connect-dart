@@ -19,7 +19,6 @@
 
 import 'dart:io';
 
-
 import 'package:app_store_client/connect.dart';
 import 'package:app_store_client/src/utils/library.dart';
 import 'package:test/test.dart';

@@ -19,7 +19,6 @@
 
 import 'dart:convert';
 
-
 import 'package:app_store_client/connect.dart';
 import 'package:test/test.dart';
 
