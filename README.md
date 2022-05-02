@@ -1,10 +1,10 @@
 [![GitHub license](https://img.shields.io/github/license/buijs-dev/dart-apple-client)](#License)
 
 # App Store Client
-A pure Dart client for the App Store Connect Api. The client can be used from Dart/Flutter code or  
-from CLI. All App Store Connect resources/tasks are/will be available through this library. 
+A pure Dart client for the App Store Connect Api. The client can be used from Dart/Flutter code or from CLI. 
+All App Store Connect resources/tasks are/will be available through this library. 
 
-# About App Store Connect API
+## About App Store Connect API
 Because the client gives access to all functionality from the App Store Connect API, it's good to know
 what this API can do. [App Store Connect API](https://developer.apple.com/documentation/appstoreconnectapi) 
 is a REST service that lets you 'Automate the tasks you perform on the Apple Developer website and in App Store Connect.'
@@ -27,9 +27,9 @@ The API provides resources to automate the following areas of App Store Connect:
 
 - Power and Performance Metrics. Download aggregate metrics and diagnostics for App Store versions of your app.
 
-# Installation
+## Installation
 
-## Add dependenccy
+#### Add dependenccy
 Add app_store_client to your pubspec.yaml:
 
 ```yaml
@@ -44,7 +44,7 @@ flutter pub get
 ```
 
 
-## Setup API keys
+#### Setup API keys
 The client will authenticate to the App Store Connect API by creating a JSON web token.
 For this it requires API Keys. If you don't have these yet you can create the keys by following
 [these](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api) steps.
@@ -70,18 +70,18 @@ This will generate a JSON file:
 
 Fill in the keys data and of course do <B>NOT</B> save this file in VCS. Make sure to add it to your gitignore file.
 
-# Usage
+## Usage
 The client can be used from Dart code directly or from the command-line:
 - [Code]()
 - [Command-line]()
 
-# Usage: Code
+#### Usage: Code
 - [Setup](#Setup)
 - [Certificates](#Certificates)
 - [Provisioning](#Provisioning)
 - [BundleId](#BundleId)
 
-## Setup
+#### Setup
 
 ```dart
 
@@ -97,7 +97,7 @@ final service = AppStoreConnect(credentials);
 
 ```
 
-## Certificates
+#### Certificates
 
 ```dart
 
@@ -130,18 +130,18 @@ await service.certificates.findById("1234NOIDEA",
 
 ```
 
-## Provisioning
+#### Provisioning
 
-## BundleId
-
-
+#### BundleId
 
 
-# Usage: Command-line
+
+
+#### Usage: Command-line
 //TODO
 
 
-# Roadmap
+## Roadmap
 //TODO 
 
 
