@@ -19,7 +19,7 @@
 
 import 'dart:convert';
 
-import 'package:crypto_keys/crypto_keys.dart';
+import 'package:crypto_keys/crypto_keys.dart' as crypto;
 import 'package:x509/x509.dart' as x509;
 
 import '../../appstoreconnect.dart';
@@ -119,7 +119,7 @@ class AppStoreCredentials {
         .encode('${_encodeString(header)}.${_encodeBytes(payload)}');
 
     final signed = key.privateKey!
-        .createSigner(AlgorithmIdentifier.getByJwaName(algorithm)!)
+        .createSigner(crypto.AlgorithmIdentifier.getByJwaName(algorithm)!)
         .sign(encoded)
         .data;
 
@@ -143,18 +143,18 @@ class AppStoreCredentialsException implements Exception {
       "AppStoreConnectException with cause: '${cause.format()}'";
 }
 
-KeyPair _toKeyPair(String privateKey, String privateKeyId) {
+crypto.KeyPair _toKeyPair(String privateKey, String privateKeyId) {
   x509.PrivateKeyInfo info = x509.parsePem(privateKey).first;
-  KeyPair v = info.keyPair;
+  crypto.KeyPair v = info.keyPair;
   final json = {
     'kty': 'EC',
     'crv': 'P-256',
-    'x': _intToBase64((v.publicKey as EcPublicKey).xCoordinate),
-    'y': _intToBase64((v.publicKey as EcPublicKey).yCoordinate),
-    'd': _intToBase64((v.privateKey as EcPrivateKey).eccPrivateKey),
+    'x': _intToBase64((v.publicKey as crypto.EcPublicKey).xCoordinate),
+    'y': _intToBase64((v.publicKey as crypto.EcPublicKey).yCoordinate),
+    'd': _intToBase64((v.privateKey as crypto.EcPrivateKey).eccPrivateKey),
     'kid': privateKeyId,
   };
-  return KeyPair.fromJwk(json);
+  return crypto.KeyPair.fromJwk(json);
 }
 
 String _encodeString(Map<String, dynamic> json) =>
