@@ -55,6 +55,5 @@ class AppStoreConnectException implements Exception {
   final String cause;
 
   @override
-  String toString() =>
-      "AppStoreConnectException with cause: '${cause.format}'";
+  String toString() => "AppStoreConnectException with cause: '${cause.format}'";
 }
