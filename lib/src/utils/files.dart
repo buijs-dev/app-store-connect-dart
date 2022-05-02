@@ -23,7 +23,7 @@ import 'dart:io';
 ///
 /// [Author] Gillian Buijs.
 class FileFactory {
-  FileFactory(dynamic path) {
+  FileFactory(dynamic path, {createIfNotExists = false}) {
     FileSystemEntity? fse;
 
     /// If path is a File or Directory then use it.
@@ -37,35 +37,85 @@ class FileFactory {
     }
 
     /// The given path is not a String, File or Directory so throw a [FileException] to stop the process.
-    if (fse == null) {
-      throw FileException(""
-          "The given path is not valid. "
-          "Please specify an absolute path as String or a File."
-          "Received path: '$path'");
-    }
+    if (fse == null) invalidPath(path);
+
+    _absolutePathString = fse!.absolute.path;
 
     /// Set the fse if it exists
     if (fse.existsSync()) {
       _wrapper = FileSystemEntityWrapper(fse);
-    } else {
+    }
+
+    /// Create the file if [createIfNotExists] is set to true (defaults to false).
+    else if(createIfNotExists) {
+      _wrapper = FileSystemEntityWrapper(fse);
+
+      if(_isFile(path)) {
+        _wrapper!.file.createSync();
+      } else {
+        _wrapper!.folder.createSync();
+      }
+
+    }
+
+    /// Only throw an exception if [fail] is set to true (default).
+    else {
       /// Throw a [FileException] because the given path does not exist.
       throw FileException(
           "The given path does not exist. Received path: '$path'");
     }
   }
 
-  late final FileSystemEntityWrapper _wrapper;
+  late final FileSystemEntityWrapper? _wrapper;
 
-  File file() => _wrapper.file();
+  late final String? _absolutePathString;
 
-  Directory folder() => _wrapper.folder();
+  File get file => _wrapper!.file;
+
+  Directory get folder => _wrapper!.folder;
+
+  FileFactory resolve(dynamic path, {createIfNotExists = false}) {
+
+    if(path == null){
+      invalidPath(path);
+    }
+
+    if(path is File || path is Directory) {
+      return FileFactory("$_absolutePathString${Platform.pathSeparator}${(path as FileSystemEntity).path}", createIfNotExists: createIfNotExists);
+    }
+
+    if(path is String) {
+      return FileFactory("$_absolutePathString${Platform.pathSeparator}$path", createIfNotExists: createIfNotExists);
+    }
+
+    return invalidPath(path);
+
+  }
 
   ///Return a File if the path contains a "." or a Directory if not.
   static FileSystemEntity _absolutePath(String path) {
-    return path.toString().contains(".")
+    return _isFile(path)
         ? File(path).absolute
         : Directory(path).absolute;
   }
+
+  static bool _isFile(String path) {
+
+    var fileOrFolder = path;
+
+    if(fileOrFolder.contains("/")) {
+      fileOrFolder = fileOrFolder.substring(path.lastIndexOf("/"), path.length);
+    }
+
+    return fileOrFolder.contains(".");
+
+  }
+
+  static dynamic invalidPath(String? path) => throw FileException(""
+      "The given path is not valid. "
+      "Please specify an absolute path as String or a File."
+      "Received path: '$path'");
+
 }
 
 /// [Author] Gillian Buijs.
@@ -76,9 +126,9 @@ class FileSystemEntityWrapper {
 
   late final FileSystemEntity _fse;
 
-  File file() => File(_fse.path);
+  File get file => File(_fse.path);
 
-  Directory folder() => Directory(_fse.path);
+  Directory get folder => Directory(_fse.path);
 }
 
 /// Exception indicating a [File] instance could not be created

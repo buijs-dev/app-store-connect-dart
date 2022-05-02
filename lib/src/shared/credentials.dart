@@ -18,11 +18,11 @@
 // SOFTWARE.
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:crypto_keys/crypto_keys.dart' as crypto;
 import 'package:x509/x509.dart' as x509;
 
-import '../../appstoreconnect.dart';
 import '../utils/library.dart';
 
 /// Utility to create a JWT token and HTTP client for connecting to app-store-connect-api.
@@ -67,7 +67,7 @@ class AppStoreCredentials {
   ///
   /// Return [AppStoreCredentials] used to create a JWT token and connect to app-store-connect-api.
   factory AppStoreCredentials.fromFile(dynamic path) {
-    final source = FileFactory(path).file();
+    final source = FileFactory(path).file;
     if (!source.path.endsWith(".json")) {
       throw AppStoreCredentialsException(
           """|Could not create an AppleCredentials instance because the given path is not a JSON file.
@@ -84,19 +84,19 @@ class AppStoreCredentials {
   ///
   /// Return [AppStoreCredentials] used to create a JWT token and connect to app-store-connect-api.
   factory AppStoreCredentials.fromJson(String fileContent) {
-    return Optional(fileContent).map((str) => jsonDecode(str)).map((json) {
+    return Optional<dynamic>(fileContent).map((str) => jsonDecode(str)).map((json) {
       return AppStoreCredentials(
-        privateKeyId: Optional(json['private_key_id']).orElseThrow(
+        privateKeyId: Optional<dynamic>(json['private_key_id']).orElseThrow(
             AppStoreCredentialsException(
                 "Missing key named 'private_key_id' in JSON document.")),
-        privateKey: Optional(json['private_key']).orElseThrow(
+        privateKey: Optional<dynamic>(json['private_key']).orElseThrow(
             AppStoreCredentialsException(
                 "Missing key named 'private_key' in JSON document.")),
-        issuerId: Optional(json['issuer_id']).orElseThrow(
+        issuerId: Optional<dynamic>(json['issuer_id']).orElseThrow(
             AppStoreCredentialsException(
                 "Missing key named 'issuer_id' in JSON document.")),
       );
-    }).value;
+    }).value!;
   }
 
   /// Create a JSON web token with the given key information.
@@ -128,6 +128,21 @@ class AppStoreCredentials {
         '.${_encodeBytes(payload)}.'
         '${_encodeBytes(signed)}';
   }
+
+  static File createTemplate(Directory path) {
+
+    final template =
+         """|{
+            |   "private_key_id": "The private key ID from App Store Connect",
+            |   "private_key": "The private key file (content) from App Store Connect.",
+            |   "issuer_id": "The issuer ID from the API keys page in App Store Connect."
+            |}""".format;
+
+    return FileFactory(path) // Will throw exception if path does not exist
+        .resolve("apple_keys.json", createIfNotExists: true) // Create the apple_keys.json file
+        .file..writeAsStringSync(template); // Write the template and return file
+  }
+
 }
 
 ///Exception indicating an issue authenticating to the App Store Connect API.
@@ -140,7 +155,7 @@ class AppStoreCredentialsException implements Exception {
 
   @override
   String toString() =>
-      "AppStoreConnectException with cause: '${cause.format()}'";
+      "AppStoreConnectException with cause: '${cause.format}'";
 }
 
 crypto.KeyPair _toKeyPair(String privateKey, String privateKeyId) {
