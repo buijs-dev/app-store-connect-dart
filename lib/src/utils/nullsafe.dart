@@ -23,14 +23,14 @@
 class Optional<T> {
   const Optional(this.value);
 
-  final T value;
+  final T? value;
 
   /// Return the value or use the fallback action if value is null.
   T orElse(Function() orElse) {
     if (value == null) {
       return orElse.call();
     } else {
-      return value;
+      return value!;
     }
   }
 
@@ -39,18 +39,18 @@ class Optional<T> {
     if (value == null) {
       return throw e;
     } else {
-      return value;
+      return value!;
     }
   }
 
   /// Execute an action on the value Object if it is not null.
   ///
   /// Return [Optional] with new value or this instance with null value.
-  Optional<dynamic> map(Function(dynamic) action) {
+  Optional<R> map<R>(R Function(T) action) {
     if (value != null) {
-      return Optional(action(value));
+      return Optional(action(value!));
     } else {
-      return this;
+      return Optional(null);
     }
   }
 
