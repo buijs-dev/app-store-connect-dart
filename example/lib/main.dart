@@ -26,13 +26,11 @@ import 'package:appstoreconnect/connect.dart';
 
 /// Example of creating an AppStoreConnect instance.
 void main(List<String> arguments) async {
-
   /// Create an AppleCredentials instance.
   ///
   /// Read from JSON file given the file is named 'apple_keys.json'
   /// and stored in the current folder.
-  final pathToJson =
-      "${Directory.current.path}apple_keys.json";
+  final pathToJson = "${Directory.current.path}apple_keys.json";
   final credentials = AppStoreCredentials.fromFile(pathToJson);
 
   /// Create an AppStoreConnect instance.
