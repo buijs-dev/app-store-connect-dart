@@ -84,7 +84,9 @@ class AppStoreCredentials {
   ///
   /// Return [AppStoreCredentials] used to create a JWT token and connect to app-store-connect-api.
   factory AppStoreCredentials.fromJson(String fileContent) {
-    return Optional<dynamic>(fileContent).map((str) => jsonDecode(str)).map((json) {
+    return Optional<dynamic>(fileContent)
+        .map((str) => jsonDecode(str))
+        .map((json) {
       return AppStoreCredentials(
         privateKeyId: Optional<dynamic>(json['private_key_id']).orElseThrow(
             AppStoreCredentialsException(
@@ -110,13 +112,10 @@ class AppStoreCredentials {
 
     final algorithm = 'ES256';
     final key = _toKeyPair(privateKey, privateKeyId);
-    final header = <String, dynamic>{
-      'alg': algorithm,
-      'kid': privateKeyId
-    };
+    final header = <String, dynamic>{'alg': algorithm, 'kid': privateKeyId};
 
-    final encoded = utf8
-        .encode('${_encodeString(header)}.${_encodeBytes(payload)}');
+    final encoded =
+        utf8.encode('${_encodeString(header)}.${_encodeBytes(payload)}');
 
     final signed = key.privateKey!
         .createSigner(crypto.AlgorithmIdentifier.getByJwaName(algorithm)!)
@@ -130,19 +129,21 @@ class AppStoreCredentials {
   }
 
   static File createTemplate(Directory path) {
-
-    final template =
-         """|{
+    final template = """|{
             |   "private_key_id": "The private key ID from App Store Connect",
             |   "private_key": "The private key file (content) from App Store Connect.",
             |   "issuer_id": "The issuer ID from the API keys page in App Store Connect."
-            |}""".format;
+            |}"""
+        .format;
 
-    return FileFactory(path) // Will throw exception if path does not exist
-        .resolve("apple_keys.json", createIfNotExists: true) // Create the apple_keys.json file
-        .file..writeAsStringSync(template); // Write the template and return file
+    return FileFactory(path)
+        .resolve(
+          "apple_keys.json",
+          createIfNotExists: true,
+        )
+        .file
+      ..writeAsStringSync(template);
   }
-
 }
 
 ///Exception indicating an issue authenticating to the App Store Connect API.
@@ -154,8 +155,7 @@ class AppStoreCredentialsException implements Exception {
   String cause;
 
   @override
-  String toString() =>
-      "AppStoreConnectException with cause: '${cause.format}'";
+  String toString() => "AppStoreConnectException with cause: '${cause.format}'";
 }
 
 crypto.KeyPair _toKeyPair(String privateKey, String privateKeyId) {
