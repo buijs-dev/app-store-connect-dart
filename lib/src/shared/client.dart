@@ -19,7 +19,7 @@
 
 import 'dart:io';
 
-import '../../appstoreconnect.dart';
+import '../../connect.dart';
 
 /// Basic abstract HTTP client which uses JWT for auth.
 ///

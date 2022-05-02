@@ -44,7 +44,7 @@ class CertificatesResponse {
   factory CertificatesResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
-    final data = Optional(json['data']).orElseThrow(CertificateException(
+    final data = Optional<Iterable<dynamic>>(json['data']).orElseThrow(CertificateException(
         "CertificateResponse JSON did not contain required element data"));
 
     final links = Optional(json['links']).orElseThrow(CertificateException(
@@ -107,7 +107,7 @@ class CertificateResponse {
   factory CertificateResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
-    final data = Optional(json['data']).orElseThrow(CertificateException(
+    final data = Optional<dynamic>(json['data']).orElseThrow(CertificateException(
         "CertificateResponse JSON did not contain required element data"));
 
     return CertificateResponse(
