@@ -37,7 +37,8 @@ List<String> _warnings = [];
 /// [Author] Gillian Buijs.
 class CertificatesService extends Service {
   CertificatesService(AppStoreCredentials credentials, [AppStoreClient? client])
-      : super( //man -_-
+      : super(
+          //man -_-
           credentials: credentials,
           path: '/certificates',
           client: client ?? AppStoreHttpClient(),
