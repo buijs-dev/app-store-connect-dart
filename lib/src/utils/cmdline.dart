@@ -23,21 +23,22 @@ import 'strings.dart';
 ///
 ///[Author] Gillian Buijs.
 class Echo {
-
   static const red = "\x1B[31m";
   static const green = "\x1B[32m";
   static const yellow = "\x1B[33m";
 
-  static info(String message) => print('${yellow}APP STORE CLIENT: $message'.format);
+  static info(String message) =>
+      print('${yellow}APP STORE CLIENT: $message'.format);
 
-  static success(String message) => print('${green}APP STORE CLIENT: $message'.format);
+  static success(String message) =>
+      print('${green}APP STORE CLIENT: $message'.format);
 
-  static warning(String message) => print('${red}APP STORE CLIENT: $message'.format);
+  static warning(String message) =>
+      print('${red}APP STORE CLIENT: $message'.format);
 
   static hello(String version) => print('''$green
   ════════════════════════════════════════════
      APP STORE CLIENT (v$version)                               
   ════════════════════════════════════════════
   ''');
-
 }
