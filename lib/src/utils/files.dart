@@ -19,6 +19,8 @@
 
 import 'dart:io';
 
+final String _s = Platform.pathSeparator;
+
 /// Factory to create a FileSystemEntity instance which always exists.
 ///
 /// [Author] Gillian Buijs.
@@ -39,6 +41,7 @@ class FileFactory {
     /// The given path is not a String, File or Directory so throw a [FileException] to stop the process.
     if (fse == null) invalidPath(path);
 
+    /// Save the path as String for resolving relative paths later.
     _absolutePathString = fse!.absolute.path;
 
     /// Set the fse if it exists
@@ -47,15 +50,14 @@ class FileFactory {
     }
 
     /// Create the file if [createIfNotExists] is set to true (defaults to false).
-    else if(createIfNotExists) {
+    else if (createIfNotExists) {
       _wrapper = FileSystemEntityWrapper(fse);
 
-      if(_isFile(path)) {
+      if (_isFile(path)) {
         _wrapper!.file.createSync();
       } else {
         _wrapper!.folder.createSync();
       }
-
     }
 
     /// Only throw an exception if [fail] is set to true (default).
@@ -75,47 +77,46 @@ class FileFactory {
   Directory get folder => _wrapper!.folder;
 
   FileFactory resolve(dynamic path, {createIfNotExists = false}) {
-
-    if(path == null){
+    if (path == null) {
       invalidPath(path);
     }
 
-    if(path is File || path is Directory) {
-      return FileFactory("$_absolutePathString${Platform.pathSeparator}${(path as FileSystemEntity).path}", createIfNotExists: createIfNotExists);
+    if (path is File || path is Directory) {
+      return FileFactory(
+        "$_absolutePathString$_s${(path as FileSystemEntity).path}",
+        createIfNotExists: createIfNotExists,
+      );
     }
 
-    if(path is String) {
-      return FileFactory("$_absolutePathString${Platform.pathSeparator}$path", createIfNotExists: createIfNotExists);
+    if (path is String) {
+      return FileFactory(
+        "$_absolutePathString$_s$path",
+        createIfNotExists: createIfNotExists,
+      );
     }
 
     return invalidPath(path);
-
   }
 
   ///Return a File if the path contains a "." or a Directory if not.
   static FileSystemEntity _absolutePath(String path) {
-    return _isFile(path)
-        ? File(path).absolute
-        : Directory(path).absolute;
+    return _isFile(path) ? File(path).absolute : Directory(path).absolute;
   }
 
   static bool _isFile(String path) {
-
     var fileOrFolder = path;
 
-    if(fileOrFolder.contains("/")) {
+    if (fileOrFolder.contains("/")) {
       fileOrFolder = fileOrFolder.substring(path.lastIndexOf("/"), path.length);
     }
 
     return fileOrFolder.contains(".");
-
   }
 
   static dynamic invalidPath(String? path) => throw FileException(""
       "The given path is not valid. "
       "Please specify an absolute path as String or a File."
       "Received path: '$path'");
-
 }
 
 /// [Author] Gillian Buijs.
