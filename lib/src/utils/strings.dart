@@ -42,7 +42,7 @@
 ///
 /// [Author] Gillian Buijs.
 extension TemplatePrinter on String {
-  String format() => replaceAllMapped(
+  String get format => replaceAllMapped(
       // Find all '|' char including preceding whitespaces.
       RegExp(r'(\s+?\|)'),
       // Replace them with a single linebreak.

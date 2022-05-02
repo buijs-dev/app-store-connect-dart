@@ -19,7 +19,8 @@
 
 import 'dart:convert';
 
-import 'package:appstoreconnect/appstoreconnect.dart';
+
+import 'package:app_store_client/connect.dart';
 import 'package:test/test.dart';
 
 void main() async {

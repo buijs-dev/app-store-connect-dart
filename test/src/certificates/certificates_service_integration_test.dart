@@ -19,8 +19,9 @@
 
 import 'dart:io';
 
-import 'package:appstoreconnect/appstoreconnect.dart';
-import 'package:appstoreconnect/src/utils/nullsafe.dart';
+
+import 'package:app_store_client/connect.dart';
+import 'package:app_store_client/src/utils/library.dart';
 import 'package:test/test.dart';
 
 /// Integration Test which uses a real Apple Developer account.

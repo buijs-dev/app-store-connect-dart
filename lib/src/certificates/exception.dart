@@ -28,5 +28,5 @@ class CertificateException implements Exception {
   String cause;
 
   @override
-  String toString() => "CertificateException with cause: '${cause.format()}'";
+  String toString() => "CertificateException with cause: '${cause.format}'";
 }

@@ -28,5 +28,5 @@ class BundleIdException implements Exception {
   String cause;
 
   @override
-  String toString() => "BundleIdException with cause: '${cause.format()}'";
+  String toString() => "BundleIdException with cause: '${cause.format}'";
 }
