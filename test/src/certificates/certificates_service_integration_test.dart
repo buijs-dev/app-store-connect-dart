@@ -28,9 +28,9 @@ void main() async {
   final service =
       CertificatesService(AppStoreCredentials.fromFile("apple_keys.json"));
 
-  final csrContent = Optional(File("private.csr")).mapOrNull((file) {
-    return (file as File).readAsStringSync();
-  });
+  final csrContent = Optional<File>(File("private.csr")).map<String>((file) {
+    return file.readAsStringSync();
+  }).value!;
 
   /// Get the certificate count to check if the count after creation is increased by 1.
   int certificateCount = await service.find().then((res) {

@@ -22,7 +22,7 @@
 /// Import the appstoreconnect library.
 import 'dart:io';
 
-import 'package:appstoreconnect/connect.dart';
+import 'package:app_store_client/connect.dart';
 
 /// Example of creating an AppStoreConnect instance.
 void main(List<String> arguments) async {
@@ -41,6 +41,46 @@ void main(List<String> arguments) async {
   /// For example: Retrieve all certificates:
   await service.certificates.find().then((certificates) => print(certificates));
 
+  /// Sort the certificates ascending by ID:
+  await service.certificates
+      .find((_) => _..sortByIdAsc)
+      .then((certificates) => print(certificates));
+
+  /// Sort the certificates descending by ID:
+  await service.certificates
+      .find((_) => _..sortByIdDesc)
+      .then((certificates) => print(certificates));
+
+  /// Sort the certificates ascending by CertificateType:
+  await service.certificates
+      .find((_) => _..sortByCertificateTypeAsc)
+      .then((certificates) => print(certificates));
+
+  /// Sort the certificates descending by CertificateType:
+  await service.certificates
+      .find((_) => _..sortByCertificateTypeDesc)
+      .then((certificates) => print(certificates));
+
+  /// Sort the certificates ascending by DisplayName:
+  await service.certificates
+      .find((_) => _..sortByDisplayNameAsc)
+      .then((certificates) => print(certificates));
+
+  /// Sort the certificates descending by DisplayName:
+  await service.certificates
+      .find((_) => _..sortByDisplayNameDesc)
+      .then((certificates) => print(certificates));
+
+  /// Sort the certificates ascending by SerialNumber:
+  await service.certificates
+      .find((_) => _..sortBySerialNumberAsc)
+      .then((certificates) => print(certificates));
+
+  /// Sort the certificates descending by SerialNumber:
+  await service.certificates
+      .find((_) => _..sortBySerialNumberDesc)
+      .then((certificates) => print(certificates));
+
   /// Or execute a query to find a specific Certificate:
   await service.certificates
       .find((_) => _
@@ -54,16 +94,18 @@ void main(List<String> arguments) async {
   await service.certificates
       .find((_) => _
         ..showDisplayName
-        ..showCsrContent)
+        ..showCsrContent
+        ..showName
+        ..showCsrContent
+        ..showExpirationDate
+        ..showCertificateType
+        ..showPlatform
+        ..showSerialNumber)
       .then((certificates) => print(certificates));
 
   /// Find by ID:
   await service.certificates.findById("1234NOIDEA");
 
-  /// Find by ID with limited response data returned:
-  await service.certificates.findById("1234NOIDEA",
-      show: (_) => _
-        ..showDisplayName
-        ..showCsrContent
-        ..showName);
+  /// Find by ID and only return the name:
+  await service.certificates.findById("1234NOIDEA", show: (_) => _..showName);
 }

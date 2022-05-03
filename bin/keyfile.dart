@@ -20,7 +20,7 @@
 import 'dart:io';
 
 import 'package:app_store_client/src/shared/credentials.dart';
-import 'package:app_store_client/src/utils/cmdline.dart';
+import 'package:app_store_client/src/commandline/library.dart';
 import 'package:app_store_client/src/utils/strings.dart';
 
 const _link =
