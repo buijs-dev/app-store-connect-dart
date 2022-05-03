@@ -2,8 +2,8 @@ name: app_store_client
 description: Dart client for Apple App Store Connect Api. Create signing certificates, provisioning profiles, upload ipa files and metadata to the App Store and more.
 
 version: 1.0.0
-homepage: https://github.com/buijs-dev/appstoreconnect-dart-client
-repository: https://github.com/buijs-dev/appstoreconnect-dart-client
+homepage: https://github.com/buijs-dev/app-store-client-dart
+repository: https://github.com/buijs-dev/app-store-client-dart
 
 environment:
   sdk: '>=2.16.1 <3.0.0'
