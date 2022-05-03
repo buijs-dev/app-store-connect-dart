@@ -17,28 +17,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'strings.dart';
+library commandline;
 
-///Utility for CLI logging. Because colours make life more beautiful. \0/
-///
-///[Author] Gillian Buijs.
-class Echo {
-  static const red = "\x1B[31m";
-  static const green = "\x1B[32m";
-  static const yellow = "\x1B[33m";
-
-  static info(String message) =>
-      print('${yellow}APP STORE CLIENT: $message'.format);
-
-  static success(String message) =>
-      print('${green}APP STORE CLIENT: $message'.format);
-
-  static warning(String message) =>
-      print('${red}APP STORE CLIENT: $message'.format);
-
-  static hello(String version) => print('''$green
-  ════════════════════════════════════════════
-     APP STORE CLIENT (v$version)                               
-  ════════════════════════════════════════════
-  ''');
-}
+export 'arguments.dart';
+export 'certificates.dart';
+export 'credentials.dart';
+export 'logging.dart';
