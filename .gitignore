@@ -24,3 +24,4 @@ doc/api/
 /createPrivateKey.sh
 /private.csr
 /private.key
+/example/pubspec.yaml
