@@ -1,10 +1,10 @@
-## Usage: Code
+# Usage: Code
 - [Setup](#Setup)
 - [Certificates](#Certificates)
 - [Provisioning](#Provisioning)
 - [BundleId](#BundleId)
 
-#### Setup
+## Setup
 
 ```dart
 
@@ -20,7 +20,7 @@ final service = AppStoreConnect(credentials);
 
 ```
 
-#### Certificates
+## Certificates
 
 ```dart
 
@@ -96,6 +96,6 @@ final service = AppStoreConnect(credentials);
 
 ```
 
-#### Provisioning
+## Provisioning
 
-#### BundleId
+## BundleId

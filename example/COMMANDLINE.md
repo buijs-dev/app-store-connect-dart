@@ -1,11 +1,11 @@
-## Usage: Command-line
+# Usage: Command-line
 - [Setup](#Setup)
 - [Certificates](#Certificates)
 - [Provisioning](#Provisioning)
 - [BundleId](#BundleId)
 
 
-#### Setup
+## Setup
 There are 4 ways to provide credentials for authentication, in order of precedence (high to low):
 - [Key arguments](#Key%20arguments)
 - [Environment keys](#Environment%20keys)
@@ -55,7 +55,7 @@ By default the command-line tool will check the current directory for an apple_k
 
 ```
 
-#### Certificates
+## Certificates
 Find all signing certificates. Available filter options:
 1. --id
 2. --serial-number
@@ -88,6 +88,6 @@ Example find a specific signing certificate by ID, serialNumber and/or displayNa
 
 ```
 
-#### Provisioning
+## Provisioning
 
-#### BundleId
+## BundleId
