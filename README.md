@@ -29,7 +29,7 @@ The API provides resources to automate the following areas of App Store Connect:
 
 ## Installation
 
-#### Add dependenccy
+#### Add dependency
 Add app_store_client to your pubspec.yaml:
 
 ```yaml
@@ -72,79 +72,8 @@ Fill in the keys data and of course do <B>NOT</B> save this file in VCS. Make su
 
 ## Usage
 The client can be used from Dart code directly or from the command-line:
-- [Code]()
-- [Command-line]()
-
-#### Usage: Code
-- [Setup](#Setup)
-- [Certificates](#Certificates)
-- [Provisioning](#Provisioning)
-- [BundleId](#BundleId)
-
-#### Setup
-
-```dart
-
-/// Read the apple_keys.json file.
-final pathToJson = "${Directory.current.path}apple_keys.json";
-
-/// Create an AppStoreCredentials instance.
-final credentials = AppStoreCredentials.fromFile(pathToJson);
-
-/// Create an AppStoreConnect instance.
-/// Now you can use the service to communicate with App Store Connect.  
-final service = AppStoreConnect(credentials);
-
-```
-
-#### Certificates
-
-```dart
-
-/// Retrieve all certificates.
-await service.certificates.find().then((certificates) => print(certificates));
-
-/// Execute a query to find a specific Certificate:  
-await service.certificates.find((_) => _
-    ..filterId = ["1234NOIDEA"]
-    ..filterSerialNumber = ["FOOBAR123"]
-    ..filterDisplayName = ["Beautiful Display"]
-    ..limit = 1)
-    .then((certificate) => print(certificate));
-
-/// Limit the response data returned:  
-await service.certificates.find((_) => _
-    ..showDisplayName
-    ..showCsrContent)
-    .then((certificates) => print(certificates));
-
-/// Find certificate by ID:  
-await service.certificates.findById("1234NOIDEA");
-
-/// Find by ID with limited response data returned:  
-await service.certificates.findById("1234NOIDEA",
-    show: (_) => _
-    ..showDisplayName
-    ..showCsrContent
-    ..showName);
-
-```
-
-#### Provisioning
-
-#### BundleId
-
-
-
-
-#### Usage: Command-line
-//TODO
-
-
-## Roadmap
-//TODO 
-
-
+- [Code](example/CODING.md)
+- [Command-line](example/COMMANDLINE.md)
 
 ## Contributing
 Pull requests are welcome. Contact me at info@buijs.dev
