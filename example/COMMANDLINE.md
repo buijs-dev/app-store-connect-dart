@@ -6,11 +6,11 @@
 
 
 #### Setup
-There are 3 ways to provide credentials for authentication, in order of precedence (high to low):
-1. [Key arguments](#Key arguments)
-2. [Environment keys](#Environment keys)
-3. [apple_keys.json path](#Custom JSON path)
-4. [apple_keys.json default path](#Default JSON path)
+There are 4 ways to provide credentials for authentication, in order of precedence (high to low):
+- [Key arguments](#Key arguments)
+- [Environment keys](#Environment keys)
+- [apple_keys.json path](#Custom JSON path)
+- [apple_keys.json default path](#Default JSON path)
 
 ##### Key arguments
 If the keys are set by the command-line arguments then these will always take precedence.
@@ -57,9 +57,9 @@ By default the command-line tool will check the current directory for an apple_k
 
 #### Certificates
 Find all signing certificates. Available filter options:
-1. "--id"
-2. "--serial-number"
-3. "--display-name"
+1. --id
+2. --serial-number
+3. --display-name
 
 Example find a specific signing certificate by ID:
 
