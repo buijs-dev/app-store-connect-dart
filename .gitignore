@@ -25,3 +25,4 @@ doc/api/
 /private.csr
 /private.key
 /example/pubspec.yaml
+/tools/it_certificates_find.sh
