@@ -215,11 +215,11 @@ class CertificateAttributes {
   final CertificateType? certificateType;
 
   factory CertificateAttributes.fromJson(dynamic json) {
-    final maybePlatform = Optional(json['platform'])
-        .mapOrNull((str) => BundleIdPlatform.deserialize(str));
+    final maybePlatform = Optional<String>(json['platform'])
+        .mapOrNull<BundleIdPlatform>((str) => BundleIdPlatform.deserialize(str));
 
-    final maybeCertificateType = Optional(json['certificateType'])
-        .mapOrNull((str) => CertificateType.deserialize(str));
+    final maybeCertificateType = Optional<String>(json['certificateType'])
+        .mapOrNull<CertificateType>((str) => CertificateType.deserialize(str));
 
     return CertificateAttributes(
       expirationDate: json['expirationDate'],

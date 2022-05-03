@@ -57,9 +57,9 @@ class Optional<T> {
   /// Terminal operation which executes an action if a value is present.
   ///
   /// Return [T] or null if no value is present.
-  dynamic mapOrNull(Function(dynamic) action) {
+  R? mapOrNull<R>(R Function(T) action) {
     if (value != null) {
-      return action(value);
+      return action(value!);
     } else {
       return null;
     }
