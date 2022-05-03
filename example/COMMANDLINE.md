@@ -7,10 +7,10 @@
 
 #### Setup
 There are 4 ways to provide credentials for authentication, in order of precedence (high to low):
-- [Key arguments](#Key arguments)
-- [Environment keys](#Environment keys)
-- [apple_keys.json path](#Custom JSON path)
-- [apple_keys.json default path](#Default JSON path)
+- [Key arguments](#Key%20arguments)
+- [Environment keys](#Environment%20keys)
+- [apple_keys.json path](#Custom%20JSON%20path)
+- [apple_keys.json default path](#Default%20JSON%20path)
 
 ##### Key arguments
 If the keys are set by the command-line arguments then these will always take precedence.
