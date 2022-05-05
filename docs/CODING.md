@@ -96,6 +96,62 @@ final service = AppStoreConnect(credentials);
 
 ```
 
-## Provisioning
-
 ## BundleId
+
+```dart
+
+    /// Retrieve all bundleIds:
+    await service.bundles.find()
+      .then((bundleIds) => print(bundleIds));
+
+    /// Retrieve bundleIds with profiles and capabilities
+    await service.find(
+            capabilities: (_) => _
+                  ..showBundleId
+                  ..showCapabilityType
+                  ..showSettings
+                  ..limit = 50,
+            profiles:  (_) => _
+                  ..showBundleId
+                  ..showCertificates
+                  ..showDevices
+                  ..showExpirationData
+                  ..showName
+                  ..showPlatform
+                  ..showProfileContent
+                  ..showProfileState
+                  ..showProfileType
+                  ..showUUID
+                  ..limit = 50,
+            bundles: (_) => _
+                  ..showCapabilities
+                  ..showIdentifier
+                  ..showName
+                  ..showPlatform
+                  ..showProfiles
+                  ..showSeedId
+                  ..filterId = ["IDEA123"]
+                  ..filterIdentifier = ["IDENTIFIER123"]
+                  ..filterName = ["BUNDLE,NAME,NONAME"]
+                  ..filterPlatformIsMacOS
+                  ..filterPlatformIsIOS
+                  ..filterSeedId = ["SEEDID,OVER9000"]
+                  ..limit = 200
+                  ..sortByIdAsc
+                  ..sortByIdDesc
+                  ..sortByIdentifierAsc
+                  ..sortByIdentifierDesc
+                  ..sortByNameAsc
+                  ..sortByNameDesc
+                  ..sortByPlatformAsc
+                  ..sortByPlatformDesc
+                  ..sortBySeedIdAsc
+                  ..sortBySeedIdDesc
+                  ..includeProfiles
+                  ..includeCapabilities
+        );
+
+
+```
+
+## Provisioning

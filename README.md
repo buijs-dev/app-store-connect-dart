@@ -72,8 +72,8 @@ Fill in the keys data and of course do <B>NOT</B> save this file in VCS. Make su
 
 ## Usage
 The client can be used from Dart code directly or from the command-line:
-- [Code](example/CODING.md)
-- [Command-line](example/COMMANDLINE.md)
+- [Code](docs/CODING.md)
+- [Command-line](docs/COMMANDLINE.md)
 
 ## Contributing
 Pull requests are welcome. Contact me at info@buijs.dev

@@ -60,32 +60,43 @@ Find all signing certificates. Available filter options:
 1. --id
 2. --serial-number
 3. --display-name
+4. --path
 
-Example find a specific signing certificate by ID:
+Example: find a specific signing certificate by ID:
 
 ```shell
 
-  flutter pub run app_store_client:<command> --id "ANIDEA"
+  flutter pub run app_store_client:certificates-find --id "ANIDEA"
 
 ```
 
 Multiple value can be supplied by using a comma separated String value.
-Example find signing certificates by multiple ID:
+Example: find signing certificates by multiple ID:
 ```shell
 
-  flutter pub run app_store_client:<command> --id "ANIDEA,NOIDEA,SOMEIDEA,IDEAS"
+  flutter pub run app_store_client:certificates-find --id "ANIDEA,NOIDEA,SOMEIDEA,IDEAS"
 
 ```
 
-Example find a specific signing certificate by ID, serialNumber and/or displayName:
+Example: find a specific signing certificate by ID, serialNumber and/or displayName:
 
 ```shell
 
-  flutter pub run app_store_client:<command> \
+  flutter pub run app_store_client:certificates-find \
   --id "ANIDEA,NOIDEA" \
   --serial-number "12345,9864" \
   --display-name "fancy name,less fancy name,nancy"
 
+```
+
+By default the certificates will be stored in <i>$HOME/Library/MobileDevice/Certificates</i>.
+This can be overridden by using the <i>path</i> option:
+
+```shell
+
+  flutter pub run app_store_client:certificates-find \
+  --path "/Users/Luke/loves/clouds"
+  
 ```
 
 ## Provisioning
