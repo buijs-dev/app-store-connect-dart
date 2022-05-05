@@ -23,7 +23,6 @@ import '../../connect.dart';
 import '../utils/library.dart';
 import 'arguments.dart';
 
-
 /// Helper to create [AppStoreCredentials].
 ///
 /// [Author] Gillian Buijs
@@ -40,8 +39,7 @@ class AppStoreCredentialsArgs {
   /// and checking for an apple_keys.json.
   ///
   /// Return [AppStoreCredentials] if keys are found and otherwise null.
-  AppStoreCredentials get parse =>
-      _fromArgs ?? _fromEnv ?? _fromFile;
+  AppStoreCredentials get parse => _fromArgs ?? _fromEnv ?? _fromFile;
 
   /// Check the supplied command-line arguments for
   /// [_issuerId], [_keyId] and [_privateKey].
@@ -49,13 +47,13 @@ class AppStoreCredentialsArgs {
   /// Return [AppStoreCredentials] if all 3 are supplied and otherwise null.
   AppStoreCredentials? get _fromArgs {
     final issuerId = parsedArgs[Arguments.issuerId];
-    if(issuerId == null) return null;
+    if (issuerId == null) return null;
 
     final keyId = parsedArgs[Arguments.keyId];
-    if(keyId == null) return null;
+    if (keyId == null) return null;
 
     final privateKey = parsedArgs[Arguments.privateKey];
-    if(privateKey == null) return null;
+    if (privateKey == null) return null;
 
     return AppStoreCredentials(
       privateKeyId: keyId,
@@ -72,13 +70,13 @@ class AppStoreCredentialsArgs {
     Map<String, String> variables = Platform.environment;
 
     final issuerId = variables[Arguments.issuerIdEnv];
-    if(issuerId == null) return null;
+    if (issuerId == null) return null;
 
     final keyId = variables[Arguments.keyIdEnv];
-    if(keyId == null) return null;
+    if (keyId == null) return null;
 
     final privateKey = variables[Arguments.privateKeyEnv];
-    if(privateKey == null) return null;
+    if (privateKey == null) return null;
 
     return AppStoreCredentials(
       privateKeyId: keyId,
@@ -97,13 +95,11 @@ class AppStoreCredentialsArgs {
   /// or throws [AppStoreCredentialsException]
   /// or throws [FileException].
   AppStoreCredentials get _fromFile {
-    final file = Optional<String>(
-        parsedArgs[Arguments.appleKeysFile]
-    ).mapOrNull<File>(
-            (path) => FileFactory(path).file
-    ) ?? FileFactory(Directory.current.absolute.path)
-        .resolve("apple_keys.json").file;
+    final file = Optional<String>(parsedArgs[Arguments.appleKeysFile])
+            .mapOrNull<File>((path) => FileFactory(path).file) ??
+        FileFactory(Directory.current.absolute.path)
+            .resolve("apple_keys.json")
+            .file;
     return AppStoreCredentials.fromFile(file);
   }
-
 }

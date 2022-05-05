@@ -66,9 +66,9 @@ class AppStoreHttpClient extends AppStoreClient {
     required String jwt,
     Map<String, String> headers = const {},
   }) async {
-    final request = await _client.getUrl(Uri.parse(uri));
-    request.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
-    request.headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
+    final request = await _client.getUrl(Uri.parse(uri))
+      ..headers.set(HttpHeaders.contentTypeHeader, 'application/json')
+      ..headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
     return request.close();
   }
 
@@ -80,9 +80,9 @@ class AppStoreHttpClient extends AppStoreClient {
     required String jwt,
     Map<String, String> headers = const {},
   }) async {
-    final request = await _client.postUrl(Uri.parse(uri));
-    request.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
-    request.headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
+    final request = await _client.postUrl(Uri.parse(uri))
+      ..headers.set(HttpHeaders.contentTypeHeader, 'application/json')
+      ..headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
     request.write(body);
     return request.close();
   }
@@ -94,9 +94,9 @@ class AppStoreHttpClient extends AppStoreClient {
     required String jwt,
     Map<String, String> headers = const {},
   }) async {
-    final request = await _client.deleteUrl(Uri.parse(uri));
-    request.headers.set(HttpHeaders.contentTypeHeader, 'application/json');
-    request.headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
+    final request = await _client.deleteUrl(Uri.parse(uri))
+      ..headers.set(HttpHeaders.contentTypeHeader, 'application/json')
+      ..headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
     return request.close();
   }
 }
