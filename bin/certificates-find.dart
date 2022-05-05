@@ -19,22 +19,29 @@
 
 import 'package:app_store_client/src/commandline/library.dart';
 
-
-/// Generate a new apple_keys.json template in the working directory.
+/// Find and download signing certificates.
 ///
 ///[Author] Gillian Buijs.
 Future<void> main(List<String> args) async {
-
   Echo.hello("1.0.0");
 
-  final result = await findCertificates(args);
-
-  if(!result.isSuccess) {
-    Echo.warning("Failed to find certificates: ${result.warnings}");
-  } else {
-    for (var element in result.value?.data??[]) {
-      Echo.success(element.toString());
+  findCertificates(args).then((response) {
+    for (var msg in response.warnings) {
+      Echo.warning(msg);
     }
-  }
 
+    for (var msg in response.info) {
+      Echo.info(msg);
+    }
+
+    if (!response.isSuccess) {
+      Echo.warning("Something went wrong downloading signing certificates.");
+    } else if (response.count == 0) {
+      Echo.info("No certificates downloaded.");
+    } else if (response.count == 1) {
+      Echo.info("Downloaded 1 certificate.");
+    } else {
+      Echo.info("Downloaded ${response.count} certificates.");
+    }
+  });
 }
