@@ -19,7 +19,7 @@
 
 import 'dart:convert';
 
-import '../bundle/const.dart';
+import '../bundles/const.dart';
 import '../shared/library.dart';
 import '../utils/nullsafe.dart';
 import 'const.dart';
@@ -216,7 +216,8 @@ class CertificateAttributes {
 
   factory CertificateAttributes.fromJson(dynamic json) {
     final maybePlatform = Optional<String>(json['platform'])
-        .mapOrNull<BundleIdPlatform>((str) => BundleIdPlatform.deserialize(str));
+        .mapOrNull<BundleIdPlatform>(
+            (str) => BundleIdPlatform.deserialize(str));
 
     final maybeCertificateType = Optional<String>(json['certificateType'])
         .mapOrNull<CertificateType>((str) => CertificateType.deserialize(str));

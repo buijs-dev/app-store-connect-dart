@@ -17,16 +17,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import '../utils/strings.dart';
+import 'exception.dart';
 
-///Exception indicating an issue communicating with the App Store Connect API regarding the BundleId resource.
+/// Strings that represent the operating system intended for the bundle.
+///
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/bundleidplatform
 ///
 /// [Author] Gillian Buijs.
-class BundleIdException implements Exception {
-  BundleIdException(this.cause);
+class BundleIdPlatform {
+  const BundleIdPlatform(this.value);
 
-  String cause;
+  final String value;
 
-  @override
-  String toString() => "BundleIdException with cause: '${cause.format}'";
+  static const ios = BundleIdPlatform("IOS");
+  static const macOs = BundleIdPlatform("MAC_OS");
+  static const universtal = BundleIdPlatform("UNIVERSAL");
+
+  static List<BundleIdPlatform> get values => [ios, macOs, universtal];
+
+  /// Helper to deserialize String to [BundleIdPlatform] enumeration.
+  ///
+  /// Throws [BundleIdException] if the given value is not valid.
+  /// Returns [BundleIdPlatform] if value is valid.
+  ///
+  /// [Author] Gillian Buijs.
+  factory BundleIdPlatform.deserialize(String value) {
+    return BundleIdPlatform.values.firstWhere(
+      (type) => type.value == value,
+      orElse: () =>
+          throw BundleIdException("Invalid BundleIdPlatform value: '$value'."),
+    );
+  }
 }
