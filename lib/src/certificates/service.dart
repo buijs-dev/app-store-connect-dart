@@ -20,6 +20,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import '../shared/queries.dart';
 import '../shared/service.dart';
 import '../shared/client.dart';
 import '../shared/library.dart';
@@ -138,7 +139,8 @@ class CertificatesService extends Service {
 /// Helper to construct query params for finding Certificates with [CertificatesService.find].
 ///
 /// [Author] Gillian Buijs.
-class CertificatesQuery extends CertificateQuery {
+class CertificatesQuery extends CertificateQuery with QueryLimit {
+
   /// Only return Certificates which matches an ID specified in this list.
   List<String> filterId = [];
 
@@ -150,35 +152,6 @@ class CertificatesQuery extends CertificateQuery {
 
   /// Sort the result list by specified fields.
   final List<_CertificatesSort> _sort = [];
-
-  /// Limit the number of certificates returned.
-  ///
-  /// Max limit is 200.
-  int? _limit;
-
-  set limit(int limit) {
-    /// If limit is less than 1 then log a warning and set the limit to 1.
-    if (limit < 1) {
-      _warnings.add(""
-          "Specified limit is invalid: $limit"
-          "Why do you want to see less than 1 certificate!?"
-          "Setting limit to: '1'");
-      _limit = 1;
-    }
-
-    /// If the limit is more than 200 then log a warning and set to max value.
-    else if (limit > 200) {
-      _warnings.add(""
-          "Specified limit exceeds the maximum value: $limit"
-          "Setting limit to maximum value: '200'");
-      _limit = 200;
-    }
-
-    /// Set the limit because the requested value is within acceptable range.
-    else {
-      _limit = limit;
-    }
-  }
 
   /// Sort the results by field CertificateType in ascending order.
   void get sortByCertificateTypeAsc {
@@ -254,8 +227,8 @@ class CertificatesQuery extends CertificateQuery {
       map.putIfAbsent("sort", () => _sort.map((e) => e.serialize).join(','));
     }
 
-    if (_limit != null) {
-      map.putIfAbsent("limit", () => "$_limit");
+    if (limit != null) {
+      map.putIfAbsent("limit", () => "$limit");
     }
 
     if (_fields.isNotEmpty) {
@@ -267,6 +240,9 @@ class CertificatesQuery extends CertificateQuery {
 
     return map;
   }
+
+  @override
+  int get maxLimit => 200;
 }
 
 /// Helper to construct query params for 'fields' filter only.
