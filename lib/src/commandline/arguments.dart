@@ -34,8 +34,10 @@ class Arguments {
   static const filterId = "id";
   static const filterSerialNumber = "serial-number";
   static const filterDisplayName = "display-name";
-}
 
+  /// Generic command-line keys.
+  static const path = "path";
+}
 
 ///Extension to convert a list of arguments to a map.
 ///
@@ -45,16 +47,14 @@ class Arguments {
 ///[Author] Gillian Buijs.
 extension ArgumentSplitter on List<String> {
   Map<String, String> get toArgs {
-
     final temp = <String, String>{};
     for (int i = 0; i < length; i++) {
       final key = this[i];
 
       // Process key as '--key value'.
       if (key.startsWith("--")) {
-        final keyValue = key
-            .substring(
-          // remove '--' prefix
+        final keyValue = key.substring(
+            // remove '--' prefix
             key.lastIndexOf("--") + 2);
         // // split 'key value' to [key, value]
         //     .split(" ");

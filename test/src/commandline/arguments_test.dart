@@ -20,13 +20,15 @@
 import 'package:app_store_client/src/commandline/arguments.dart';
 import 'package:test/test.dart';
 
-
 void main() async {
   test('Verify splitting of arguments', () async {
     final command = [
-      "--issuer-id", "ISSUER_ID",
-      "--key-id", "KEY_IDENTIFIER",
-      "--private-key", "PRIVATE_KEY",
+      "--issuer-id",
+      "ISSUER_ID",
+      "--key-id",
+      "KEY_IDENTIFIER",
+      "--private-key",
+      "PRIVATE_KEY",
       "dry-run",
       "nonsense"
     ];
@@ -39,6 +41,5 @@ void main() async {
     final options = arguments["OPTIONS"]?.split(",");
     expect(options?[0], "dry-run");
     expect(options?[1], "nonsense");
-
   });
 }
