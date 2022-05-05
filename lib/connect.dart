@@ -19,13 +19,15 @@
 
 library appstoreconnect;
 
+import 'package:app_store_client/src/bundles/service.dart';
+
 import 'src/certificates/service.dart';
 import 'src/shared/credentials.dart';
 import 'src/shared/client.dart';
 import 'src/utils/library.dart';
 
 export 'src/certificates/library.dart';
-export 'src/bundle/library.dart';
+export 'src/bundles/library.dart';
 export 'src/shared/library.dart';
 
 /// The actual service which uses the App Store Connect API to communicate.
@@ -36,6 +38,7 @@ class AppStoreConnect {
   // For each App Store Connect API resource instantiate a Service.
   {
     certificates = CertificatesService(credentials, client);
+    bundleIds = BundlesService(credentials, client);
   }
 
   /// Credentials to be converted to a JSON web token
@@ -44,6 +47,9 @@ class AppStoreConnect {
 
   /// Service to access the App Store Connect API Certificates Resource.
   late final CertificatesService certificates;
+
+  /// Service to access the App Store Connect API BundleIDs Resource.
+  late final BundlesService bundleIds;
 }
 
 ///Exception indicating an issue connecting to the App Store Connect API.
