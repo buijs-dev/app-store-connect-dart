@@ -28,14 +28,19 @@ class FileFactory {
   FileFactory(dynamic path, {createIfNotExists = false}) {
     FileSystemEntity? fse;
 
-    /// If path is a File or Directory then use it.
-    if (path is File || path is Directory) {
-      fse = path.absolute;
+    /// If path is a File then use it.
+    if (path is File) {
+      fse = File(path.absolute.path.replaceAll("/", _s));
+    }
+
+    /// If path is a Directory then use it.
+    if (path is Directory) {
+      fse = Directory(path.absolute.path.replaceAll("/", _s));
     }
 
     /// Create a FileSystemEntity instance if the given path is a String.
     else if (path is String) {
-      fse = _absolutePath(path);
+      fse = _absolutePath(path.replaceAll("/", _s));
     }
 
     /// The given path is not a String, File or Directory so throw a [FileException] to stop the process.
