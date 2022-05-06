@@ -17,6 +17,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import 'dart:convert';
 import 'dart:io';
 
 import '../utils/http.dart';
@@ -51,6 +52,24 @@ class Result<T> {
   /// Call [create] to initialize all fields.
   Result();
 
+  /// HTTP response status code.
+  late final int code;
+
+  /// HTTP response body.
+  late final String body;
+
+  /// Deserialized Response object.
+  late final T? value;
+
+  /// Value indicating if the HTTP request is processed successfully.
+  late final bool isSuccess;
+
+  /// List of warnings produced by the dart service concerning the handling of the HTTP request and/or response.
+  late final List<String> warnings;
+
+  /// Returns App Store Connect API error information.
+  List<String> get errors => _parseErrorResponse(body);
+
   /// Convert the HTTP Response to a Result object.
   Future<Result<T>> create({
     /// The HTTP Response.
@@ -84,18 +103,43 @@ class Result<T> {
     );
   }
 
-  /// HTTP response status code.
-  late final int code;
+  /// Parse response as Errors JSON if [isSuccess] is false.
+  ///
+  /// Example Errors JSON:
+  /// ```
+  ///   {
+  ///     "errors" : [ {
+  ///       "id" : "some-uuid",
+  ///       "status" : "404",
+  ///       "code" : "ENTITY_ERROR.FOO",
+  ///       "title" : "Some error has occurred",
+  ///       "detail" : "Details about said error."
+  ///   } ]
+  /// }
+  /// ```
+  /// Returns List<String> containing status, title and detail.
+  static List<String> _parseErrorResponse(String body) {
+    if (body == "") {
+      return <String>[];
+    }
 
-  /// HTTP response body.
-  late final String body;
+    final json = jsonDecode(body);
 
-  /// Deserialized Response object.
-  late final T? value;
+    final errors = json['errors'];
 
-  /// Value indicating if the HTTP request is processed successfully.
-  late final bool isSuccess;
+    if (errors == null || errors.isEmpty) {
+      return <String>[];
+    }
 
-  /// List of warnings produced by the dart service concerning the handling of the HTTP request and/or response.
-  late final List<String> warnings;
+    final status = errors[0]['status'];
+    final title = errors[0]['title'];
+    final detail = errors[0]['detail'];
+
+    return [
+      "App Store Connect API returned error response:",
+      "Status: '$status'",
+      "Title: '$title'",
+      "Detail: '$detail'",
+    ];
+  }
 }
