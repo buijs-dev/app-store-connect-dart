@@ -20,8 +20,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:app_store_client/connect.dart';
-import 'package:app_store_client/src/utils/files.dart';
+import '../../connect.dart';
+import '../utils/files.dart';
 
 import 'library.dart';
 
