@@ -27,7 +27,7 @@ typedef _C = CertificateType;
 ///
 /// [Author] Gillian Buijs.
 class CertificateType extends CONST {
-  const CertificateType(String value): super(value);
+  const CertificateType(String value) : super(value);
 
   static const developerIdApplication = _C("DEVELOPER_ID_APPLICATION");
   static const developerIdKext = _C("DEVELOPER_ID_KEXT");
