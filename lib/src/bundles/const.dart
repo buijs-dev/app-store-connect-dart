@@ -44,8 +44,9 @@ class BundleIdPlatform {
   factory BundleIdPlatform.deserialize(String value) {
     return BundleIdPlatform.values.firstWhere(
       (type) => type.value == value,
-      orElse: () =>
-          throw BundleIdException("Invalid BundleIdPlatform value: '$value'."),
+      orElse: () => throw BundleIdException(
+        "Invalid BundleIdPlatform value: '$value'.",
+      ),
     );
   }
 }
