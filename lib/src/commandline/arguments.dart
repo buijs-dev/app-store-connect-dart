@@ -19,24 +19,30 @@
 
 ///[Author] Gillian Buijs.
 class Arguments {
+  /// AppStoreCredentials environment variables.
+  static const issuerIdEnv = "APP_STORE_CONNECT_ISSUER_ID";
+  static const keyIdEnv = "APP_STORE_CONNECT_KEY_IDENTIFIER";
+  static const privateKeyEnv = "APP_STORE_CONNECT_PRIVATE_KEY";
+
   /// AppStoreCredentials command-line keys.
   static const issuerId = "issuer-id";
   static const keyId = "key-id";
   static const privateKey = "private-key";
   static const appleKeysFile = "key-file";
 
-  /// AppStoreCredentials environment variables.
-  static const issuerIdEnv = "APP_STORE_CONNECT_ISSUER_ID";
-  static const keyIdEnv = "APP_STORE_CONNECT_KEY_IDENTIFIER";
-  static const privateKeyEnv = "APP_STORE_CONNECT_PRIVATE_KEY";
+  /// Generic command-line keys.
+  static const path = "path";
 
   /// Certificates command-line keys.
   static const filterId = "id";
   static const filterSerialNumber = "serial-number";
   static const filterDisplayName = "display-name";
 
-  /// Generic command-line keys.
-  static const path = "path";
+  /// BundleId command-line keys.
+  static const bundleId = "id";
+  static const bundleName = "name";
+  static const bundlePlatform = "platform";
+  static const bundleSeedId = "seedId";
 }
 
 ///Extension to convert a list of arguments to a map.
@@ -56,8 +62,6 @@ extension ArgumentSplitter on List<String> {
         final keyValue = key.substring(
             // remove '--' prefix
             key.lastIndexOf("--") + 2);
-        // // split 'key value' to [key, value]
-        //     .split(" ");
 
         // Add key with value to temp map.
         i += 1;

@@ -17,10 +17,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library commandline;
+import 'dart:io';
 
-export 'arguments.dart';
-export 'certificates.dart';
-export 'credentials.dart';
-export 'bundles.dart';
-export 'logging.dart';
+/// Check if debugging is enabled.
+///
+/// ENV variable 'APP_STORE_CONNECT_API_DEBUG'.
+///
+/// [Author] Gillian Buijs.
+bool get hasDebugEnabled {
+  final env = Platform.environment;
+  final debug = env["APP_STORE_CONNECT_API_DEBUG"]?.toLowerCase();
+  return debug == "true";
+}

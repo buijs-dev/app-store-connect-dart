@@ -20,7 +20,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import '../utils/http.dart';
+import '../utils/library.dart';
 
 /// Wrapper which encapsulates all processing information for a single App Store Connect API request.
 ///
@@ -93,6 +93,19 @@ class Result<T> {
 
     // Only deserialize if isSuccess is true to avoid running into deserialization issues.
     final value = isSuccess ? deserialize(responseBody) : null;
+
+    // Log the responseBody if debugging is enabled.
+    if (hasDebugEnabled) {
+      print(
+        """
+          |App Store Connect API returned statuscode: ${response.statusCode}
+          |====================================
+          |$responseBody
+          |====================================
+          """
+            .format,
+      );
+    }
 
     return Result<T>._(
       code: response.statusCode,

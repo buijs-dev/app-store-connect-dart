@@ -29,10 +29,10 @@ import '../../utils/client.dart';
 void main() async {
   final client = TestClient();
 
-  final service =
-      BundlesService(
-          AppStoreCredentials.fromFile("apple_keys.json"), client,
-      );
+  final service = BundlesService(
+    AppStoreCredentials.fromFile("apple_keys.json"),
+    client,
+  );
 
   final okResponse = jsonEncode(
     BundleIdsResponse(data: [
@@ -63,7 +63,9 @@ void main() async {
     expect(result.value != null, true);
   });
 
-  test('When capabilities query is specified then include param is implicitly added', () async {
+  test(
+      'When capabilities query is specified then include param is implicitly added',
+      () async {
     // Setup client expectations
     client.expectedUri = "https://api.appstoreconnect.apple.com/v1/bundleIds"
         "?include=bundleIdCapabilities"

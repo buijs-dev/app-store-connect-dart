@@ -17,10 +17,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library commandline;
+import 'package:app_store_client/src/commandline/library.dart';
 
-export 'arguments.dart';
-export 'certificates.dart';
-export 'credentials.dart';
-export 'bundles.dart';
-export 'logging.dart';
+/// Register a new Bundle ID.
+///
+///[Author] Gillian Buijs.
+Future<void> main(List<String> args) async {
+  Echo.hello("1.0.0");
+
+  deleteBundleId(args).then((response) {
+    for (var msg in response.warnings) {
+      Echo.warning(msg);
+    }
+
+    for (var msg in response.info) {
+      Echo.info(msg);
+    }
+
+    if (!response.isSuccess) {
+      Echo.warning("Something went wrong deleting a Bundle ID.");
+    } else {
+      Echo.info("Bundle ID deleted: ${response.id}");
+    }
+  });
+}

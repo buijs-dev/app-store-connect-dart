@@ -26,3 +26,4 @@ doc/api/
 /private.key
 /example/pubspec.yaml
 /tools/it_certificates_find.sh
+/tools/it_bundleid_create.sh

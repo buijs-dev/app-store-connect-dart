@@ -42,7 +42,7 @@ class AppStoreCredentialsArgs {
   AppStoreCredentials get parse => _fromArgs ?? _fromEnv ?? _fromFile;
 
   /// Check the supplied command-line arguments for
-  /// [_issuerId], [_keyId] and [_privateKey].
+  /// [Arguments.issuerId], [Arguments.keyId] and [Arguments.privateKey].
   ///
   /// Return [AppStoreCredentials] if all 3 are supplied and otherwise null.
   AppStoreCredentials? get _fromArgs {
@@ -54,6 +54,10 @@ class AppStoreCredentialsArgs {
 
     final privateKey = parsedArgs[Arguments.privateKey];
     if (privateKey == null) return null;
+
+    if (hasDebugEnabled) {
+      print("Retrieved APP STORE CONNECT API credentials from CLI arguments.");
+    }
 
     return AppStoreCredentials(
       privateKeyId: keyId,
@@ -78,6 +82,10 @@ class AppStoreCredentialsArgs {
     final privateKey = variables[Arguments.privateKeyEnv];
     if (privateKey == null) return null;
 
+    if (hasDebugEnabled) {
+      print("Retrieved APP STORE CONNECT API credentials from ENV arguments.");
+    }
+
     return AppStoreCredentials(
       privateKeyId: keyId,
       privateKey: privateKey,
@@ -95,11 +103,24 @@ class AppStoreCredentialsArgs {
   /// or throws [AppStoreCredentialsException]
   /// or throws [FileException].
   AppStoreCredentials get _fromFile {
-    final file = Optional<String>(parsedArgs[Arguments.appleKeysFile])
-            .mapOrNull<File>((path) => FileFactory(path).file) ??
-        FileFactory(Directory.current.absolute.path)
-            .resolve("apple_keys.json")
-            .file;
-    return AppStoreCredentials.fromFile(file);
+    final customPath = parsedArgs[Arguments.appleKeysFile];
+
+    if (customPath != null) {
+      if (hasDebugEnabled) {
+        print("Received path to apple_keys.json from CLI arguments.");
+      }
+
+      return AppStoreCredentials.fromFile(FileFactory(customPath).file);
+    }
+
+    if (hasDebugEnabled) {
+      print("Looking for apple_keys.json in working folder.");
+    }
+
+    return AppStoreCredentials.fromFile(
+      FileFactory(Directory.current.absolute.path)
+          .resolve("apple_keys.json")
+          .file,
+    );
   }
 }

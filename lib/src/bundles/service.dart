@@ -128,6 +128,9 @@ class BundlesService extends Service {
 
   /// Modify a Bundle ID
   ///
+  /// Param [id] the record ID, not the Bundle ID.
+  /// Param [name] the new Bundle ID.
+  ///
   /// Update a specific bundle ID’s name.
   Future<Result<BundleIdResponse>> modifyById(String id,
       {required String name}) {

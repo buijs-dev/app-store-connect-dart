@@ -1,7 +1,6 @@
 # Usage: Code
 - [Setup](#Setup)
 - [Certificates](#Certificates)
-- [Provisioning](#Provisioning)
 - [BundleId](#BundleId)
 
 ## Setup
@@ -113,16 +112,16 @@ final service = AppStoreConnect(credentials);
     ///
     /// First register a new Bundle ID for iOS platform:
     await service.bundleIds.create(
-    identifier: "your.company.or.org.bundle.id",
-    name: "unique name for this bundleId",
-    platform: BundleIdPlatform.ios,
+        identifier: "your.company.or.org.bundle.id",
+        name: "unique name for this bundleId",
+        platform: BundleIdPlatform.ios,
     ).then((bundleId) => print(bundleId));
     
     /// Register a new Bundle ID for MAC_OS platform:
     await service.bundleIds.create(
-    identifier: "your.company.or.org.bundle.id",
-    name: "unique name for this bundleId",
-    platform: BundleIdPlatform.macOs,
+        identifier: "your.company.or.org.bundle.id",
+        name: "unique name for this bundleId",
+        platform: BundleIdPlatform.macOs,
     ).then((bundleId) => print(bundleId));
     
     /// Register a new Bundle ID with seedId.
@@ -131,159 +130,157 @@ final service = AppStoreConnect(credentials);
     /// If none specified then it is automatically generated
     /// by App Store Connect.
     await service.bundleIds.create(
-    identifier: "your.company.or.org.bundle.id",
-    name: "unique name for this bundleId",
-    platform: BundleIdPlatform.macOs,
-    seedId: "ABDED1244",
+        identifier: "your.company.or.org.bundle.id",
+        name: "unique name for this bundleId",
+        platform: BundleIdPlatform.macOs,
+        seedId: "ABDED1244",
     ).then((bundleId) => print(bundleId));
     
     /// Change the Bundle ID name:
     await service.bundleIds.modifyById(
-    "BUNDLEID123", name: "empire strikes back",
+      "BUNDLEID123", name: "empire strikes back",
     ).then((bundleId) => print(bundleId));
     
     /// Find a Bundle ID by it's ID:
     await service.bundleIds.findById("SOMEIDEA123")
-    .then((bundleId) => print(bundleId));
+      .then((bundleId) => print(bundleId));
     
     /// Find all related profiles for a Bundle ID:
     await service.bundleIds.findProfilesById("NOIDEA456")
-    .then((bundleId) => print(bundleId));
+      .then((bundleId) => print(bundleId));
     
     /// Find all related capabilites for a Bundle ID:
     await service.bundleIds.findCapabilitiesById("SHOWMEIDEA")
-    .then((bundleId) => print(bundleId));
+      .then((bundleId) => print(bundleId));
     
     /// Find all Bundle IDs:
     await service.bundleIds.find().then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs and include profiles:
     await service.bundleIds.find(
-    bundles: (_) => _..includeProfiles,
+        bundles: (_) => _..includeProfiles,
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and limit the result set by 10 ID's:
     await service.bundleIds.find(
-    profiles: (_) => _..limit = 10
+        profiles: (_) => _..limit = 10
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show platform:
     await service.bundleIds.find(
-    profiles: (_) => _..showPlatform
+        profiles: (_) => _..showPlatform
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show name:
     await service.bundleIds.find(
-    profiles: (_) => _..showName
+        profiles: (_) => _..showName
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show Bundle ID:
     await service.bundleIds.find(
-    profiles: (_) => _..showBundleId
+        profiles: (_) => _..showBundleId
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show certificates:
     await service.bundleIds.find(
-    profiles: (_) => _..showCertificates
+        profiles: (_) => _..showCertificates
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show devices:
     await service.bundleIds.find(
-    profiles: (_) => _..showDevices
+        profiles: (_) => _..showDevices
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show expirationDate:
     await service.bundleIds.find(
-    profiles: (_) => _..showExpirationData
+        profiles: (_) => _..showExpirationData
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show profileContent:
     await service.bundleIds.find(
-    profiles: (_) => _..showProfileContent
+        profiles: (_) => _..showProfileContent
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show profileState:
     await service.bundleIds.find(
-    profiles: (_) => _..showProfileState
+        profiles: (_) => _..showProfileState
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show profileType:
     await service.bundleIds.find(
-    profiles: (_) => _..showProfileType
+        profiles: (_) => _..showProfileType
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include profiles and only show UUID:
     await service.bundleIds.find(
-    profiles: (_) => _..showUUID
+        profiles: (_) => _..showUUID
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs and include capabilities:
     await service.bundleIds.find(
-    bundles: (_) => _..includeCapabilities,
+        bundles: (_) => _..includeCapabilities,
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include capabilities and limit the result set by 10 ID's:
     await service.bundleIds.find(
-    capabilities: (_) => _..limit = 10
+        capabilities: (_) => _..limit = 10
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include capabilities and only show bundleIds:
     await service.bundleIds.find(
-    capabilities: (_) => _..showBundleId
+        capabilities: (_) => _..showBundleId
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include capabilities and only show capabilityType:
     await service.bundleIds.find(
-    capabilities: (_) => _..showCapabilityType
+        capabilities: (_) => _..showCapabilityType
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs, include capabilities and only show settings:
     await service.bundleIds.find(
-    capabilities: (_) => _..showSettings
+        capabilities: (_) => _..showSettings
     ).then((bundleIds) => print(bundleIds));
     
     /// Find all Bundle IDs and include profiles and capabilities:
     await service.bundleIds.find(
     bundles: (_) => _
-    ..includeCapabilities
-    ..includeProfiles,
+        ..includeCapabilities
+        ..includeProfiles,
     ).then((bundleIds) => print(bundleIds));
     
     /// Execute a query to find a specific BundleId:
     await service.bundleIds.find(
     bundles: (_) => _
-    ..filterIdentifier = ["ABCD", "OREFG"]
-    ..filterId = ["1234NOIDEA"]
-    ..filterName = ["A new Hope"]
-    ..filterSeedId = ["RANDOMPREFIX"]
-    ..filterPlatformIsIOS // Only add Bundle IDs for platform IOS
-    ..filterPlatformIsMacOS, // Only add Bundle IDs for platform MAC_OS
+        ..filterIdentifier = ["ABCD", "OREFG"]
+        ..filterId = ["1234NOIDEA"]
+        ..filterName = ["A new Hope"]
+        ..filterSeedId = ["RANDOMPREFIX"]
+        ..filterPlatformIsIOS // Only add Bundle IDs for platform IOS
+        ..filterPlatformIsMacOS, // Only add Bundle IDs for platform MAC_OS
     ).then((certificate) => print(certificate));
     
     /// Limit Bundle IDs response data returned:
     await service.bundleIds.find(bundles: (_) => _
-    ..showName
-    ..showPlatform,
+        ..showName
+        ..showPlatform,
     ).then((certificates) => print(certificates));
     
     /// Sort the response data:
     await service.bundleIds.find(bundles: (_) => _
-    ..sortByIdAsc
-    ..sortByIdDesc
-    ..sortByIdentifierAsc
-    ..sortByIdentifierDesc
-    ..sortByNameAsc
-    ..sortByNameDesc
-    ..sortByPlatformAsc
-    ..sortByPlatformDesc
-    ..sortBySeedIdAsc
-    ..sortBySeedIdDesc,
+        ..sortByIdAsc
+        ..sortByIdDesc
+        ..sortByIdentifierAsc
+        ..sortByIdentifierDesc
+        ..sortByNameAsc
+        ..sortByNameDesc
+        ..sortByPlatformAsc
+        ..sortByPlatformDesc
+        ..sortBySeedIdAsc
+        ..sortBySeedIdDesc,
     ).then((certificates) => print(certificates));
     
     /// Delete a Bundle ID:
     await service.bundleIds.deleteById("SOLONGIDEA")
-    .then((bundleIds) => print(bundleIds));
+      .then((bundleIds) => print(bundleIds));
 
 ```
-
-## Provisioning
