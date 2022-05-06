@@ -24,32 +24,32 @@ import 'package:app_store_client/src/bundles/response.dart';
 import 'package:app_store_client/src/bundles/service.dart';
 import 'package:test/test.dart';
 
-import '../client.dart';
+import '../../utils/client.dart';
 
 void main() async {
-
   final client = TestClient();
 
-  final service = BundlesService(
-      AppStoreCredentials.fromFile("apple_keys.json"),
-      client
-  );
+  final service =
+      BundlesService(
+          AppStoreCredentials.fromFile("apple_keys.json"), client,
+      );
 
   final okResponse = jsonEncode(
-    BundleIdsResponse(data: [BundleId(
-      attributes: BundleIdAttributes(
-        identifier: "bundle-identifier",
-        name: "bundle-attribute-name",
-        platform: BundleIdPlatform.ios,
-        seedId: "seedid123",
-      ),
-      id: "idea",
-      links: ResourceLinks("resource-link"),
-    )], links: PagedDocumentLinks(self: "self-reference-paged-link")),
+    BundleIdsResponse(data: [
+      BundleId(
+        attributes: BundleIdAttributes(
+          identifier: "bundle-identifier",
+          name: "bundle-attribute-name",
+          platform: BundleIdPlatform.ios,
+          seedId: "seedid123",
+        ),
+        id: "idea",
+        links: ResourceLinks("resource-link"),
+      )
+    ], links: PagedDocumentLinks(self: "self-reference-paged-link")),
   );
 
   test('Verify find without query returns BundleIDs', () async {
-
     // Setup client expectations
     client.expectedUri = "https://api.appstoreconnect.apple.com/v1/bundleIds";
     client.getResponseCode = 200;
@@ -61,17 +61,14 @@ void main() async {
     // Assertions
     expect(result.isSuccess, true);
     expect(result.value != null, true);
-
   });
 
   test('When capabilities query is specified then include param is implicitly added', () async {
-
     // Setup client expectations
-    client.expectedUri =
-      "https://api.appstoreconnect.apple.com/v1/bundleIds"
-          "?include=bundleIdCapabilities"
-          "&limit=10"
-          "&fields[bundleIdCapabilities]=bundleId,capabilityType,settings";
+    client.expectedUri = "https://api.appstoreconnect.apple.com/v1/bundleIds"
+        "?include=bundleIdCapabilities"
+        "&limit=10"
+        "&fields[bundleIdCapabilities]=bundleId,capabilityType,settings";
     client.getResponseCode = 200;
     client.getResponseBody = okResponse;
 
@@ -87,7 +84,5 @@ void main() async {
     // Assertions
     expect(result.isSuccess, true);
     expect(result.value != null, true);
-
   });
-
 }
