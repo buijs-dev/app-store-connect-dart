@@ -24,7 +24,6 @@ import 'package:app_store_client/src/bundles/service.dart';
 import 'src/certificates/service.dart';
 import 'src/shared/credentials.dart';
 import 'src/shared/client.dart';
-import 'src/utils/library.dart';
 
 export 'src/certificates/library.dart';
 export 'src/bundles/library.dart';
@@ -34,32 +33,24 @@ export 'src/shared/library.dart';
 ///
 /// [Author] Gillian Buijs.
 class AppStoreConnect {
-  AppStoreConnect(this.credentials, {AppStoreClient? client})
+  AppStoreConnect(
+
+      /// Credentials to be converted to a JSON web token
+      /// which are used to authenticate to App Store Connect API.
+      AppStoreCredentials credentials,
+
+      /// Client used to connect to the App Store Connect API.
+      /// Default client is an [AppStoreHttpClient].
+      {AppStoreClient? client})
   // For each App Store Connect API resource instantiate a Service.
   {
     certificates = CertificatesService(credentials, client);
     bundleIds = BundlesService(credentials, client);
   }
 
-  /// Credentials to be converted to a JSON web token
-  /// which are used to authenticate to App Store Connect API.
-  final AppStoreCredentials credentials;
-
   /// Service to access the App Store Connect API Certificates Resource.
   late final CertificatesService certificates;
 
   /// Service to access the App Store Connect API BundleIDs Resource.
   late final BundlesService bundleIds;
-}
-
-///Exception indicating an issue connecting to the App Store Connect API.
-///
-/// [Author] Gillian Buijs.
-class AppStoreConnectException implements Exception {
-  const AppStoreConnectException(this.cause);
-
-  final String cause;
-
-  @override
-  String toString() => "AppStoreConnectException with cause: '${cause.format}'";
 }
