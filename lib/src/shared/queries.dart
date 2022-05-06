@@ -21,7 +21,7 @@
 abstract class QueryLimit {
   final warnings = <String>[];
 
-  int get maxLimit;
+  int _maxLimit = 200;
 
   int? get limit => _limit;
 
@@ -29,7 +29,7 @@ abstract class QueryLimit {
   int? _limit;
 
   set limit(int? limit) {
-    final limitNotNull = limit ?? maxLimit;
+    final limitNotNull = limit ?? _maxLimit;
 
     /// If limit is less than 1 then log a warning and set the limit to 1.
     if (limitNotNull < 1) {
@@ -41,16 +41,22 @@ abstract class QueryLimit {
     }
 
     /// If the limit is more than 50 then log a warning and set to max value.
-    else if (limitNotNull > maxLimit) {
+    else if (limitNotNull > _maxLimit) {
       warnings.add(""
           "Specified limit exceeds the maximum value: $limit"
-          "Setting limit to maximum value: '$maxLimit'");
-      _limit = maxLimit;
+          "Setting limit to maximum value: '$_maxLimit'");
+      _limit = _maxLimit;
     }
 
     /// Set the limit because the requested value is within acceptable range.
     else {
       _limit = limitNotNull;
     }
+  }
+}
+
+extension QueryLimitter on QueryLimit {
+  void setMaxLimit(int limit) {
+    _maxLimit = limit;
   }
 }

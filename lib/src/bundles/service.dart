@@ -442,19 +442,15 @@ class BundlesQuery extends BundleQuery with QueryLimit {
 
     return map;
   }
-
-  @override
-  int get maxLimit => 200;
 }
 
 /// Helper to construct query params for finding BundleIds with [BundlesService.find].
 ///
 /// [Author] Gillian Buijs.
 class ProfilesQuery with QueryLimit {
-  ProfilesQuery([this.maxLimit = 50]);
-
-  @override
-  final int maxLimit;
+  ProfilesQuery([int maxLimit = 50]) {
+    setMaxLimit(maxLimit);
+  }
 
   /// If no fields are specified then all are returned.
   final List<_ProfilesFields> _fields = [];
@@ -569,6 +565,7 @@ class CapabilitiesQuery with QueryLimit {
     final map = <String, String>{};
 
     if (limit != null) {
+      setMaxLimit(50);
       map.putIfAbsent("limit", () => "$limit");
     }
 
@@ -581,9 +578,6 @@ class CapabilitiesQuery with QueryLimit {
 
     return map;
   }
-
-  @override
-  int get maxLimit => 50;
 }
 
 /// Helper to construct query params for 'fields' filter only.

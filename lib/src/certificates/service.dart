@@ -239,9 +239,6 @@ class CertificatesQuery extends CertificateQuery with QueryLimit {
 
     return map;
   }
-
-  @override
-  int get maxLimit => 200;
 }
 
 /// Helper to construct query params for 'fields' filter only.
