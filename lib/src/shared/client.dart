@@ -45,6 +45,13 @@ abstract class AppStoreClient {
     Map<String, String> headers = const {},
   });
 
+  Future<HttpClientResponse> patch({
+    required String uri,
+    required String body,
+    required String jwt,
+    Map<String, String> headers = const {},
+  });
+
   Future<HttpClientResponse> delete({
     required String uri,
     required String jwt,
@@ -81,6 +88,21 @@ class AppStoreHttpClient extends AppStoreClient {
     Map<String, String> headers = const {},
   }) async {
     final request = await _client.postUrl(Uri.parse(uri))
+      ..headers.set(HttpHeaders.contentTypeHeader, 'application/json')
+      ..headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
+    request.write(body);
+    return request.close();
+  }
+
+  /// Execute a PATCH request to the App Store Connect API.
+  @override
+  Future<HttpClientResponse> patch({
+    required String uri,
+    required String body,
+    required String jwt,
+    Map<String, String> headers = const {},
+  }) async {
+    final request = await _client.patchUrl(Uri.parse(uri))
       ..headers.set(HttpHeaders.contentTypeHeader, 'application/json')
       ..headers.set(HttpHeaders.authorizationHeader, 'Bearer ' + jwt);
     request.write(body);
