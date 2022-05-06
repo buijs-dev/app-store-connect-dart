@@ -17,10 +17,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 /// [Author] Gillian Buijs.
 abstract class QueryLimit {
-
   final warnings = <String>[];
 
   int get maxLimit;
@@ -55,6 +53,4 @@ abstract class QueryLimit {
       _limit = limitNotNull;
     }
   }
-
-
 }
