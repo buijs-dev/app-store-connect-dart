@@ -3,12 +3,10 @@ import 'dart:io';
 
 import 'package:app_store_client/src/shared/client.dart';
 
-
 /// Injectable client for testing purposes.
 ///
 /// [Author] Gillian Buijs.
 class TestClient extends AppStoreClient {
-
   String getResponseBody = "";
   int getResponseCode = 200;
 
@@ -23,11 +21,9 @@ class TestClient extends AppStoreClient {
     required String uri,
     required String jwt,
   }) async {
-
     assertUri(uri);
 
     return TestResponse(getResponseBody, getResponseCode);
-
   }
 
   @override
@@ -37,44 +33,51 @@ class TestClient extends AppStoreClient {
     required String jwt,
     Map<String, String> headers = const {},
   }) async {
-
     assertUri(uri);
     assertRequest(body);
 
     return TestResponse(postResponseBody, postResponseCode);
-
   }
 
   void assertUri(String uri) {
+    assert(Uri.tryParse(uri) != null, "Invalid URI: '$uri'");
 
-    assert (Uri.tryParse(uri) != null, "Invalid URI: '$uri'");
-
-    if(expectedUri != "") {
+    if (expectedUri != "") {
       var compare = expectedUri;
       //Clear the URI to be sure it does not interfere when client is reused for other test.
       expectedUri = "";
-      assert (compare == uri, "Expected URI: '$compare'\nActual URI: $uri");
+      assert(compare == uri, "Expected URI: '$compare'\nActual URI: $uri");
     }
   }
 
   void assertRequest(String request) {
-    if(expectedRequest != "") {
+    if (expectedRequest != "") {
       //Clear the Request to be sure it does not interfere when client is reused for other test.
       expectedRequest = "";
-      assert (expectedRequest.replaceAll(" ", "") == request.replaceAll(" ", ""), "Expected request: '$expectedRequest'\nActual request: $request");
+      assert(expectedRequest.replaceAll(" ", "") == request.replaceAll(" ", ""),
+          "Expected request: '$expectedRequest'\nActual request: $request");
     }
   }
 
   @override
-  Future<HttpClientResponse> delete({required String uri, required String jwt}) {
+  Future<HttpClientResponse> delete(
+      {required String uri, required String jwt}) {
     // TODO: implement delete
     throw UnimplementedError();
   }
 
+  @override
+  Future<HttpClientResponse> patch(
+      {required String uri,
+      required String body,
+      required String jwt,
+      Map<String, String> headers = const {}}) {
+    // TODO: implement patch
+    throw UnimplementedError();
+  }
 }
 
 class TestResponse extends HttpClientResponse {
-
   TestResponse(this.responseBody, this.statusCode);
 
   final String responseBody;
@@ -94,7 +97,9 @@ class TestResponse extends HttpClientResponse {
   }
 
   @override
-  Stream<List<int>> asBroadcastStream({void Function(StreamSubscription<List<int>> subscription)? onListen, void Function(StreamSubscription<List<int>> subscription)? onCancel}) {
+  Stream<List<int>> asBroadcastStream(
+      {void Function(StreamSubscription<List<int>> subscription)? onListen,
+      void Function(StreamSubscription<List<int>> subscription)? onCancel}) {
     // TODO: implement asBroadcastStream
     throw UnimplementedError();
   }
@@ -123,7 +128,8 @@ class TestResponse extends HttpClientResponse {
 
   @override
   // TODO: implement compressionState
-  HttpClientResponseCompressionState get compressionState => throw UnimplementedError();
+  HttpClientResponseCompressionState get compressionState =>
+      throw UnimplementedError();
 
   @override
   // TODO: implement connectionInfo
@@ -150,7 +156,8 @@ class TestResponse extends HttpClientResponse {
   }
 
   @override
-  Stream<List<int>> distinct([bool Function(List<int> previous, List<int> next)? equals]) {
+  Stream<List<int>> distinct(
+      [bool Function(List<int> previous, List<int> next)? equals]) {
     // TODO: implement distinct
     throw UnimplementedError();
   }
@@ -184,13 +191,15 @@ class TestResponse extends HttpClientResponse {
   Future<List<int>> get first => throw UnimplementedError();
 
   @override
-  Future<List<int>> firstWhere(bool Function(List<int> element) test, {List<int> Function()? orElse}) {
+  Future<List<int>> firstWhere(bool Function(List<int> element) test,
+      {List<int> Function()? orElse}) {
     // TODO: implement firstWhere
     throw UnimplementedError();
   }
 
   @override
-  Future<S> fold<S>(S initialValue, S Function(S previous, List<int> element) combine) {
+  Future<S> fold<S>(
+      S initialValue, S Function(S previous, List<int> element) combine) {
     // TODO: implement fold
     throw UnimplementedError();
   }
@@ -202,7 +211,8 @@ class TestResponse extends HttpClientResponse {
   }
 
   @override
-  Stream<List<int>> handleError(Function onError, {bool Function(dynamic error)? test}) {
+  Stream<List<int>> handleError(Function onError,
+      {bool Function(dynamic error)? test}) {
     // TODO: implement handleError
     throw UnimplementedError();
   }
@@ -234,7 +244,8 @@ class TestResponse extends HttpClientResponse {
   Future<List<int>> get last => throw UnimplementedError();
 
   @override
-  Future<List<int>> lastWhere(bool Function(List<int> element) test, {List<int> Function()? orElse}) {
+  Future<List<int>> lastWhere(bool Function(List<int> element) test,
+      {List<int> Function()? orElse}) {
     // TODO: implement lastWhere
     throw UnimplementedError();
   }
@@ -244,7 +255,8 @@ class TestResponse extends HttpClientResponse {
   Future<int> get length => throw UnimplementedError();
 
   @override
-  StreamSubscription<List<int>> listen(void Function(List<int> event)? onData, {Function? onError, void Function()? onDone, bool? cancelOnError}) {
+  StreamSubscription<List<int>> listen(void Function(List<int> event)? onData,
+      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
     // TODO: implement listen
     throw UnimplementedError();
   }
@@ -270,7 +282,8 @@ class TestResponse extends HttpClientResponse {
   String get reasonPhrase => throw UnimplementedError();
 
   @override
-  Future<HttpClientResponse> redirect([String? method, Uri? url, bool? followLoops]) {
+  Future<HttpClientResponse> redirect(
+      [String? method, Uri? url, bool? followLoops]) {
     // TODO: implement redirect
     throw UnimplementedError();
   }
@@ -280,7 +293,8 @@ class TestResponse extends HttpClientResponse {
   List<RedirectInfo> get redirects => throw UnimplementedError();
 
   @override
-  Future<List<int>> reduce(List<int> Function(List<int> previous, List<int> element) combine) {
+  Future<List<int>> reduce(
+      List<int> Function(List<int> previous, List<int> element) combine) {
     // TODO: implement reduce
     throw UnimplementedError();
   }
@@ -290,7 +304,8 @@ class TestResponse extends HttpClientResponse {
   Future<List<int>> get single => throw UnimplementedError();
 
   @override
-  Future<List<int>> singleWhere(bool Function(List<int> element) test, {List<int> Function()? orElse}) {
+  Future<List<int>> singleWhere(bool Function(List<int> element) test,
+      {List<int> Function()? orElse}) {
     // TODO: implement singleWhere
     throw UnimplementedError();
   }
@@ -320,7 +335,8 @@ class TestResponse extends HttpClientResponse {
   }
 
   @override
-  Stream<List<int>> timeout(Duration timeLimit, {void Function(EventSink<List<int>> sink)? onTimeout}) {
+  Stream<List<int>> timeout(Duration timeLimit,
+      {void Function(EventSink<List<int>> sink)? onTimeout}) {
     // TODO: implement timeout
     throw UnimplementedError();
   }
@@ -342,5 +358,4 @@ class TestResponse extends HttpClientResponse {
     // TODO: implement where
     throw UnimplementedError();
   }
-
 }
