@@ -101,6 +101,13 @@ class Service {
         body: body,
       );
 
+  /// Execute a POST request to App Store Connect API.
+  Future<HttpClientResponse> doPatch(String body) async => client.patch(
+        uri: _uri,
+        jwt: credentials.jsonWebToken,
+        body: body,
+      );
+
   /// Execute a DELETE request to App Store Connect API.
   Future<HttpClientResponse> get doDelete async => client.delete(
         uri: _uri,
