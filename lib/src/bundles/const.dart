@@ -17,6 +17,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import 'package:app_store_client/connect.dart';
+
 import 'exception.dart';
 
 /// Strings that represent the operating system intended for the bundle.
@@ -24,10 +26,8 @@ import 'exception.dart';
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/bundleidplatform
 ///
 /// [Author] Gillian Buijs.
-class BundleIdPlatform {
-  const BundleIdPlatform(this.value);
-
-  final String value;
+class BundleIdPlatform extends CONST {
+  const BundleIdPlatform(String value) : super(value);
 
   static const ios = BundleIdPlatform("IOS");
   static const macOs = BundleIdPlatform("MAC_OS");
