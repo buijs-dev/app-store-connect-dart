@@ -17,25 +17,152 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import '../utils/library.dart';
+
+/// Mixin for JSON serializable classes.
+///
+/// [Author] Gillian Buijs.
+abstract class JSON {
+  Map<String, dynamic> toJson();
+
+  @override
+  bool operator ==(Object other) =>
+      other is JSON &&
+      other.runtimeType == runtimeType &&
+      other.toJson() == toJson();
+
+  @override
+  int get hashCode => toJson().keys.join("=").length;
+
+  @override
+  String toString() => "Instance of JSON: ${toJson().entries.join("=")}";
+}
+
+/// Parent for const values.
+///
+/// [Author] Gillian Buijs.
+abstract class CONST {
+  const CONST(this.value);
+  final String value;
+
+  @override
+  bool operator ==(Object other) =>
+      other is CONST &&
+      other.runtimeType == runtimeType &&
+      other.value == value;
+
+  @override
+  int get hashCode => value.hashCode;
+
+  @override
+  String toString() => "Instance of CONST: value = $value";
+}
+
+/// The data and links that describe the relationship between the resources.
+///
+/// [Author] Gillian Buijs.
+class Relationship with JSON {
+  const Relationship({
+    this.data,
+    this.links,
+    this.meta,
+  });
+
+  final List<RelationshipData>? data;
+  final RelationshipLinks? links;
+  final PagingInformation? meta;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        "data": data,
+        "links": links,
+        "meta": meta,
+      };
+
+  factory Relationship.fromJson(dynamic json) {
+    final data = Optional<dynamic>(json['data']).mapOrNull((json) =>
+        List.from(json).map((e) => RelationshipData.fromJson(e)).toList());
+
+    final links = Optional<dynamic>(json['links'])
+        .mapOrNull((json) => RelationshipLinks.fromJson(json));
+
+    final meta = Optional<dynamic>(json['meta'])
+        .map((json) => json['paging'])
+        .mapOrNull((json) => PagingInformation.paging(
+            total: json['total'], limit: json['limit']));
+
+    return Relationship(
+      data: data,
+      links: links,
+      meta: meta,
+    );
+  }
+}
+
+/// The data and links that describe the relationship between the resources.
+///
+/// [Author] Gillian Buijs.
+class RelationshipData with JSON {
+  const RelationshipData({
+    required this.id,
+    required this.type,
+  });
+
+  final String id;
+  final String type;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "type": type,
+      };
+
+  factory RelationshipData.fromJson(dynamic json) {
+    return RelationshipData(
+      id: json['id'],
+      type: json['type'],
+    );
+  }
+}
+
+/// The links to the related data and the relationship's self-link..
+///
+/// [Author] Gillian Buijs.
+class RelationshipLinks with JSON {
+  const RelationshipLinks({
+    required this.related,
+    required this.self,
+  });
+
+  final String related;
+  final String self;
+
+  @override
+  Map<String, dynamic> toJson() => {
+        "related": related,
+        "self": self,
+      };
+
+  factory RelationshipLinks.fromJson(dynamic json) {
+    return RelationshipLinks(
+      related: json['related'],
+      self: json['self'],
+    );
+  }
+}
+
 /// Self-links to documents that can contain information for one or more resources.
 ///
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/documentlinks.
 ///
 /// [Author] Gillian Buijs.
-class DocumentLinks extends ResourceLinks {
+class DocumentLinks extends ResourceLinks with JSON {
   DocumentLinks({required String self}) : super(self);
 
   @override
-  bool operator ==(Object other) =>
-      other is DocumentLinks &&
-      other.runtimeType == runtimeType &&
-      other.self == self;
-
-  @override
-  int get hashCode => self.hashCode;
-
-  @override
-  String toString() => "Instance of DocumentLinks: self = $self";
+  Map<String, dynamic> toJson() => {
+        "self": self,
+      };
 }
 
 /// Links related to the response document, including paging links.
@@ -43,7 +170,7 @@ class DocumentLinks extends ResourceLinks {
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/pageddocumentlinks.
 ///
 /// [Author] Gillian Buijs.
-class PagedDocumentLinks {
+class PagedDocumentLinks with JSON {
   const PagedDocumentLinks({
     required this.self,
     this.first,
@@ -65,26 +192,12 @@ class PagedDocumentLinks {
         self: json['self'],
       );
 
+  @override
   Map<String, dynamic> toJson() => {
         "first": first,
         "next": next,
         "self": self,
       };
-
-  @override
-  bool operator ==(Object other) =>
-      other is PagedDocumentLinks &&
-      other.runtimeType == runtimeType &&
-      other.self == self &&
-      other.next == next &&
-      other.first == first;
-
-  @override
-  int get hashCode => self.hashCode;
-
-  @override
-  String toString() =>
-      "Instance of PagedDocumentLinks: self = $self | next = $next | first = $first";
 }
 
 /// Paging information for data responses.
@@ -92,7 +205,7 @@ class PagedDocumentLinks {
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/paginginformation.
 ///
 /// [Author] Gillian Buijs.
-class PagingInformation {
+class PagingInformation with JSON {
   const PagingInformation(this.paging);
 
   /// (Required) The paging information details.
@@ -109,29 +222,8 @@ class PagingInformation {
         ),
       );
 
-  /// Helper to deserialize PagingInformation for responses where it is a nullable element.
-  static PagingInformation? fromJson(dynamic json) {
-    if (json == null) return null;
-
-    return PagingInformation.paging(
-      total: json['paging']['total'],
-      limit: json['paging']['limit'],
-    );
-  }
-
+  @override
   Map<String, dynamic> toJson() => {"paging": paging};
-
-  @override
-  bool operator ==(Object other) =>
-      other is PagingInformation &&
-      other.runtimeType == runtimeType &&
-      other.paging == paging;
-
-  @override
-  int get hashCode => paging.hashCode;
-
-  @override
-  String toString() => "Instance of PagingInformation: paging = $paging";
 }
 
 /// Paging details such as the total number of resources and the per-page limit.
@@ -139,7 +231,7 @@ class PagingInformation {
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/paginginformation/paging.
 ///
 /// [Author] Gillian Buijs.
-class PagingInformationPaging {
+class PagingInformationPaging with JSON {
   const PagingInformationPaging({
     required this.limit,
     this.total,
@@ -151,24 +243,11 @@ class PagingInformationPaging {
   /// The total number of resources matching your request.
   final int? total;
 
+  @override
   Map<String, dynamic> toJson() => {
         "total": total,
         "limit": limit,
       };
-
-  @override
-  bool operator ==(Object other) =>
-      other is PagingInformationPaging &&
-      other.runtimeType == runtimeType &&
-      other.limit == limit &&
-      other.total == total;
-
-  @override
-  int get hashCode => limit.hashCode;
-
-  @override
-  String toString() =>
-      "Instance of PagingInformationPaging: total = $total | limit = $limit";
 }
 
 /// Self-links to requested resources.
@@ -176,24 +255,26 @@ class PagingInformationPaging {
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/resourcelinks.
 ///
 /// [Author] Gillian Buijs.
-class ResourceLinks {
+class ResourceLinks with JSON {
   //Such a selfish resource. :-)
   const ResourceLinks(this.self);
 
   /// (Required) The link to the resource.
   final String self;
 
+  @override
   Map<String, dynamic> toJson() => {"self": self};
+}
+
+/// Exception indicating an issue communicating with the App Store Connect API resources.
+///
+/// [Author] Gillian Buijs.
+class AppStoreResourceException implements Exception {
+  AppStoreResourceException(this.cause);
+
+  String cause;
 
   @override
-  bool operator ==(Object other) =>
-      other is ResourceLinks &&
-      other.runtimeType == runtimeType &&
-      other.self == self;
-
-  @override
-  int get hashCode => self.hashCode;
-
-  @override
-  String toString() => "Instance of ResourceLinks: self = $self";
+  String toString() =>
+      "AppStoreResourceException with cause: '${cause.format}'";
 }
