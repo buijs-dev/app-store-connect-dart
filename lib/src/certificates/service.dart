@@ -65,7 +65,7 @@ class CertificatesService extends Service {
   }
 
   /// Retrieve a signing certificate for given ID.
-  Future<Result<CertificateResponse>> findById(id,
+  Future<Result<CertificateResponse>> findById(String id,
       {CertificateQuery Function(CertificateQuery)? show}) {
     final params = <String>[id];
     final queryOrNull = Optional(show).mapOrNull((show) {
@@ -140,7 +140,6 @@ class CertificatesService extends Service {
 ///
 /// [Author] Gillian Buijs.
 class CertificatesQuery extends CertificateQuery with QueryLimit {
-
   /// Only return Certificates which matches an ID specified in this list.
   List<String> filterId = [];
 

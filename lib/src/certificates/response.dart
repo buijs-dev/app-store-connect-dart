@@ -30,7 +30,7 @@ import 'exception.dart';
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificatesresponse.
 ///
 /// [Author] Gillian Buijs.
-class CertificatesResponse {
+class CertificatesResponse with JSON {
   CertificatesResponse({
     required this.data,
     required this.links,
@@ -44,49 +44,48 @@ class CertificatesResponse {
   factory CertificatesResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
+    /// Get required JSON element data or throw [CertificateException].
     final data = Optional<Iterable<dynamic>>(json['data']).orElseThrow(
-        CertificateException(
-            "CertificateResponse JSON did not contain required element data"));
+      CertificateException(
+        "CertificateResponse JSON did not contain required element data",
+      ),
+    );
 
-    final links = Optional(json['links']).orElseThrow(CertificateException(
-        "CertificateResponse JSON did not contain required element links"));
+    /// Get required JSON element links or throw [CertificateException].
+    final links = Optional(json['links']).orElseThrow(
+      CertificateException(
+        "CertificateResponse JSON did not contain required element links",
+      ),
+    );
 
-    final meta = json['meta'];
+    /// Get optional JSON element data or return null.
+    final meta = Optional<dynamic>(json['meta'])
+        .map((json) => json['paging'])
+        .mapOrNull((json) {
+      return PagingInformation.paging(
+        total: json['total'],
+        limit: json['limit'],
+      );
+    });
 
     return CertificatesResponse(
       links: PagedDocumentLinks.fromJson(links),
-      meta: PagingInformation.fromJson(meta),
-      data: List.from(data)
-          .map(
-            (cert) => Certificate(
-                id: cert['id'].toString(),
-                links: ResourceLinks(cert['links']['self']),
-                attributes: CertificateAttributes.fromJson(cert['attributes'])),
-          )
-          .toList(),
+      meta: meta,
+      data: List.from(data).map((cert) {
+        return Certificate(
+            id: cert['id'].toString(),
+            links: ResourceLinks(cert['links']['self']),
+            attributes: CertificateAttributes.fromJson(cert['attributes']));
+      }).toList(),
     );
   }
 
+  @override
   Map<String, dynamic> toJson() => {
         "data": data,
         "links": links,
         "meta": meta,
       };
-
-  @override
-  bool operator ==(Object other) =>
-      other is CertificatesResponse &&
-      other.runtimeType == runtimeType &&
-      other.data == data &&
-      other.links == links &&
-      other.meta == meta;
-
-  @override
-  int get hashCode => data.hashCode;
-
-  @override
-  String toString() =>
-      "Instance of CertificatesResponse: data = $data | links = $links | meta = $meta";
 }
 
 /// A response that contains a single Certificates resource.
@@ -94,7 +93,7 @@ class CertificatesResponse {
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificateresponse.
 ///
 /// [Author] Gillian Buijs.
-class CertificateResponse {
+class CertificateResponse with JSON {
   CertificateResponse({
     required this.data,
     required this.links,
@@ -108,9 +107,12 @@ class CertificateResponse {
   factory CertificateResponse.fromJson(String content) {
     final json = jsonDecode(content);
 
+    /// Get required JSON element data or throw [CertificateException].
     final data = Optional<dynamic>(json['data']).orElseThrow(
-        CertificateException(
-            "CertificateResponse JSON did not contain required element data"));
+      CertificateException(
+        "CertificateResponse JSON did not contain required element data",
+      ),
+    );
 
     return CertificateResponse(
       links: DocumentLinks(self: data['links']['self']),
@@ -121,24 +123,11 @@ class CertificateResponse {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() => {
         "data": data,
         "links": links,
       };
-
-  @override
-  bool operator ==(Object other) =>
-      other is CertificateResponse &&
-      other.runtimeType == runtimeType &&
-      other.data == data &&
-      other.links == links;
-
-  @override
-  int get hashCode => data.hashCode;
-
-  @override
-  String toString() =>
-      "Instance of CertificateResponse: data = $data | links = $links";
 }
 
 /// Part of [CertificatesResponse] and [CertificateResponse].
@@ -146,7 +135,7 @@ class CertificateResponse {
 /// Source: https://developer.apple.com/documentation/appstoreconnectapi/certificate.
 ///
 /// [Author] Gillian Buijs.
-class Certificate {
+class Certificate with JSON {
   Certificate({
     required this.attributes,
     required this.id,
@@ -165,26 +154,12 @@ class Certificate {
   /// (Required) Navigational links that include the self-link.
   final ResourceLinks links;
 
+  @override
   Map<String, dynamic> toJson() => {
         "attributes": attributes,
         "id": id,
         "links": links,
       };
-
-  @override
-  bool operator ==(Object other) =>
-      other is Certificate &&
-      other.runtimeType == runtimeType &&
-      other.attributes == attributes &&
-      other.id == id &&
-      other.links == links;
-
-  @override
-  int get hashCode => attributes.hashCode;
-
-  @override
-  String toString() =>
-      "Instance of Certificate: attributes = $attributes | id = $id | links = $links";
 }
 
 /// Part of [Certificate].
@@ -195,7 +170,7 @@ class Certificate {
 /// will result in some JSON fields not to be present in the response.
 ///
 /// [Author] Gillian Buijs.
-class CertificateAttributes {
+class CertificateAttributes with JSON {
   CertificateAttributes({
     this.certificateContent,
     this.displayName,
@@ -215,9 +190,10 @@ class CertificateAttributes {
   final CertificateType? certificateType;
 
   factory CertificateAttributes.fromJson(dynamic json) {
-    final maybePlatform = Optional<String>(json['platform'])
-        .mapOrNull<BundleIdPlatform>(
-            (str) => BundleIdPlatform.deserialize(str));
+    final maybePlatform =
+        Optional<String>(json['platform']).mapOrNull<BundleIdPlatform>((str) {
+      return BundleIdPlatform.deserialize(str);
+    });
 
     final maybeCertificateType = Optional<String>(json['certificateType'])
         .mapOrNull<CertificateType>((str) => CertificateType.deserialize(str));
@@ -233,6 +209,7 @@ class CertificateAttributes {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() => {
         "certificateContent": certificateContent,
         "displayName": displayName,
@@ -242,29 +219,4 @@ class CertificateAttributes {
         "serialNumber": serialNumber,
         "certificateType": certificateType?.value,
       };
-
-  @override
-  bool operator ==(Object other) =>
-      other is CertificateAttributes &&
-      other.runtimeType == runtimeType &&
-      other.certificateContent == certificateContent &&
-      other.displayName == displayName &&
-      other.expirationDate == expirationDate &&
-      other.name == name &&
-      other.platform == platform &&
-      other.serialNumber == serialNumber &&
-      other.certificateType == certificateType;
-
-  @override
-  int get hashCode => certificateType.hashCode + certificateContent.hashCode;
-
-  @override
-  String toString() => "Instance of CertificateAttributes: "
-      "certificateContent = $certificateContent | "
-      "displayName = $displayName | "
-      "expirationDate = $expirationDate | "
-      "name = $name | "
-      "platform = $platform | "
-      "serialNumber = $serialNumber | "
-      "certificateType = ${certificateType?.value}";
 }
