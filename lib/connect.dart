@@ -19,7 +19,7 @@
 
 library appstoreconnect;
 
-import 'package:app_store_client/src/service/bundles_service.dart';
+import 'package:app_store_connect/src/service/bundles_service.dart';
 
 import 'src/service/certificates_service.dart';
 import 'src/service/service_credentials.dart';

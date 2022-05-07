@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app_store_client/src/service/service_client.dart';
+import 'package:app_store_connect/src/service/service_client.dart';
 
 /// Injectable client for testing purposes.
 ///

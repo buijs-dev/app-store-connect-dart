@@ -19,9 +19,9 @@
 
 import 'dart:io';
 
-import 'package:app_store_client/src/service/service_credentials.dart';
-import 'package:app_store_client/src/cli/logging.dart' as echo;
-import 'package:app_store_client/src/common/strings.dart';
+import 'package:app_store_connect/src/service/service_credentials.dart';
+import 'package:app_store_connect/src/cli/logging.dart' as echo;
+import 'package:app_store_connect/src/common/strings.dart';
 
 const _link =
     "https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api";

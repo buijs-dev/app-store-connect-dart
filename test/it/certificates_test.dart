@@ -19,9 +19,8 @@
 
 import 'dart:io';
 
-import 'package:app_store_client/connect.dart';
-import 'package:app_store_client/src/common/common.dart';
-import 'package:app_store_client/src/service/service_credentials.dart';
+import 'package:app_store_connect/connect.dart';
+import 'package:app_store_connect/src/common/common.dart';
 import 'package:test/test.dart';
 
 /// Integration Test which uses a real Apple Developer account.

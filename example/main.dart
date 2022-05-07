@@ -22,7 +22,7 @@
 /// Import the appstoreconnect library.
 import 'dart:io';
 
-import 'package:app_store_client/connect.dart';
+import 'package:app_store_connect/connect.dart';
 
 /// Example of creating an AppStoreConnect instance.
 void main(List<String> arguments) async {

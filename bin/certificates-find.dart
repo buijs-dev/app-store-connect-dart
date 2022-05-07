@@ -17,8 +17,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/cli/certificates.dart';
-import 'package:app_store_client/src/cli/logging.dart' as echo;
+import 'package:app_store_connect/src/cli/certificates.dart';
+import 'package:app_store_connect/src/cli/logging.dart' as echo;
 
 /// Find and download signing certificates.
 ///

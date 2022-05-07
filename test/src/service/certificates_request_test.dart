@@ -19,8 +19,8 @@
 
 import 'dart:convert';
 
-import 'package:app_store_client/src/service/certificates_const.dart';
-import 'package:app_store_client/src/service/certificates_request.dart';
+import 'package:app_store_connect/src/service/certificates_const.dart';
+import 'package:app_store_connect/src/service/certificates_request.dart';
 import 'package:test/test.dart';
 
 void main() async {

@@ -19,10 +19,9 @@
 
 import 'dart:convert';
 
-import 'package:app_store_client/src/service/bundles_service.dart';
-import 'package:app_store_client/src/service/bundles.dart';
-import 'package:app_store_client/src/service/service.dart';
-import 'package:app_store_client/src/service/service_credentials.dart';
+import 'package:app_store_connect/src/service/bundles_service.dart';
+import 'package:app_store_connect/src/service/bundles.dart';
+import 'package:app_store_connect/src/service/service.dart';
 import 'package:test/test.dart';
 
 import '../../utils/client.dart';

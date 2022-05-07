@@ -17,9 +17,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/service/bundles_const.dart';
-import 'package:app_store_client/src/service/certificates_const.dart';
-import 'package:app_store_client/src/service/certificates_response.dart';
+import 'package:app_store_connect/src/service/bundles_const.dart';
+import 'package:app_store_connect/src/service/certificates_const.dart';
+import 'package:app_store_connect/src/service/certificates_response.dart';
 import 'package:test/test.dart';
 
 void main() async {

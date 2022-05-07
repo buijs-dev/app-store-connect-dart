@@ -19,7 +19,7 @@ If this is the desired approach then it would be best to read the key from a fil
 
 ```shell
 
-    flutter pub run app_store_client:<command> \
+    flutter pub run app_store_connect:<command> \
         --issuer-id ISSUER_ID \
         --key-id KEY_IDENTIFIER \
         --private-key PRIVATE_KEY
@@ -37,7 +37,7 @@ If this is the desired approach then it would be best to read the key from a fil
   export APP_STORE_CONNECT_KEY_IDENTIFIER="KEY_IDENTIFIER"    
   export APP_STORE_CONNECT_PRIVATE_KEY="PRIVATE_KEY"      
 
-  flutter pub run app_store_client:<command>
+  flutter pub run app_store_connect:<command>
 
 ```
 
@@ -46,7 +46,7 @@ If you use the apple_keys.json file you can pass the absolute path to the file:
 
 ```shell
 
-  flutter pub run app_store_client:<command> --key-file "/Users/obi-wan/twins/apple_keys.json"
+  flutter pub run app_store_connect:<command> --key-file "/Users/obi-wan/twins/apple_keys.json"
 
 ```
 
@@ -55,7 +55,7 @@ By default the command-line tool will check the current directory for an apple_k
 
 ```shell
 
-  flutter pub run app_store_client:<command>
+  flutter pub run app_store_connect:<command>
 
 ```
 
@@ -70,7 +70,7 @@ Example: find a specific signing certificate by ID:
 
 ```shell
 
-  flutter pub run app_store_client:certificates-find --id "ANIDEA"
+  flutter pub run app_store_connect:certificates-find --id "ANIDEA"
 
 ```
 
@@ -78,7 +78,7 @@ Multiple value can be supplied by using a comma separated String value.
 Example: find signing certificates by multiple ID:
 ```shell
 
-  flutter pub run app_store_client:certificates-find --id "ANIDEA,NOIDEA,SOMEIDEA,IDEAS"
+  flutter pub run app_store_connect:certificates-find --id "ANIDEA,NOIDEA,SOMEIDEA,IDEAS"
 
 ```
 
@@ -86,7 +86,7 @@ Example: find a specific signing certificate by ID, serialNumber and/or displayN
 
 ```shell
 
-  flutter pub run app_store_client:certificates-find \
+  flutter pub run app_store_connect:certificates-find \
   --id "ANIDEA,NOIDEA" \
   --serial-number "12345,9864" \
   --display-name "fancy name,less fancy name,nancy"
@@ -98,7 +98,7 @@ This can be overridden by using the <i>path</i> option:
 
 ```shell
 
-  flutter pub run app_store_client:certificates-find \
+  flutter pub run app_store_connect:certificates-find \
   --path "/Users/Luke/loves/clouds"
   
 ```
@@ -125,7 +125,7 @@ Create a new bundleId. Available arguments:
 
 ```shell
 
-  flutter pub run app_store_client:bundle-create \
+  flutter pub run app_store_connect:bundle-create \
   --id org.anic.material \
   --name "ORGANIC APP" \
   --platform IOS
@@ -139,7 +139,7 @@ Edit a bundleId. Available arguments:
 
 ```shell
 
-  flutter pub run app_store_client:bundle-edit \
+  flutter pub run app_store_connect:bundle-edit \
   --id org.anic.material \
   --name "SYNTHETIC APP"
 
@@ -151,7 +151,7 @@ Delete a bundleId. Available arguments:
 
 ```shell
 
-  flutter pub run app_store_client:bundle-delete \
+  flutter pub run app_store_connect:bundle-delete \
   --id org.anic.material 
 
 ```

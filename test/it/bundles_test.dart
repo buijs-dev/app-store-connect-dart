@@ -17,10 +17,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/connect.dart';
-import 'package:app_store_client/src/service/bundles_const.dart';
-import 'package:app_store_client/src/service/bundles_response.dart';
-import 'package:app_store_client/src/service/service_credentials.dart';
+import 'package:app_store_connect/connect.dart';
 import 'package:test/test.dart';
 
 /// Integration Test which uses a real Apple Developer account.

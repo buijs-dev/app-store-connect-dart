@@ -2,8 +2,9 @@
 
 # App Store Client
 A pure Dart client for the App Store Connect Api. The client can be used from Dart/Flutter code or from CLI. 
-All App Store Connect resources/tasks will be available through this library. <B>Note</B>: Package is a 
-work in progress and not published yet.
+All App Store Connect resources/tasks will be available through this library. 
+
+<B>Note</B>: Package is a work in progress and not published yet.
 
 ## About App Store Connect API
 Because the client gives access to all functionality from the App Store Connect API, it's good to know
@@ -31,11 +32,11 @@ The API provides resources to automate the following areas of App Store Connect:
 ## Installation
 
 #### Add dependency
-Add app_store_client to your pubspec.yaml:
+Add app_store_connect to your pubspec.yaml:
 
 ```yaml
 dependencies:
-  app_store_client: ^1.0.0
+  app_store_connect: ^1.0.0
 ```
 
 Run:
@@ -55,7 +56,7 @@ of your project:
 
 ```shell
 
-flutter pub run app_store_client:keyfile
+flutter pub run app_store_connect:keyfile
 
 ````
 

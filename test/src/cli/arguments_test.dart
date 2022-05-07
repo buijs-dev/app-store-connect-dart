@@ -17,7 +17,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/cli/arguments.dart';
+import 'package:app_store_connect/src/cli/arguments.dart';
 import 'package:test/test.dart';
 
 void main() async {
