@@ -17,10 +17,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'dart:io';
-
 import 'package:app_store_connect/connect.dart';
-import 'package:app_store_connect/src/common/common.dart';
 import 'package:test/test.dart';
 
 import '../utils/credentials.dart';
@@ -31,9 +28,7 @@ void main() async {
     testingCredentials(),
   ).certificates;
 
-  final csrContent = Optional<File>(File("private.csr")).map<String>((file) {
-    return file.readAsStringSync();
-  }).value!;
+  final csrContent = testingCsrFile();
 
   /// Get the certificate count to check if the count after creation is increased by 1.
   int certificateCount = await service.find().then((res) {
