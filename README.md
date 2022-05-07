@@ -1,4 +1,6 @@
 [![GitHub license](https://img.shields.io/github/license/buijs-dev/app-store-connect-dart?style=for-the-badge)](#License)
+[![Codecov](https://img.shields.io/codecov/c/github/buijs-dev/app-store-connect-dart?style=for-the-badge)](https://app.codecov.io/gh/buijs-dev/app-store-connect-dart)
+
 
 # App Store Client
 A pure Dart client for the App Store Connect Api. The client can be used from Dart/Flutter code or from CLI. 
