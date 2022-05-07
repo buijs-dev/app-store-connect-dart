@@ -56,12 +56,10 @@ class FileFactory {
 
     /// Create the file if [createIfNotExists] is set to true (defaults to false).
     else if (createIfNotExists) {
-      _wrapper = FileSystemEntityWrapper(fse);
-
-      if (_isFile(path)) {
-        _wrapper!.file.createSync();
+      if (_isFile(_absolutePathString!)) {
+        _wrapper = FileSystemEntityWrapper(File(_absolutePathString!)..createSync(recursive: true));
       } else {
-        _wrapper!.folder.createSync();
+        _wrapper = FileSystemEntityWrapper(Directory(_absolutePathString!)..createSync(recursive: true));
       }
     }
 
@@ -118,7 +116,7 @@ class FileFactory {
     return fileOrFolder.contains(".");
   }
 
-  static dynamic invalidPath(String? path) => throw FileException(""
+  static dynamic invalidPath(dynamic path) => throw FileException(""
       "The given path is not valid. "
       "Please specify an absolute path as String or a File."
       "Received path: '$path'");
