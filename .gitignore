@@ -27,3 +27,5 @@ doc/api/
 /example/pubspec.yaml
 /tools/it_certificates_find.sh
 /tools/it_bundleid_create.sh
+/tools/it_bundleid_delete.sh
+/tools/it_bundleid_edit.sh

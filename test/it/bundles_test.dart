@@ -20,10 +20,12 @@
 import 'package:app_store_connect/connect.dart';
 import 'package:test/test.dart';
 
+import '../utils/credentials.dart';
+
 /// Integration Test which uses a real Apple Developer account.
 void main() async {
   late final service = AppStoreConnect(
-    AppStoreCredentials.fromFile("apple_keys.json"),
+      testingCredentials()
   ).bundleIds;
 
   /// Get the bundles count to check if the count after creation is increased by 1.

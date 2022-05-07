@@ -25,12 +25,13 @@ import 'package:app_store_connect/src/service/service.dart';
 import 'package:test/test.dart';
 
 import '../../utils/client.dart';
+import '../../utils/credentials.dart';
 
 void main() async {
   final client = TestClient();
 
   final service = BundlesService(
-    AppStoreCredentials.fromFile("apple_keys.json"),
+    testingCredentials(), //not used because testclient
     client,
   );
 

@@ -23,12 +23,9 @@ import 'package:test/test.dart';
 void main() async {
   test('Verify splitting of arguments', () async {
     final command = [
-      "--issuer-id",
-      "ISSUER_ID",
-      "--key-id",
-      "KEY_IDENTIFIER",
-      "--private-key",
-      "PRIVATE_KEY",
+      "--issuer-id", "ISSUER_ID",
+      "--key-id", "KEY_IDENTIFIER",
+      "--private-key", "PRIVATE_KEY",
       "dry-run",
       "nonsense"
     ];

@@ -23,10 +23,12 @@ import 'package:app_store_connect/connect.dart';
 import 'package:app_store_connect/src/common/common.dart';
 import 'package:test/test.dart';
 
+import '../utils/credentials.dart';
+
 /// Integration Test which uses a real Apple Developer account.
 void main() async {
   final service = AppStoreConnect(
-    AppStoreCredentials.fromFile("apple_keys.json"),
+    testingCredentials(),
   ).certificates;
 
   final csrContent = Optional<File>(File("private.csr")).map<String>((file) {
