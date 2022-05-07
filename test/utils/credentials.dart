@@ -12,15 +12,15 @@ AppStoreCredentials testingCredentials() {
   final keyId = env["APP_STORE_CONNECT_KEY_IDENTIFIER"];
   final key = env["APP_STORE_CONNECT_PRIVATE_KEY"];
 
-  if(issuerId == null) {
+  if (issuerId == null) {
     return AppStoreCredentials.fromFile("apple_keys.json");
   }
 
-  if(keyId == null) {
+  if (keyId == null) {
     return AppStoreCredentials.fromFile("apple_keys.json");
   }
 
-  if(key == null) {
+  if (key == null) {
     return AppStoreCredentials.fromFile("apple_keys.json");
   }
 
@@ -29,13 +29,12 @@ AppStoreCredentials testingCredentials() {
     privateKey: key,
     privateKeyId: keyId,
   );
-
 }
 
 /// Get Signing Certificate locally or from env.
 String testingCsrFile() {
-  return Platform.environment["APP_STORE_CONNECT_PRIVATE_CSR_IT"]
-      ?? Optional<File>(File("private.csr")).map<String>((file) {
-    return file.readAsStringSync();
-  }).value!;
+  return Platform.environment["APP_STORE_CONNECT_PRIVATE_CSR_IT"] ??
+      Optional<File>(File("private.csr")).map<String>((file) {
+        return file.readAsStringSync();
+      }).value!;
 }

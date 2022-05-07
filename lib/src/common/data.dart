@@ -27,13 +27,13 @@ abstract class JSON {
   bool operator ==(Object other) =>
       other is JSON &&
           other.runtimeType == runtimeType &&
-          other.toJson() == toJson();
+          other.toJson().toString() == toJson().toString();
 
   @override
-  int get hashCode => toJson().keys.join("=").length;
+  int get hashCode => toJson().keys.join().length;
 
   @override
-  String toString() => "Instance of JSON: ${toJson().entries.join("=")}";
+  String toString() => "Instance of JSON: ${toJson()}";
 }
 
 /// Parent for const values.
@@ -46,8 +46,8 @@ abstract class CONST {
   @override
   bool operator ==(Object other) =>
       other is CONST &&
-          other.runtimeType == runtimeType &&
-          other.value == value;
+      other.runtimeType == runtimeType &&
+      other.value == value;
 
   @override
   int get hashCode => value.hashCode;

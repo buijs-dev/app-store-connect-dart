@@ -25,9 +25,7 @@ import 'utils/credentials.dart';
 /// Integration Test which uses a real Apple Developer account.
 void main() async {
   test('Verify an AppStoreConnect client can be instantiated', () async {
-    final asc = AppStoreConnect(
-      testingCredentials()
-    );
+    final asc = AppStoreConnect(testingCredentials());
 
     expect(asc.certificates.path, '/certificates');
     expect(asc.bundleIds.path, '/bundleIds');

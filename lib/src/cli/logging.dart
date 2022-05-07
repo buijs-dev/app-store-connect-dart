@@ -19,22 +19,18 @@
 
 import '../common/strings.dart';
 
- const _red = "\x1B[31m";
- const _green = "\x1B[32m";
- const _yellow = "\x1B[33m";
+const _red = "\x1B[31m";
+const _green = "\x1B[32m";
+const _yellow = "\x1B[33m";
 
- info(String message) =>
-    print('${_yellow}APP STORE CLIENT: $message'.format);
+info(String message) => print('${_yellow}APP STORE CLIENT: $message'.format);
 
- success(String message) =>
-    print('${_green}APP STORE CLIENT: $message'.format);
+success(String message) => print('${_green}APP STORE CLIENT: $message'.format);
 
- warning(String message) =>
-    print('${_red}APP STORE CLIENT: $message'.format);
+warning(String message) => print('${_red}APP STORE CLIENT: $message'.format);
 
- hello(String version) => print('''$_green
+hello(String version) => print('''$_green
 ════════════════════════════════════════════
    APP STORE CLIENT (v$version)                               
 ════════════════════════════════════════════
 ''');
-
