@@ -17,31 +17,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/commandline/library.dart';
+import 'package:app_store_client/src/cli/certificates.dart';
+import 'package:app_store_client/src/cli/logging.dart' as echo;
 
 /// Find and download signing certificates.
 ///
 ///[Author] Gillian Buijs.
 Future<void> main(List<String> args) async {
-  Echo.hello("1.0.0");
+  echo.hello("1.0.0");
 
   findCertificates(args).then((response) {
     for (var msg in response.warnings) {
-      Echo.warning(msg);
+      echo.warning(msg);
     }
 
     for (var msg in response.info) {
-      Echo.info(msg);
+      echo.info(msg);
     }
 
     if (!response.isSuccess) {
-      Echo.warning("Something went wrong downloading signing certificates.");
+      echo.warning("Something went wrong downloading signing certificates.");
     } else if (response.count == 0) {
-      Echo.info("No certificates downloaded.");
+      echo.info("No certificates downloaded.");
     } else if (response.count == 1) {
-      Echo.info("Downloaded 1 certificate.");
+      echo.info("Downloaded 1 certificate.");
     } else {
-      Echo.info("Downloaded ${response.count} certificates.");
+      echo.info("Downloaded ${response.count} certificates.");
     }
   });
 }

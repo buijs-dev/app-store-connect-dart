@@ -17,28 +17,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/cli/bundles.dart';
-import 'package:app_store_client/src/cli/logging.dart' as echo;
+import '../common/common.dart';
+import 'service_exception.dart';
 
-/// Register a new Bundle ID.
+/// Strings that represent the operating system intended for the bundle.
 ///
-///[Author] Gillian Buijs.
-Future<void> main(List<String> args) async {
-  echo.hello("1.0.0");
+/// Source: https://developer.apple.com/documentation/appstoreconnectapi/bundleidplatform
+///
+/// [Author] Gillian Buijs.
+class BundleIdPlatform extends CONST {
+  const BundleIdPlatform(String value) : super(value);
 
-  editBundleId(args).then((response) {
-    for (var msg in response.warnings) {
-      echo.warning(msg);
-    }
+  static const ios = BundleIdPlatform("IOS");
+  static const macOs = BundleIdPlatform("MAC_OS");
+  static const universtal = BundleIdPlatform("UNIVERSAL");
 
-    for (var msg in response.info) {
-      echo.info(msg);
-    }
+  static List<BundleIdPlatform> get values => [ios, macOs, universtal];
 
-    if (!response.isSuccess) {
-      echo.warning("Something went wrong editting a Bundle ID.");
-    } else {
-      echo.info("Bundle ID editted: ${response.id}");
-    }
-  });
+  /// Helper to deserialize String to [BundleIdPlatform] enumeration.
+  ///
+  /// Throws [AppStoreConnectException] if the given value is not valid.
+  /// Returns [BundleIdPlatform] if value is valid.
+  ///
+  /// [Author] Gillian Buijs.
+  factory BundleIdPlatform.deserialize(String value) {
+    return BundleIdPlatform.values.firstWhere(
+      (type) => type.value == value,
+      orElse: () => throw AppStoreConnectException(
+        "Invalid BundleIdPlatform value: '$value'.",
+      ),
+    );
+  }
 }

@@ -19,15 +19,16 @@
 
 library appstoreconnect;
 
-import 'package:app_store_client/src/bundles/service.dart';
+import 'package:app_store_client/src/service/bundles_service.dart';
 
-import 'src/certificates/service.dart';
-import 'src/shared/credentials.dart';
-import 'src/shared/client.dart';
+import 'src/service/certificates_service.dart';
+import 'src/service/service_credentials.dart';
+import 'src/service/service_client.dart';
 
-export 'src/certificates/library.dart';
-export 'src/bundles/library.dart';
-export 'src/shared/library.dart';
+export 'src/service/service.dart';
+export 'src/service/bundles.dart';
+export 'src/service/certificates.dart';
+export 'src/service/profiles.dart';
 
 /// The actual service which uses the App Store Connect API to communicate.
 ///

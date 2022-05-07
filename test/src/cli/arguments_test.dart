@@ -17,28 +17,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/cli/bundles.dart';
-import 'package:app_store_client/src/cli/logging.dart' as echo;
+import 'package:app_store_client/src/cli/arguments.dart';
+import 'package:test/test.dart';
 
-/// Register a new Bundle ID.
-///
-///[Author] Gillian Buijs.
-Future<void> main(List<String> args) async {
-  echo.hello("1.0.0");
+void main() async {
+  test('Verify splitting of arguments', () async {
+    final command = [
+      "--issuer-id",
+      "ISSUER_ID",
+      "--key-id",
+      "KEY_IDENTIFIER",
+      "--private-key",
+      "PRIVATE_KEY",
+      "dry-run",
+      "nonsense"
+    ];
 
-  editBundleId(args).then((response) {
-    for (var msg in response.warnings) {
-      echo.warning(msg);
-    }
+    final arguments = command.toArgs;
+    expect(arguments["issuer-id"], "ISSUER_ID");
+    expect(arguments["key-id"], "KEY_IDENTIFIER");
+    expect(arguments["private-key"], "PRIVATE_KEY");
 
-    for (var msg in response.info) {
-      echo.info(msg);
-    }
-
-    if (!response.isSuccess) {
-      echo.warning("Something went wrong editting a Bundle ID.");
-    } else {
-      echo.info("Bundle ID editted: ${response.id}");
-    }
+    final options = arguments["OPTIONS"]?.split(",");
+    expect(options?[0], "dry-run");
+    expect(options?[1], "nonsense");
   });
 }

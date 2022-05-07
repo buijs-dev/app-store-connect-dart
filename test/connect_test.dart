@@ -18,8 +18,7 @@
 // SOFTWARE.
 
 import 'package:app_store_client/connect.dart';
-import 'package:app_store_client/src/bundles/response.dart';
-import 'package:app_store_client/src/bundles/service.dart';
+import 'package:app_store_client/src/service/service_credentials.dart';
 import 'package:test/test.dart';
 
 /// Integration Test which uses a real Apple Developer account.

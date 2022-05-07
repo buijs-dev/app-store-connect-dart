@@ -17,28 +17,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/cli/bundles.dart';
-import 'package:app_store_client/src/cli/logging.dart' as echo;
+import 'dart:convert';
 
-/// Register a new Bundle ID.
-///
-///[Author] Gillian Buijs.
-Future<void> main(List<String> args) async {
-  echo.hello("1.0.0");
+import 'package:app_store_client/src/service/certificates_const.dart';
+import 'package:app_store_client/src/service/certificates_request.dart';
+import 'package:test/test.dart';
 
-  editBundleId(args).then((response) {
-    for (var msg in response.warnings) {
-      echo.warning(msg);
-    }
+void main() async {
+  test('Verify serializing CertificateCreateRequest to JSON', () async {
+    final request = CertificateCreateRequest.create(
+      certificateType: CertificateType.iosDistribution,
+      csrContent: """-----BEGIN CERTIFICATE REQUEST-----
+                    BLABLABLABLABLABLABLABLABLALBLA==
+                    -----END CERTIFICATE REQUEST-----""",
+    ).toJson();
 
-    for (var msg in response.info) {
-      echo.info(msg);
-    }
-
-    if (!response.isSuccess) {
-      echo.warning("Something went wrong editting a Bundle ID.");
-    } else {
-      echo.info("Bundle ID editted: ${response.id}");
-    }
+    expect(jsonEncode(request).replaceAll(" ", "").replaceAll("\\n", ""), json);
   });
 }
+
+final json = """{
+    "data": {
+        "type": "certificates",
+        "attributes": {
+          "certificateType": "IOS_DISTRIBUTION",
+          "csrContent": "-----BEGIN CERTIFICATE REQUEST-----
+          BLABLABLABLABLABLABLABLABLALBLA==
+          -----END CERTIFICATE REQUEST-----"
+        }
+     }
+  }"""
+    .replaceAll(" ", "")
+    .replaceAll("\n", "");

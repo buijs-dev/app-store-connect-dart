@@ -17,28 +17,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/cli/bundles.dart';
-import 'package:app_store_client/src/cli/logging.dart' as echo;
-
-/// Register a new Bundle ID.
+/// Mixin for JSON serializable classes.
 ///
-///[Author] Gillian Buijs.
-Future<void> main(List<String> args) async {
-  echo.hello("1.0.0");
+/// [Author] Gillian Buijs.
+abstract class JSON {
+  Map<String, dynamic> toJson();
 
-  editBundleId(args).then((response) {
-    for (var msg in response.warnings) {
-      echo.warning(msg);
-    }
+  @override
+  bool operator ==(Object other) =>
+      other is JSON &&
+          other.runtimeType == runtimeType &&
+          other.toJson() == toJson();
 
-    for (var msg in response.info) {
-      echo.info(msg);
-    }
+  @override
+  int get hashCode => toJson().keys.join("=").length;
 
-    if (!response.isSuccess) {
-      echo.warning("Something went wrong editting a Bundle ID.");
-    } else {
-      echo.info("Bundle ID editted: ${response.id}");
-    }
-  });
+  @override
+  String toString() => "Instance of JSON: ${toJson().entries.join("=")}";
+}
+
+/// Parent for const values.
+///
+/// [Author] Gillian Buijs.
+abstract class CONST {
+  const CONST(this.value);
+  final String value;
+
+  @override
+  bool operator ==(Object other) =>
+      other is CONST &&
+          other.runtimeType == runtimeType &&
+          other.value == value;
+
+  @override
+  int get hashCode => value.hashCode;
+
+  @override
+  String toString() => "Instance of CONST: value = $value";
 }

@@ -17,28 +17,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/cli/bundles.dart';
-import 'package:app_store_client/src/cli/logging.dart' as echo;
+library common;
 
-/// Register a new Bundle ID.
-///
-///[Author] Gillian Buijs.
-Future<void> main(List<String> args) async {
-  echo.hello("1.0.0");
-
-  editBundleId(args).then((response) {
-    for (var msg in response.warnings) {
-      echo.warning(msg);
-    }
-
-    for (var msg in response.info) {
-      echo.info(msg);
-    }
-
-    if (!response.isSuccess) {
-      echo.warning("Something went wrong editting a Bundle ID.");
-    } else {
-      echo.info("Bundle ID editted: ${response.id}");
-    }
-  });
-}
+export 'debug.dart';
+export 'files.dart';
+export 'http.dart';
+export 'nullsafe.dart';
+export 'strings.dart';
+export 'data.dart';

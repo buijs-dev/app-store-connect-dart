@@ -17,28 +17,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/cli/bundles.dart';
-import 'package:app_store_client/src/cli/logging.dart' as echo;
+import '../common/strings.dart';
 
-/// Register a new Bundle ID.
+/// Exception indicating an issue in the App Store Connect service.
 ///
-///[Author] Gillian Buijs.
-Future<void> main(List<String> args) async {
-  echo.hello("1.0.0");
+/// [Author] Gillian Buijs.
+class AppStoreConnectException implements Exception {
+  AppStoreConnectException(this.cause);
 
-  editBundleId(args).then((response) {
-    for (var msg in response.warnings) {
-      echo.warning(msg);
-    }
+  String cause;
 
-    for (var msg in response.info) {
-      echo.info(msg);
-    }
-
-    if (!response.isSuccess) {
-      echo.warning("Something went wrong editting a Bundle ID.");
-    } else {
-      echo.info("Bundle ID editted: ${response.id}");
-    }
-  });
+  @override
+  String toString() => "AppStoreConnectException with cause: '${cause.format}'";
 }

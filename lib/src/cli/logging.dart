@@ -17,28 +17,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import 'package:app_store_client/src/cli/bundles.dart';
-import 'package:app_store_client/src/cli/logging.dart' as echo;
+import '../common/strings.dart';
 
-/// Register a new Bundle ID.
-///
-///[Author] Gillian Buijs.
-Future<void> main(List<String> args) async {
-  echo.hello("1.0.0");
+ const _red = "\x1B[31m";
+ const _green = "\x1B[32m";
+ const _yellow = "\x1B[33m";
 
-  editBundleId(args).then((response) {
-    for (var msg in response.warnings) {
-      echo.warning(msg);
-    }
+ info(String message) =>
+    print('${_yellow}APP STORE CLIENT: $message'.format);
 
-    for (var msg in response.info) {
-      echo.info(msg);
-    }
+ success(String message) =>
+    print('${_green}APP STORE CLIENT: $message'.format);
 
-    if (!response.isSuccess) {
-      echo.warning("Something went wrong editting a Bundle ID.");
-    } else {
-      echo.info("Bundle ID editted: ${response.id}");
-    }
-  });
-}
+ warning(String message) =>
+    print('${_red}APP STORE CLIENT: $message'.format);
+
+ hello(String version) => print('''$_green
+════════════════════════════════════════════
+   APP STORE CLIENT (v$version)                               
+════════════════════════════════════════════
+''');
+

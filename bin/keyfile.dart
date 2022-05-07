@@ -19,9 +19,9 @@
 
 import 'dart:io';
 
-import 'package:app_store_client/src/shared/credentials.dart';
-import 'package:app_store_client/src/commandline/library.dart';
-import 'package:app_store_client/src/utils/strings.dart';
+import 'package:app_store_client/src/service/service_credentials.dart';
+import 'package:app_store_client/src/cli/logging.dart' as echo;
+import 'package:app_store_client/src/common/strings.dart';
 
 const _link =
     "https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api";
@@ -30,7 +30,7 @@ const _link =
 ///
 ///[Author] Gillian Buijs.
 Future<void> main(List<String> args) async {
-  Echo.hello("1.0.0");
+  echo.hello("1.0.0");
   // Create a temporary folder to work in.
   final workingDirectory = Directory.current;
 
@@ -40,7 +40,7 @@ Future<void> main(List<String> args) async {
 
   // Assert it does not exist yet.
   if (keysJson.existsSync()) {
-    Echo.warning(
+    echo.warning(
       "File already exists: "
       "'${keysJson.absolute.path}'. "
       "Delete it first if you want to generate a new template.",
@@ -54,9 +54,9 @@ Future<void> main(List<String> args) async {
       final message = """ |File created: '${keysJson.absolute.path}'.
                           |
                           |For how to create API keys see: '$_link'.""";
-      Echo.success(message.format);
+      echo.success(message.format);
     } else {
-      Echo.warning("Failed to create file: '${keysJson.absolute.path}'...");
+      echo.warning("Failed to create file: '${keysJson.absolute.path}'...");
     }
   }
 }
