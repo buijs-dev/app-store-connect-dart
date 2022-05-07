@@ -1,8 +1,9 @@
-[![GitHub license](https://img.shields.io/github/license/buijs-dev/dart-apple-client)](#License)
+[![GitHub license](https://img.shields.io/github/license/buijs-dev/https://github.com/buijs-dev/app-store-connect-dart)](#License)
 
 # App Store Client
 A pure Dart client for the App Store Connect Api. The client can be used from Dart/Flutter code or from CLI. 
-All App Store Connect resources/tasks are/will be available through this library. 
+All App Store Connect resources/tasks will be available through this library. <B>Note</B>: Package is a 
+work in progress and not published yet.
 
 ## About App Store Connect API
 Because the client gives access to all functionality from the App Store Connect API, it's good to know
